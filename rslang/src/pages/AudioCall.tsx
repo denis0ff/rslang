@@ -1,7 +1,13 @@
-import styled from 'styled-components'
-
-const Title = styled.h2``
+import { useState } from 'react'
+import { Difficulty } from '../components/games/Difficulty'
+import { AudioCallGame } from '../components/games/AudioCallGame'
+import { IGame } from '../utils/types'
 
 export const AudioCall = () => {
-  return <Title>AudioCall</Title>
+  const [game, SetGame] = useState<IGame>({ status: 'select' })
+  return game.status === 'select' ? (
+    <Difficulty type="audiocall" SetGame={SetGame} />
+  ) : (
+    <AudioCallGame words={game.words} />
+  )
 }

@@ -1,5 +1,5 @@
-export const BASE = '127.0.0.1'
+const BASE = 'https://react-learnwords-example.herokuapp.com/'
+const WORDS = `${BASE}words`
 
-export const BASE3 = '127.0.0.1:3'
-
-export const ID = 3;
+export const getWordsResponse = (group: number, page: number) =>
+  `${WORDS}?group=${group}&page=${page}`
