@@ -4,10 +4,9 @@ import { SprintGame } from '../components/games/SprintGame'
 import { IGame } from '../utils/types'
 
 export const Sprint = () => {
-  const [game, SetGame] = useState<IGame>({ status: 'select' })
-  return game.status === 'select' ? (
-    <Difficulty type="sprint" SetGame={SetGame} />
-  ) : (
-    <SprintGame words={game.words} />
-  )
+  const [game, setGame] = useState<IGame>({ status: 'select' })
+  if (game.status === 'select')
+    return <Difficulty type="sprint" setGame={setGame} />
+  if (game.words) return <SprintGame words={game.words} />
+  return null
 }

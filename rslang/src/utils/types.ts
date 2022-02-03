@@ -24,9 +24,9 @@ export interface IGame {
 
 export interface IDifficultyProps {
   type: 'audiocall' | 'sprint'
-  SetGame: Dispatch<SetStateAction<IGame>>
+  setGame: Dispatch<SetStateAction<IGame>>
 }
 
 export interface IGameRunProps {
-  words?: IWord[]
+  words: IWord[]
 }

@@ -11,14 +11,14 @@ const Title = styled.h2``
 
 const Description = styled.p``
 
-const Wrapper = styled.div`
+export const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 1em;
 `
 
-const WrapperRow = styled.div`
+export const WrapperRow = styled.div`
   display: flex;
   gap: 0.5em;
 `
@@ -27,10 +27,10 @@ const Button = styled.button`
   width: max-content;
 `
 
-export const Difficulty = ({ type, SetGame }: IDifficultyProps) => {
-  const [words, SetWords] = useState([])
+export const Difficulty = ({ type, setGame }: IDifficultyProps) => {
+  const [words, setWords] = useState([])
   const getWords = useCallback(
-    (group) => getWordsPromise(group).then(({ data }) => SetWords(data)),
+    (group) => getWordsPromise(group).then(({ data }) => setWords(data)),
     []
   )
 
@@ -52,7 +52,7 @@ export const Difficulty = ({ type, SetGame }: IDifficultyProps) => {
           <Button onClick={() => getWords(4)}>C1</Button>
           <Button onClick={() => getWords(5)}>C2</Button>
         </WrapperRow>
-        <Button onClick={() => SetGame({ status: 'game', words })}>
+        <Button onClick={() => setGame({ status: 'game', words })}>
           Начать
         </Button>
       </Wrapper>

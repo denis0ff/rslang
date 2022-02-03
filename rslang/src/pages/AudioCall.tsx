@@ -4,10 +4,9 @@ import { AudioCallGame } from '../components/games/AudioCallGame'
 import { IGame } from '../utils/types'
 
 export const AudioCall = () => {
-  const [game, SetGame] = useState<IGame>({ status: 'select' })
-  return game.status === 'select' ? (
-    <Difficulty type="audiocall" SetGame={SetGame} />
-  ) : (
-    <AudioCallGame words={game.words} />
-  )
+  const [game, setGame] = useState<IGame>({ status: 'select' })
+  if (game.status === 'select')
+    return <Difficulty type="audiocall" setGame={setGame} />
+  if (game.words) return <AudioCallGame words={game.words} />
+  return null
 }
