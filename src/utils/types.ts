@@ -1,5 +1,3 @@
-import { Dispatch, SetStateAction } from 'react'
-
 export interface IWord {
   id: string
   group: number
@@ -17,16 +15,9 @@ export interface IWord {
   textExampleTranslate: string
 }
 
-export interface IGame {
-  status: 'select' | 'game'
-  words?: IWord[]
-}
-
-export interface IDifficultyProps {
-  type: 'audiocall' | 'sprint'
-  SetGame: Dispatch<SetStateAction<IGame>>
-}
-
-export interface IGameRunProps {
-  words?: IWord[]
+export enum Paths {
+  HOME = '/',
+  SPRINT = 'sprint',
+  AUDIO_CALL = 'audiocall',
+  NOT_FOUND = '*',
 }
