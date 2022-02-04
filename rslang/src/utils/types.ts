@@ -17,9 +17,15 @@ export interface IWord {
   textExampleTranslate: string
 }
 
+export interface IAnswers {
+  good: IWord[]
+  bad: IWord[]
+}
+
 export interface IGame {
-  status: 'select' | 'game'
+  status: 'select' | 'game' | 'result'
   words?: IWord[]
+  answers?: IAnswers
 }
 
 export interface IDifficultyProps {
@@ -29,4 +35,10 @@ export interface IDifficultyProps {
 
 export interface IGameRunProps {
   words: IWord[]
+  setGame: Dispatch<SetStateAction<IGame>>
+}
+
+export interface IResultProps {
+  answers: IAnswers
+  setGame: Dispatch<SetStateAction<IGame>>
 }

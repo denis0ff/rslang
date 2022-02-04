@@ -1,62 +1,96 @@
-import { useCallback, useState } from 'react'
+import { useCallback, useMemo, useState } from 'react'
 import styled from 'styled-components'
 import { getFileResponse } from '../../utils/config'
-import { IGameRunProps, IWord } from '../../utils/types'
+import { IAnswers, IGameRunProps, IWord } from '../../utils/types'
 import { Wrapper, WrapperRow } from './Difficulty'
-import Icon from '../../assets/audio-play.svg'
+import { shuffle } from '../../utils/utils'
+import { AudioButton } from './AudioButton'
 
-const AudioButton = styled.button``
+const AnswerContainer = styled.div``
 
-const StyledIcon = styled(Icon)``
+export const Container = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5em;
+`
+
+const AnswerImg = styled.div<{ img: string }>`
+  width: 30rem;
+  height: 30rem;
+  background: center / cover no-repeat ${(props) => `url(${props.img})`};
+`
 
 const AnswerButton = styled.button``
 
 const ShowAnswer = styled.button``
 
-const shuffle = (array: IWord[]) => {
-  console.log(array[0].id)
+const answers: IAnswers = { good: [], bad: [] }
 
-  for (let i = array.length - 1; i > 0; i -= 1) {
-    const j = Math.floor(Math.random() * (i + 1))
-    ;[array[i], array[j]] = [array[j], array[i]]
-  }
-  return array
-}
-
-export const AudioCallGame = ({ words }: IGameRunProps) => {
+export const AudioCallGame = ({ words, setGame }: IGameRunProps) => {
   const [current, setCurrent] = useState(0)
-  const [answer, setAnswer] = useState(words[0].id)
+  const [isAnswered, setIsAnswered] = useState(false)
+
   const audio = new Audio(getFileResponse(words[0].audio))
 
-  const generateAnswers = useCallback(
+  const generateAnswers = useMemo(
     () =>
       shuffle(
         Array.from(new Set([words[current], ...shuffle(words)])).slice(0, 5)
       ),
-    [current, words]
+    [current]
   )
 
   const checkAnswer = useCallback(
     (id: string) => {
-      console.log(id === answer)
-      setCurrent((prev) => prev + 1)
-      setAnswer(words[current].id)
-      audio.src = getFileResponse(words[current].audio)
+      id === words[current].id
+        ? answers.good.push(words[current])
+        : answers.bad.push(words[current])
+      console.log(answers)
+      setIsAnswered(true)
     },
-    [answer, current, words]
+    [current]
   )
+
+  const nextQuestion = useCallback(() => {
+    if (current === words.length - 17)
+      return setGame({ status: 'result', answers })
+    setCurrent((prev) => prev + 1)
+    setIsAnswered(false)
+    audio.pause
+    audio.src = getFileResponse(words[current].audio)
+  }, [isAnswered])
 
   return (
     <Wrapper>
-      <AudioButton onClick={() => audio.play()} />
+      {isAnswered ? (
+        <AnswerContainer>
+          <AnswerImg img={getFileResponse(words[current].image)} />
+          <Container>
+            {words[current].word}
+            <AudioButton audio={audio} />
+          </Container>
+        </AnswerContainer>
+      ) : (
+        <AudioButton audio={audio} />
+      )}
       <WrapperRow>
-        {generateAnswers().map((w) => (
-          <AnswerButton key={w.id} onClick={() => checkAnswer(w.id)}>
+        {generateAnswers.map((w) => (
+          <AnswerButton
+            key={w.id}
+            onClick={() => {
+              if (!isAnswered) checkAnswer(w.id)
+            }}
+          >
             {w.wordTranslate}
           </AnswerButton>
         ))}
       </WrapperRow>
-      <ShowAnswer />
+      <ShowAnswer
+        onClick={() => (isAnswered ? nextQuestion() : checkAnswer(''))}
+      >
+        {isAnswered ? 'Следующий' : 'Не знаю'}
+      </ShowAnswer>
     </Wrapper>
   )
 }

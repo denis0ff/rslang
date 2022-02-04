@@ -52,7 +52,9 @@ export const Difficulty = ({ type, setGame }: IDifficultyProps) => {
           <Button onClick={() => getWords(4)}>C1</Button>
           <Button onClick={() => getWords(5)}>C2</Button>
         </WrapperRow>
-        <Button onClick={() => setGame({ status: 'game', words })}>
+        <Button
+          disabled={words.length === 0}
+          onClick={() => setGame({ status: 'game', words })}>
           Начать
         </Button>
       </Wrapper>
