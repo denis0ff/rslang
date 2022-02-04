@@ -1,4 +1,4 @@
-import { IGameRunProps } from '../../utils/types'
+import { IGameRunProps } from '../types'
 
 export const AudioCallGame = ({ words }: IGameRunProps) => {
   console.log(words)

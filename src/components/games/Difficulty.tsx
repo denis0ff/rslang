@@ -1,7 +1,7 @@
 import { useCallback, useState } from 'react'
 import styled from 'styled-components'
-import { IDifficultyProps } from '../../utils/types'
 import { getWordsPromise } from '../../utils/services'
+import { IDifficultyProps } from './types'
 
 const Container = styled.section`
   text-align: center;
@@ -27,7 +27,7 @@ const Button = styled.button`
   width: max-content;
 `
 
-export const Difficulty = ({ type, SetGame }: IDifficultyProps) => {
+export const Difficulty = ({ type, setGame }: IDifficultyProps) => {
   const [words, SetWords] = useState([])
   const getWords = useCallback(
     (group) => getWordsPromise(group).then(({ data }) => SetWords(data)),
@@ -52,7 +52,7 @@ export const Difficulty = ({ type, SetGame }: IDifficultyProps) => {
           <Button onClick={() => getWords(4)}>C1</Button>
           <Button onClick={() => getWords(5)}>C2</Button>
         </WrapperRow>
-        <Button onClick={() => SetGame({ status: 'game', words })}>
+        <Button onClick={() => setGame({ status: 'game', words })}>
           Начать
         </Button>
       </Wrapper>

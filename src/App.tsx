@@ -4,6 +4,7 @@ import { AudioCall } from './pages/AudioCall'
 import { Main } from './pages/Main'
 import { NotFound } from './pages/NotFound'
 import { Sprint } from './pages/Sprint'
+import { Paths } from './utils/types'
 
 const NavLink = styled(Link)`
   margin: 0 0.5rem;
@@ -23,15 +24,15 @@ export const App = () => {
   return (
     <>
       <Header>
-        <NavLink to="/">Home</NavLink>
-        <NavLink to="/sprint">Sprint</NavLink>
-        <NavLink to="/audiocall">AudioCall</NavLink>
+        <NavLink to={Paths.HOME}>Home</NavLink>
+        <NavLink to={Paths.SPRINT}>Sprint</NavLink>
+        <NavLink to={Paths.AUDIO_CALL}>AudioCall</NavLink>
       </Header>
       <Routes>
-        <Route path="/" element={<Main />} />
-        <Route path="sprint" element={<Sprint />} />
-        <Route path="audiocall" element={<AudioCall />} />
-        <Route path="*" element={<NotFound />} />
+        <Route path={Paths.HOME} element={<Main />} />
+        <Route path={Paths.SPRINT} element={<Sprint />} />
+        <Route path={Paths.AUDIO_CALL} element={<AudioCall />} />
+        <Route path={Paths.NOT_FOUND} element={<NotFound />} />
       </Routes>
     </>
   )
