@@ -1,7 +1,8 @@
-import { useCallback, useState } from 'react'
+import { useCallback } from 'react'
 import styled from 'styled-components'
-import { IDifficultyProps } from '../../utils/types'
 import { getWordsPromise } from '../../utils/services'
+import { getRandomInteger } from '../../utils/utils'
+import { GameType, IDifficultyProps } from './types'
 
 const Container = styled.section`
   text-align: center;
@@ -11,14 +12,14 @@ const Title = styled.h2``
 
 const Description = styled.p``
 
-const Wrapper = styled.div`
+export const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 1em;
 `
 
-const WrapperRow = styled.div`
+export const WrapperRow = styled.div`
   display: flex;
   gap: 0.5em;
 `
@@ -27,32 +28,42 @@ const Button = styled.button`
   width: max-content;
 `
 
-export const Difficulty = ({ type, SetGame }: IDifficultyProps) => {
-  const [words, SetWords] = useState([])
-  const getWords = useCallback(
-    (group) => getWordsPromise(group).then(({ data }) => SetWords(data)),
-    []
-  )
+const difficulties = ['A1', 'A2', 'B1', 'B2', 'C1', 'C2']
+
+export const Difficulty = ({
+  type,
+  setStatus,
+  words,
+  setWords,
+}: IDifficultyProps) => {
+  const getWords = useCallback((group) => {
+    const page = getRandomInteger(0, 30)
+    getWordsPromise(group, page).then(({ data }) =>
+      setWords((prev) => ({ ...prev, chunk: data, page }))
+    )
+  }, [])
 
   return (
     <Container>
-      <Title>{type === 'audiocall' ? 'Аудиовызов' : 'Спринт'}</Title>
+      <Title>{type === GameType.AUDIO_CALL ? 'Аудиовызов' : 'Спринт'}</Title>
       <Description>
-        {type === 'audiocall'
+        {type === GameType.AUDIO_CALL
           ? 'Аудиовызов улучшает восприятие речи. Угадай слова на слух'
           : 'Спринт - тренировка на скорость. Угадай как можно больше слов за 30 секунд'}
       </Description>
       <Wrapper>
         Выбери уровень сложности:
         <WrapperRow>
-          <Button onClick={() => getWords(0)}>A1</Button>
-          <Button onClick={() => getWords(1)}>A2</Button>
-          <Button onClick={() => getWords(2)}>B1</Button>
-          <Button onClick={() => getWords(3)}>B2</Button>
-          <Button onClick={() => getWords(4)}>C1</Button>
-          <Button onClick={() => getWords(5)}>C2</Button>
+          {difficulties.map((key, index) => (
+            <Button key={key} onClick={() => getWords(index)}>
+              {key}
+            </Button>
+          ))}
         </WrapperRow>
-        <Button onClick={() => SetGame({ status: 'game', words })}>
+        <Button
+          disabled={words.chunk.length === 0}
+          onClick={() => setStatus('game')}
+        >
           Начать
         </Button>
       </Wrapper>
