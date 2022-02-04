@@ -19,5 +19,6 @@ export enum Paths {
   HOME = '/',
   SPRINT = 'sprint',
   AUDIO_CALL = 'audiocall',
+  TEXTBOOK = 'textbook',
   NOT_FOUND = '*',
 }

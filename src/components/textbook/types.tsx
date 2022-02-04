@@ -1,6 +1,6 @@
 export type NameSectionType = 'Easy' | 'Normal' | 'Hard' | 'Difficult words'
 
-export type CodeSectionType =
+export type CodeLevelType =
   | 'A1'
   | 'A2'
   | 'B1'
@@ -11,7 +11,7 @@ export type CodeSectionType =
 
 export interface ISection {
   name: NameSectionType
-  code?: CodeSectionType
+  code?: CodeLevelType
   first?: number
   last?: number
 }
