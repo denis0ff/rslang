@@ -1,7 +1,7 @@
 import { useCallback, useMemo, useState } from 'react'
 import styled from 'styled-components'
 import { getFileResponse } from '../../utils/config'
-import { IAnswers, IGameRunProps, IWord } from '../../utils/types'
+import { IAnswers, IGameRunProps } from '../../utils/types'
 import { Wrapper, WrapperRow } from './Difficulty'
 import { shuffle } from '../../utils/utils'
 import { AudioButton } from './AudioButton'
@@ -53,11 +53,10 @@ export const AudioCallGame = ({ words, setGame }: IGameRunProps) => {
   )
 
   const nextQuestion = useCallback(() => {
-    if (current === words.length - 17)
-      return setGame({ status: 'result', answers })
+    if (current === words.length - 17) setGame({ status: 'result', answers })
     setCurrent((prev) => prev + 1)
     setIsAnswered(false)
-    audio.pause
+    audio.pause()
     audio.src = getFileResponse(words[current].audio)
   }, [isAnswered])
 
