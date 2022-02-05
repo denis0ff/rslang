@@ -23,7 +23,6 @@ export interface IDifficultyProps {
 }
 
 export interface IGameRunProps {
-  words: IWords
   setAnswers: Dispatch<SetStateAction<IAnswers>>
   setStatus: Dispatch<SetStateAction<string>>
 }
@@ -31,4 +30,9 @@ export interface IGameRunProps {
 export interface IResultProps {
   answers: IAnswers
   setStatus: Dispatch<SetStateAction<string>>
+}
+
+export interface IAudioButtonProps {
+  audio: HTMLAudioElement
+  src?: string
 }
