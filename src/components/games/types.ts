@@ -2,8 +2,8 @@ import { Dispatch, SetStateAction } from 'react'
 import { IWord } from '../../utils/types'
 
 export enum GameType {
-  AUDIO_CALL = 'audiocall',
-  SPRINT = 'sprint',
+  AUDIO_CALL = 'Аудиовызов',
+  SPRINT = 'Спринт',
 }
 
 export enum GameStatus {

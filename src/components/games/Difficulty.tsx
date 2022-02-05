@@ -44,7 +44,9 @@ export const Difficulty = ({
 
   return (
     <Container>
-      <Title>{type === GameType.AUDIO_CALL ? 'Аудиовызов' : 'Спринт'}</Title>
+      <Title>
+        {type === GameType.AUDIO_CALL ? GameType.AUDIO_CALL : GameType.SPRINT}
+      </Title>
       <Description>
         {type === GameType.AUDIO_CALL
           ? 'Аудиовызов улучшает восприятие речи. Угадай слова на слух'

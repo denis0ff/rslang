@@ -6,7 +6,7 @@ import { GameStatus, GameType, IAnswers } from '../components/games/types'
 import { IWord } from '../utils/types'
 
 export const AudioCall = () => {
-  const [status, setStatus] = useState(GameStatus.SELECT) // select, game, result
+  const [status, setStatus] = useState(GameStatus.SELECT)
   const [words, setWords] = useState<IWord[]>([])
   const [answers, setAnswers] = useState<IAnswers>({ good: [], bad: [] })
   if (status === GameStatus.SELECT)
