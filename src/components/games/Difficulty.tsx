@@ -20,6 +20,8 @@ export const Wrapper = styled.div`
 
 export const WrapperRow = styled.div`
   display: flex;
+  align-items: center;
+  justify-content: center;
   gap: 0.5em;
 `
 

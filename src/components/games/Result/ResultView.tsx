@@ -1,10 +1,17 @@
+import { Link } from 'react-router-dom'
 import styled from 'styled-components'
 import { Title } from '../../../pages/NotFound'
+import { Paths } from '../../../utils/types'
+import { WrapperRow } from '../Difficulty'
 import { GameStatus, IResultViewProps } from '../types'
 
 const TextLink = styled.p``
 
-const Button = styled.button``
+const GameLink = styled.div``
+
+const TextbookLink = styled(Link)`
+  padding: 0;
+`
 
 export const ResultView = ({ good, bad, setStatus }: IResultViewProps) => (
   <>
@@ -12,11 +19,11 @@ export const ResultView = ({ good, bad, setStatus }: IResultViewProps) => (
     <TextLink>
       {good} изучено, {bad} на изучении
     </TextLink>
-    <div>
-      <Button onClick={() => setStatus(GameStatus.SELECT)}>
+    <WrapperRow>
+      <GameLink onClick={() => setStatus(GameStatus.SELECT)}>
         Сыграть ещё раз
-      </Button>
-      <Button>Перейти в учебник</Button>
-    </div>
+      </GameLink>
+      <TextbookLink to={Paths.TEXTBOOK}>Перейти в учебник</TextbookLink>
+    </WrapperRow>
   </>
 )
