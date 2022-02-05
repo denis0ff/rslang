@@ -31,8 +31,6 @@ const Section: FC<ISection> = ({ name, code, first, last }) => {
   )
 }
 
-// const Word: FC<I>
-
 export const Textbook: FC<ITextbook> = ({ sections }) => {
   return (
     <div className="container">
