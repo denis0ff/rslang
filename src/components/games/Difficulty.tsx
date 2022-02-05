@@ -1,8 +1,7 @@
 import { useCallback } from 'react'
 import styled from 'styled-components'
 import { getWordsPromise } from '../../utils/services'
-import { getRandomInteger } from '../../utils/utils'
-import { GameType, IDifficultyProps } from './types'
+import { GameStatus, GameType, IDifficultyProps } from './types'
 
 const Container = styled.section`
   text-align: center;
@@ -36,12 +35,12 @@ export const Difficulty = ({
   words,
   setWords,
 }: IDifficultyProps) => {
-  const getWords = useCallback((group) => {
-    const page = getRandomInteger(0, 30)
-    getWordsPromise(group, page).then(({ data }) =>
-      setWords((prev) => ({ ...prev, chunk: data, page }))
-    )
-  }, [])
+  const getWords = useCallback(
+    (group) => {
+      getWordsPromise(group).then(({ data }) => setWords(data))
+    },
+    [words]
+  )
 
   return (
     <Container>
@@ -61,8 +60,8 @@ export const Difficulty = ({
           ))}
         </WrapperRow>
         <Button
-          disabled={words.chunk.length === 0}
-          onClick={() => setStatus('game')}
+          disabled={words.length === 0}
+          onClick={() => setStatus(GameStatus.GAME)}
         >
           Начать
         </Button>

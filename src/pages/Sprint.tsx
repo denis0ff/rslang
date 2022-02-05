@@ -2,13 +2,18 @@ import { useState } from 'react'
 import { Difficulty } from '../components/games/Difficulty'
 import { Result } from '../components/games/Result'
 import { SprintGame } from '../components/games/Sprint/SprintGame'
-import { GameType, IAnswers, IWords } from '../components/games/types'
+import {
+  GameStatus,
+  GameType,
+  IAnswers,
+  IWords,
+} from '../components/games/types'
 
 export const Sprint = () => {
-  const [status, setStatus] = useState('select')
-  const [words, setWords] = useState<IWords>({ chunk: [], page: -1 })
+  const [status, setStatus] = useState(GameStatus.SELECT)
+  const [words, setWords] = useState<IWords>({ chunk: [], page: -1, group: -1 })
   const [answers, setAnswers] = useState<IAnswers>({ good: [], bad: [] })
-  if (status === 'select')
+  if (status === GameStatus.SELECT)
     return (
       <Difficulty
         type={GameType.SPRINT}
@@ -17,9 +22,9 @@ export const Sprint = () => {
         setWords={setWords}
       />
     )
-  if (status === 'result')
+  if (status === GameStatus.RESULT)
     return <Result answers={answers} setStatus={setStatus} />
-  if (status === 'game')
+  if (status === GameStatus.GAME)
     return (
       <SprintGame words={words} setStatus={setStatus} setAnswers={setAnswers} />
     )

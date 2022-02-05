@@ -2,13 +2,14 @@ import { useState } from 'react'
 import { AudioCallGame } from '../components/games/AudioCall/AudioCallGame'
 import { Difficulty } from '../components/games/Difficulty'
 import { Result } from '../components/games/Result'
-import { GameType, IAnswers, IWords } from '../components/games/types'
+import { GameStatus, GameType, IAnswers } from '../components/games/types'
+import { IWord } from '../utils/types'
 
 export const AudioCall = () => {
-  const [status, setStatus] = useState('select')
-  const [words, setWords] = useState<IWords>({ chunk: [], page: -1 })
+  const [status, setStatus] = useState(GameStatus.SELECT) // select, game, result
+  const [words, setWords] = useState<IWord[]>([])
   const [answers, setAnswers] = useState<IAnswers>({ good: [], bad: [] })
-  if (status === 'select')
+  if (status === GameStatus.SELECT)
     return (
       <Difficulty
         type={GameType.AUDIO_CALL}
@@ -17,9 +18,9 @@ export const AudioCall = () => {
         setWords={setWords}
       />
     )
-  if (status === 'result')
+  if (status === GameStatus.RESULT)
     return <Result answers={answers} setStatus={setStatus} />
-  if (status === 'game')
+  if (status === GameStatus.GAME)
     return (
       <AudioCallGame
         words={words}

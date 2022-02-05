@@ -6,9 +6,10 @@ export enum GameType {
   SPRINT = 'sprint',
 }
 
-export interface IWords {
-  chunk: IWord[]
-  page: number
+export enum GameStatus {
+  SELECT,
+  GAME,
+  RESULT,
 }
 export interface IAnswers {
   good: IWord[]
@@ -17,20 +18,20 @@ export interface IAnswers {
 
 export interface IDifficultyProps {
   type: GameType
-  setStatus: Dispatch<SetStateAction<string>>
-  words: IWords
-  setWords: Dispatch<SetStateAction<IWords>>
+  setStatus: Dispatch<SetStateAction<GameStatus>>
+  words: IWord[]
+  setWords: Dispatch<SetStateAction<IWord[]>>
 }
 
 export interface IGameRunProps {
-  words: IWords
+  words: IWord[]
   setAnswers: Dispatch<SetStateAction<IAnswers>>
-  setStatus: Dispatch<SetStateAction<string>>
+  setStatus: Dispatch<SetStateAction<GameStatus>>
 }
 
 export interface IResultProps {
   answers: IAnswers
-  setStatus: Dispatch<SetStateAction<string>>
+  setStatus: Dispatch<SetStateAction<GameStatus>>
 }
 
 export interface IAudioButtonProps {

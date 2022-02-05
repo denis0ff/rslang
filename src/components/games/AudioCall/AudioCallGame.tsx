@@ -1,10 +1,10 @@
-import { useCallback, useMemo, useState } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 import styled from 'styled-components'
 import { getFileResponse } from '../../../utils/config'
 import { shuffle } from '../../../utils/utils'
 import { AudioButton } from '../AudioButton'
 import { Wrapper, WrapperRow } from '../Difficulty'
-import { IAnswers, IGameRunProps } from '../types'
+import { GameStatus, IAnswers, IGameRunProps } from '../types'
 
 const AnswerContainer = styled.div``
 
@@ -35,51 +35,50 @@ export const AudioCallGame = ({
   const [current, setCurrent] = useState(0)
   const [isAnswered, setIsAnswered] = useState(false)
 
-  const audio = new Audio()
-
+  const audio = useMemo(() => new Audio(), [])
   const generateAnswers = useMemo(
     () =>
       shuffle(
-        Array.from(
-          new Set([words.chunk[current], ...shuffle(words.chunk)])
-        ).slice(0, 5)
+        Array.from(new Set([words[current], ...shuffle([...words])])).slice(
+          0,
+          5
+        )
       ),
-    [current, words.chunk]
+    [current, words]
   )
 
   const checkAnswer = useCallback(
     (id: string) => {
-      if (id === words.chunk[current].id)
-        answers.good.push(words.chunk[current])
-      else answers.bad.push(words.chunk[current])
+      if (id === words[current].id) answers.good.push(words[current])
+      else answers.bad.push(words[current])
       setIsAnswered(true)
     },
-    [current, words.chunk]
+    [current]
   )
 
-  const changeAudioSrc = useCallback(() => {
+  useEffect(() => {
     audio.pause()
-    audio.src = getFileResponse(words.chunk[current].audio)
-  }, [audio, current, words.chunk])
+    audio.src = getFileResponse(words[current].audio)
+    audio.play()
+  }, [current])
 
   const nextQuestion = useCallback(() => {
-    if (current === words.chunk.length - 1) {
+    if (current === words.length - 1) {
       setAnswers((prev) => ({ ...prev, ...answers }))
-      setStatus('result')
+      setStatus(GameStatus.RESULT)
     } else {
       setCurrent((prev) => prev + 1)
       setIsAnswered(false)
-      changeAudioSrc()
     }
-  }, [current, setAnswers, setStatus, words.chunk])
+  }, [isAnswered])
 
   return (
     <Wrapper>
       {isAnswered ? (
         <AnswerContainer>
-          <AnswerImg img={getFileResponse(words.chunk[current].image)} />
+          <AnswerImg img={getFileResponse(words[current].image)} />
           <Container>
-            {words.chunk[current].word}
+            {words[current].word}
             <AudioButton audio={audio} />
           </Container>
         </AnswerContainer>
