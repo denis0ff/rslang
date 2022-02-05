@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { Difficulty } from '../components/games/Difficulty'
-import { Result } from '../components/games/Result'
+import { Result } from '../components/games/Result/Result'
 import { SprintGame } from '../components/games/Sprint/SprintGame'
 import { GameStatus, GameType, IAnswers } from '../components/games/types'
 import { IWord } from '../utils/types'

@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { AudioCallGame } from '../components/games/AudioCall/AudioCallGame'
 import { Difficulty } from '../components/games/Difficulty'
-import { Result } from '../components/games/Result'
+import { Result } from '../components/games/Result/Result'
 import { GameStatus, GameType, IAnswers } from '../components/games/types'
 import { IWord } from '../utils/types'
 

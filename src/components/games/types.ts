@@ -38,3 +38,25 @@ export interface IAudioButtonProps {
   audio: HTMLAudioElement
   src?: string
 }
+
+export enum ResultViews {
+  RESULT = 'Результат',
+  WORDS = 'Мои слова',
+}
+
+export enum WordListType {
+  MISTAKE = 'Ошибся',
+  SUCCESS = 'Успешно',
+}
+
+export interface IWordListProps {
+  type: WordListType
+  audio: HTMLAudioElement
+  words: IWord[]
+}
+
+export interface IResultViewProps {
+  good: number
+  bad: number
+  setStatus: Dispatch<SetStateAction<GameStatus>>
+}
