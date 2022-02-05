@@ -23,6 +23,7 @@ export interface IDifficultyProps {
 }
 
 export interface IGameRunProps {
+  words: IWords
   setAnswers: Dispatch<SetStateAction<IAnswers>>
   setStatus: Dispatch<SetStateAction<string>>
 }
