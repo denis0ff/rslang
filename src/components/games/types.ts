@@ -1,28 +1,62 @@
 import { Dispatch, SetStateAction } from 'react'
 import { IWord } from '../../utils/types'
 
+export enum GameType {
+  AUDIO_CALL = 'Аудиовызов',
+  SPRINT = 'Спринт',
+}
+
+export enum GameStatus {
+  SELECT,
+  GAME,
+  RESULT,
+}
 export interface IAnswers {
   good: IWord[]
   bad: IWord[]
 }
 
-export interface IGame {
-  status: 'select' | 'game' | 'result'
-  words?: IWord[]
-  answers?: IAnswers
-}
-
 export interface IDifficultyProps {
-  type: 'audiocall' | 'sprint'
-  setGame: Dispatch<SetStateAction<IGame>>
+  type: GameType
+  setStatus: Dispatch<SetStateAction<GameStatus>>
+  words: IWord[]
+  setWords: Dispatch<SetStateAction<IWord[]>>
 }
 
 export interface IGameRunProps {
   words: IWord[]
-  setGame: Dispatch<SetStateAction<IGame>>
+  setAnswers: Dispatch<SetStateAction<IAnswers>>
+  setStatus: Dispatch<SetStateAction<GameStatus>>
 }
 
 export interface IResultProps {
   answers: IAnswers
-  setGame: Dispatch<SetStateAction<IGame>>
+  setStatus: Dispatch<SetStateAction<GameStatus>>
+}
+
+export interface IAudioButtonProps {
+  audio: HTMLAudioElement
+  src?: string
+}
+
+export enum ResultViews {
+  RESULT = 'Результат',
+  WORDS = 'Мои слова',
+}
+
+export enum WordListType {
+  MISTAKE = 'Ошибся',
+  SUCCESS = 'Успешно',
+}
+
+export interface IWordListProps {
+  type: WordListType
+  audio: HTMLAudioElement
+  words: IWord[]
+}
+
+export interface IResultViewProps {
+  good: number
+  bad: number
+  setStatus: Dispatch<SetStateAction<GameStatus>>
 }
