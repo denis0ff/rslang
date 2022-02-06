@@ -1,4 +1,4 @@
-export type NameSectionType = 'Easy' | 'Normal' | 'Hard' | 'Difficult words'
+export type NameSectionType = 'Easy' | 'Normal' | 'Hard' | 'Difficult'
 
 export type CodeLevelType =
   | 'A1'
