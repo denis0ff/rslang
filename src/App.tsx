@@ -1,6 +1,7 @@
 import { Link, Route, Routes } from 'react-router-dom'
 import styled from 'styled-components'
 import { AudioCall } from './pages/AudioCall'
+import { Auth } from './pages/Auth'
 import { Main } from './pages/Main'
 import { NotFound } from './pages/NotFound'
 import { Sprint } from './pages/Sprint'
@@ -25,16 +26,18 @@ export const App = () => {
   return (
     <>
       <Header>
-        <NavLink to={Paths.HOME}>Home</NavLink>
-        <NavLink to={Paths.SPRINT}>Sprint</NavLink>
-        <NavLink to={Paths.AUDIO_CALL}>AudioCall</NavLink>
-        <NavLink to={Paths.TEXTBOOK}>Textbook</NavLink>
+        <NavLink to={Paths.HOME}>Домой</NavLink>
+        <NavLink to={Paths.SPRINT}>Спринт</NavLink>
+        <NavLink to={Paths.AUDIO_CALL}>Аудиовызов</NavLink>
+        <NavLink to={Paths.TEXTBOOK}>Учебник</NavLink>
+        <NavLink to={Paths.AUTH}>Вход</NavLink>
       </Header>
       <Routes>
         <Route path={Paths.HOME} element={<Main />} />
         <Route path={Paths.SPRINT} element={<Sprint />} />
         <Route path={Paths.AUDIO_CALL} element={<AudioCall />} />
         <Route path={Paths.TEXTBOOK} element={<TextbookPage />} />
+        <Route path={Paths.AUTH} element={<Auth />} />
         <Route path={Paths.NOT_FOUND} element={<NotFound />} />
       </Routes>
     </>
