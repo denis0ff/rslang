@@ -1,11 +1,11 @@
 import axios from 'axios'
 import validator from 'validator'
 import { ChangeEvent, FormEvent, useState } from 'react'
-import { USERS } from '../../utils/config'
+import { SIGN_IN, USERS } from '../../utils/config'
 import { Form } from './Authorization'
-import { AuthAction, IAuthProps } from './types'
+import { AuthAction, Errors, IAuthProps } from './types'
 
-export const Registration = ({ setAction }: IAuthProps) => {
+export const Registration = ({ setAction, setError }: IAuthProps) => {
   const [register, setRegister] = useState(() => {
     return {
       username: '',
@@ -27,30 +27,52 @@ export const Registration = ({ setAction }: IAuthProps) => {
 
   const submitChackin = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
-    if (!validator.isEmail(register.email)) {
-      alert('You did not enter email')
-    } else if (register.password !== register.password2) {
-      alert('Repeated password incorrectly')
-    } else if (
-      !validator.isStrongPassword(register.password, { minSymbols: 0 })
-    ) {
-      alert(
-        'Password must consist of one lowercase, uppercase letter and number, at least 8 characters'
-      )
-    } else {
+    if (!validator.isEmail(register.email)) setError(Errors.NO_EMAIL)
+    else if (!validator.isStrongPassword(register.password, { minSymbols: 0 }))
+      setError(Errors.PASS_STRONG)
+    else if (register.password !== register.password2)
+      setError(Errors.PASS_REPEAT)
+    else
       axios
         .post(USERS, {
           username: register.username,
           email: register.email,
           password: register.password,
         })
-        .then(({ data }) => {
-          console.log(data)
+        .then(() => {
+          axios
+            .post(SIGN_IN, {
+              email: register.email,
+              password: register.password,
+            })
+            .then(({ data }) => {
+              localStorage.setItem('token', data.token)
+              localStorage.setItem('refreshToken', data.refreshToken)
+              localStorage.setItem('userId', data.userId)
+              window.location.href = window.location.origin
+            })
+            .catch(({ response }) => {
+              switch (response.status) {
+                case 404:
+                  setError(Errors.ERROR_404)
+                  break
+                case 403:
+                  setError(Errors.ERROR_403)
+                  break
+                default:
+                  setError(Errors.ERROR_SOME)
+              }
+            })
         })
-        .catch((error) => {
-          console.log(error)
+        .catch(({ response }) => {
+          switch (response.status) {
+            case 417:
+              setError(Errors.ERROR_417)
+              break
+            default:
+              setError(Errors.ERROR_SOME)
+          }
         })
-    }
   }
 
   return (

@@ -2,7 +2,7 @@ import axios from 'axios'
 import { ChangeEvent, FormEvent, useState } from 'react'
 import styled from 'styled-components'
 import { SIGN_IN } from '../../utils/config'
-import { AuthAction, IAuthProps } from './types'
+import { AuthAction, Errors, IAuthProps } from './types'
 
 export const Form = styled.form`
   margin: 2em;
@@ -14,7 +14,7 @@ export const Form = styled.form`
   }
 `
 
-export const Authorization = ({ setAction }: IAuthProps) => {
+export const Authorization = ({ setAction, setError }: IAuthProps) => {
   const [auth, setAuth] = useState(() => {
     return {
       email: '',
@@ -31,7 +31,6 @@ export const Authorization = ({ setAction }: IAuthProps) => {
       }
     })
   }
-
   const submitChackin = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     axios
@@ -40,13 +39,22 @@ export const Authorization = ({ setAction }: IAuthProps) => {
         password: auth.password,
       })
       .then(({ data }) => {
-        console.log(data)
         localStorage.setItem('token', data.token)
         localStorage.setItem('refreshToken', data.refreshToken)
         localStorage.setItem('userId', data.userId)
+        window.location.href = window.location.origin
       })
-      .catch((error) => {
-        console.log(error)
+      .catch(({ response }) => {
+        switch (response.status) {
+          case 404:
+            setError(Errors.ERROR_404)
+            break
+          case 403:
+            setError(Errors.ERROR_403)
+            break
+          default:
+            setError(Errors.ERROR_SOME)
+        }
       })
   }
 
