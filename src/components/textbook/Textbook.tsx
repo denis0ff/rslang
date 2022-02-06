@@ -1,7 +1,7 @@
 import React, { FC } from 'react'
 import { ISection, ITextbook } from './types'
 import './Textbook.css'
-import data1 from './words'
+// import data1 from './words'
 import Pic from '../../../src/1.jpg'
 
 
@@ -55,7 +55,7 @@ const vocabulary = () => {
   if (authorize === 1) {
     return (
       <>
-        <div className="title-path">Vocabulary</div>
+        <div className="title-path">Мой словарь</div>
         <div className="sections sections-vocabulary">
           <Section key="D" name="Difficult" first={0} />
         </div>
@@ -68,8 +68,8 @@ const vocabulary = () => {
 export const Textbook: FC<ITextbook> = ({ sections }) => {
   return (
     <div className="container">
-      <div className="title">Textbook</div>
-      <div className="title-path">Word difficulty levels</div>
+      <div className="title">Электронный учебник</div>
+      <div className="title-path">Разделы сложности слов</div>
       <div className="sections">
         {sections.map((item) => {
           return (
@@ -84,7 +84,7 @@ export const Textbook: FC<ITextbook> = ({ sections }) => {
         })}
       </div>
       {vocabulary()}
-      <div className="title">Words</div>
+      <div className="title">Слова</div>
       <div className="words">
         <div className="wordlist">
           <div className="wordlist-item">
@@ -110,6 +110,32 @@ export const Textbook: FC<ITextbook> = ({ sections }) => {
         </div>
         <div className="word">
           <img src={Pic} alt="pic" className="word_image" />
+          <div className="word_description">
+            <h2>straightforward</h2>
+            <h3>находящихся под угрозой исчезновения</h3>
+            <h3>
+              транскрипция
+              <button type="button">Vollume</button>
+            </h3>
+            <div className="word_buttons">
+              <button type="button">+ В СЛОЖНЫЕ СЛОВА</button>
+              <button type="button">ИЗУЧЕННОЕ СЛОВО</button>
+            </div>
+            <p className="word_explanation-title">Значение</p>
+            <p className="word_explanation-example">
+              АВИБМЛАОАОАО ООАОАОАОАО ВЛВЛВЛВЛ ВОВОВОВАВИБМЛАОАОАО ООАОАОАОАО ВЛВЛВЛВЛ ВОВОВОВ
+              </p>
+            <p className="word_explanation-example">
+              АВИБМЛАОАОАО ООАОАОАОАО ВЛВЛВЛВЛ ВОВОВОВАВИБМЛАОАОАО ООАОАОАОАО ВЛВЛВЛВЛ ВОВОВОВ
+            </p>
+            <p className="word_explanation-title">Пример</p>
+            <p className="word_explanation-example">
+              АВИБМЛАОАОАО ООАОАОАОАО ВЛВЛВЛВЛ ВОВОВОВ
+            </p>
+            <p className="word_explanation-example">
+              Tckb rnj-nj nheljk.,bd jy vnj-nj nheljk.,bd jyjuj hf,jnftn
+            </p>
+          </div>
         </div>
       </div>
     </div>
