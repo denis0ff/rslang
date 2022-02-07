@@ -25,3 +25,14 @@ export type IsAuthContext = {
   isAuth: boolean
   setIsAuth: Dispatch<SetStateAction<boolean>>
 }
+
+export interface ISignIn {
+  email: string
+  password: string
+}
+
+export interface IRegistration {
+  username: string
+  email: string
+  password: string
+}

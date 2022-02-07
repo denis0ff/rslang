@@ -1,9 +1,8 @@
-import axios from 'axios'
 import { ChangeEvent, FormEvent, useContext, useState } from 'react'
 import styled from 'styled-components'
-import { SIGN_IN } from '../../utils/config'
-import { AuthContext } from '../../utils/services'
-import { AuthAction, Errors, IAuthProps } from './types'
+import { AuthContext, singInPromise } from '../../utils/services'
+import { catchError, signIn } from '../../utils/utils'
+import { AuthAction, IAuthProps } from './types'
 
 export const Form = styled.form`
   margin: 2em;
@@ -35,30 +34,12 @@ export const Authorization = ({ setAction, setError }: IAuthProps) => {
   }
   const submitChackin = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
-    axios
-      .post(SIGN_IN, {
-        email: auth.email,
-        password: auth.password,
-      })
+    singInPromise({ email: auth.email, password: auth.password })
       .then(({ data }) => {
-        localStorage.setItem('token', data.token)
-        localStorage.setItem('refreshToken', data.refreshToken)
-        localStorage.setItem('userId', data.userId)
+        signIn(data)
         setIsAuth(true)
-        window.location.href = window.location.origin
       })
-      .catch(({ response }) => {
-        switch (response.status) {
-          case 404:
-            setError(Errors.ERROR_404)
-            break
-          case 403:
-            setError(Errors.ERROR_403)
-            break
-          default:
-            setError(Errors.ERROR_SOME)
-        }
-      })
+      .catch(({ response }) => setError(catchError(response.status)))
   }
 
   return (

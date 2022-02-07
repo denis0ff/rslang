@@ -1,10 +1,13 @@
-import axios from 'axios'
 import validator from 'validator'
 import { ChangeEvent, FormEvent, useContext, useState } from 'react'
-import { SIGN_IN, USERS } from '../../utils/config'
 import { Form } from './Authorization'
 import { AuthAction, Errors, IAuthProps } from './types'
-import { AuthContext } from '../../utils/services'
+import {
+  AuthContext,
+  registerPromise,
+  singInPromise,
+} from '../../utils/services'
+import { catchError, signIn } from '../../utils/utils'
 
 export const Registration = ({ setAction, setError }: IAuthProps) => {
   const { setIsAuth } = useContext(AuthContext)
@@ -35,47 +38,23 @@ export const Registration = ({ setAction, setError }: IAuthProps) => {
     else if (register.password !== register.password2)
       setError(Errors.PASS_REPEAT)
     else
-      axios
-        .post(USERS, {
-          username: register.username,
-          email: register.email,
-          password: register.password,
-        })
+      registerPromise({
+        username: register.username,
+        email: register.email,
+        password: register.password,
+      })
         .then(() => {
-          axios
-            .post(SIGN_IN, {
-              email: register.email,
-              password: register.password,
-            })
+          singInPromise({
+            email: register.email,
+            password: register.password,
+          })
             .then(({ data }) => {
-              localStorage.setItem('token', data.token)
-              localStorage.setItem('refreshToken', data.refreshToken)
-              localStorage.setItem('userId', data.userId)
+              signIn(data)
               setIsAuth(true)
-              window.location.href = window.location.origin
             })
-            .catch(({ response }) => {
-              switch (response.status) {
-                case 404:
-                  setError(Errors.ERROR_404)
-                  break
-                case 403:
-                  setError(Errors.ERROR_403)
-                  break
-                default:
-                  setError(Errors.ERROR_SOME)
-              }
-            })
+            .catch(({ response }) => setError(catchError(response.status)))
         })
-        .catch(({ response }) => {
-          switch (response.status) {
-            case 417:
-              setError(Errors.ERROR_417)
-              break
-            default:
-              setError(Errors.ERROR_SOME)
-          }
-        })
+        .catch(({ response }) => setError(catchError(response.status)))
   }
 
   return (
