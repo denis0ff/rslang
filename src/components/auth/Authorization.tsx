@@ -1,7 +1,8 @@
 import axios from 'axios'
-import { ChangeEvent, FormEvent, useState } from 'react'
+import { ChangeEvent, FormEvent, useContext, useState } from 'react'
 import styled from 'styled-components'
 import { SIGN_IN } from '../../utils/config'
+import { AuthContext } from '../../utils/services'
 import { AuthAction, Errors, IAuthProps } from './types'
 
 export const Form = styled.form`
@@ -15,6 +16,7 @@ export const Form = styled.form`
 `
 
 export const Authorization = ({ setAction, setError }: IAuthProps) => {
+  const { setIsAuth } = useContext(AuthContext)
   const [auth, setAuth] = useState(() => {
     return {
       email: '',
@@ -42,6 +44,7 @@ export const Authorization = ({ setAction, setError }: IAuthProps) => {
         localStorage.setItem('token', data.token)
         localStorage.setItem('refreshToken', data.refreshToken)
         localStorage.setItem('userId', data.userId)
+        setIsAuth(true)
         window.location.href = window.location.origin
       })
       .catch(({ response }) => {

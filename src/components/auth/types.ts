@@ -20,3 +20,8 @@ export interface IAuthProps {
   setAction: Dispatch<SetStateAction<AuthAction>>
   setError: Dispatch<SetStateAction<Errors>>
 }
+
+export type IsAuthContext = {
+  isAuth: boolean
+  setIsAuth: Dispatch<SetStateAction<boolean>>
+}
