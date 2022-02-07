@@ -4,7 +4,6 @@ import './Textbook.css'
 // import data1 from './words'
 import Pic from '../../../src/1.jpg'
 
-
 const getProp = (e: React.MouseEvent<HTMLButtonElement>): string => {
   return JSON.parse(e.currentTarget.dataset.prop || '')
 }
