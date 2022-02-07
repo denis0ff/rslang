@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import { Link, Route, Routes } from 'react-router-dom'
 import styled from 'styled-components'
 import { AudioCall } from './pages/AudioCall'
@@ -6,6 +7,7 @@ import { Main } from './pages/Main'
 import { NotFound } from './pages/NotFound'
 import { Sprint } from './pages/Sprint'
 import { TextbookPage } from './pages/TextbookPage'
+import { AuthContext } from './utils/services'
 import { Paths } from './utils/types'
 
 const NavLink = styled(Link)`
@@ -21,16 +23,29 @@ const Header = styled.header`
   display: flex;
   height: 100%;
 `
+const Logout = styled.button``
 
 export const App = () => {
+  const [isAuth, setIsAuth] = useState(() => !!localStorage.getItem('token'))
   return (
-    <>
+    <AuthContext.Provider value={{ isAuth, setIsAuth }}>
       <Header>
         <NavLink to={Paths.HOME}>Домой</NavLink>
         <NavLink to={Paths.SPRINT}>Спринт</NavLink>
         <NavLink to={Paths.AUDIO_CALL}>Аудиовызов</NavLink>
         <NavLink to={Paths.TEXTBOOK}>Учебник</NavLink>
-        <NavLink to={Paths.AUTH}>Вход</NavLink>
+        {isAuth ? (
+          <Logout
+            onClick={() => {
+              localStorage.clear()
+              setIsAuth(false)
+            }}
+          >
+            Выход
+          </Logout>
+        ) : (
+          <NavLink to={Paths.AUTH}>Вход</NavLink>
+        )}
       </Header>
       <Routes>
         <Route path={Paths.HOME} element={<Main />} />
@@ -40,6 +55,6 @@ export const App = () => {
         <Route path={Paths.AUTH} element={<Auth />} />
         <Route path={Paths.NOT_FOUND} element={<NotFound />} />
       </Routes>
-    </>
+    </AuthContext.Provider>
   )
 }

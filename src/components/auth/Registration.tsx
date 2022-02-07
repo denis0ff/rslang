@@ -1,11 +1,13 @@
 import axios from 'axios'
 import validator from 'validator'
-import { ChangeEvent, FormEvent, useState } from 'react'
+import { ChangeEvent, FormEvent, useContext, useState } from 'react'
 import { SIGN_IN, USERS } from '../../utils/config'
 import { Form } from './Authorization'
 import { AuthAction, Errors, IAuthProps } from './types'
+import { AuthContext } from '../../utils/services'
 
 export const Registration = ({ setAction, setError }: IAuthProps) => {
+  const { setIsAuth } = useContext(AuthContext)
   const [register, setRegister] = useState(() => {
     return {
       username: '',
@@ -49,6 +51,7 @@ export const Registration = ({ setAction, setError }: IAuthProps) => {
               localStorage.setItem('token', data.token)
               localStorage.setItem('refreshToken', data.refreshToken)
               localStorage.setItem('userId', data.userId)
+              setIsAuth(true)
               window.location.href = window.location.origin
             })
             .catch(({ response }) => {
