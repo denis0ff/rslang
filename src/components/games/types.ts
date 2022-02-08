@@ -31,6 +31,7 @@ export interface IGameRunProps {
 
 export interface IResultProps {
   answers: IAnswers
+  words: IWord[]
   setStatus: Dispatch<SetStateAction<GameStatus>>
 }
 
@@ -58,5 +59,5 @@ export interface IWordListProps {
 export interface IResultViewProps {
   good: number
   bad: number
-  setStatus: Dispatch<SetStateAction<GameStatus>>
+  nextGame: () => void
 }

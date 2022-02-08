@@ -1,7 +1,7 @@
-import { useMemo, useState } from 'react'
+import { useCallback, useMemo, useState } from 'react'
 import styled from 'styled-components'
 import { Wrapper, WrapperRow } from '../Difficulty'
-import { IResultProps, ResultViews, WordListType } from '../types'
+import { GameStatus, IResultProps, ResultViews, WordListType } from '../types'
 import { ResultView } from './ResultView'
 import { WordList } from './WordList'
 
@@ -18,9 +18,16 @@ const Container = styled.div`
   }
 `
 
-export const Result = ({ answers, setStatus }: IResultProps) => {
+export const Result = ({ answers, words, setStatus }: IResultProps) => {
   const [active, setActive] = useState(ResultViews.RESULT)
   const audio = useMemo(() => new Audio(), [])
+
+  const nextGame = useCallback(() => {
+    answers.good.length = 0
+    answers.bad.length = 0
+    words.length = 0
+    setStatus(GameStatus.SELECT)
+  }, [])
   return (
     <Wrapper>
       <WrapperRow>
@@ -36,7 +43,7 @@ export const Result = ({ answers, setStatus }: IResultProps) => {
           <ResultView
             good={answers.good.length}
             bad={answers.bad.length}
-            setStatus={setStatus}
+            nextGame={nextGame}
           />
         ) : (
           <>

@@ -19,7 +19,7 @@ export const Sprint = () => {
       />
     )
   if (status === GameStatus.RESULT)
-    return <Result answers={answers} setStatus={setStatus} />
+    return <Result answers={answers} words={words} setStatus={setStatus} />
   if (status === GameStatus.GAME)
     return (
       <SprintGame words={words} setStatus={setStatus} setAnswers={setAnswers} />

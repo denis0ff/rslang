@@ -63,7 +63,7 @@ export const AudioCallGame = ({
   }, [current])
 
   const nextQuestion = useCallback(() => {
-    if (current === words.length - 1) {
+    if (current === words.length - 19) {
       setAnswers((prev) => ({ ...prev, ...answers }))
       setStatus(GameStatus.RESULT)
     } else {
