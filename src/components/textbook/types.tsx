@@ -18,4 +18,14 @@ export interface ISection {
 
 export interface ITextbook {
   sections: ISection[]
+  pageCounter: {
+    countItems: number
+    currentPage: number
+    countPage: number
+    readonly itemPerPage: number
+  }
+}
+
+export interface ITextbookMethods {
+  pagingEvent: (num: number) => void
 }

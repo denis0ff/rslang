@@ -1,33 +1,14 @@
 import React, { FC } from 'react'
-import { ISection, ITextbook } from './types'
+import { ISection, ITextbook, ITextbookMethods } from './types'
 import './Textbook.css'
-// import data1 from './words'
-import Pic from '../../../src/1.jpg'
-
-const getProp = (e: React.MouseEvent<HTMLButtonElement>): string => {
-  return JSON.parse(e.currentTarget.dataset.prop || '')
-}
+import Pic from '../../assets/1.jpg'
+import { Paging } from './Paging'
+import { getProp } from './utils'
 
 const sectionListener = (e: React.MouseEvent<HTMLButtonElement>) => {
   e.preventDefault()
   const data = getProp(e)
-  /*
-  let maxW1 = 0;
-  let maxT1 = 0;
-  let w1 = ''
-  let t1 = ''
-  for (let i = 0; i < data1.length; i += 1) {
-    if (maxW1 < data1[i].word.length) {
-      maxW1 = data1[i].word.length
-      w1 = data1[i].word
-    }
-    if (maxT1 < data1[i].wordTranslate.length) {
-      maxT1 = data1[i].wordTranslate.length
-      t1 = data1[i].wordTranslate
-    }
-  }
-  console.log(maxW1, w1, maxT1, t1)
-  */
+  console.log(data)
 }
 
 const Section: FC<ISection> = ({ name, code, first, last }) => {
@@ -64,13 +45,17 @@ const vocabulary = () => {
   return ''
 }
 
-export const Textbook: FC<ITextbook> = ({ sections }) => {
+export const Textbook: FC<{
+  state: ITextbook
+  setState: (item: ITextbook) => void
+  methods: ITextbookMethods
+}> = ({ state, setState, methods }) => {
   return (
     <div className="container">
       <div className="title">Электронный учебник</div>
       <div className="title-path">Разделы сложности слов</div>
       <div className="sections">
-        {sections.map((item) => {
+        {state.sections.map((item) => {
           return (
             <Section
               key={item.code}
@@ -86,6 +71,66 @@ export const Textbook: FC<ITextbook> = ({ sections }) => {
       <div className="title">Слова</div>
       <div className="words">
         <div className="wordlist">
+          <div className="wordlist-item">
+            <h2>straightforward</h2>
+            <p>находящихся под угрозой исчезновения</p>
+          </div>
+          <div className="wordlist-item">
+            <h2>straightforward</h2>
+            <p>находящихся под угрозой исчезновения</p>
+          </div>
+          <div className="wordlist-item">
+            <h2>straightforward</h2>
+            <p>находящихся под угрозой исчезновения</p>
+          </div>
+          <div className="wordlist-item">
+            <h2>straightforward</h2>
+            <p>находящихся под угрозой исчезновения</p>
+          </div>
+          <div className="wordlist-item">
+            <h2>straightforward</h2>
+            <p>находящихся под угрозой исчезновения</p>
+          </div>
+          <div className="wordlist-item">
+            <h2>straightforward</h2>
+            <p>находящихся под угрозой исчезновения</p>
+          </div>
+          <div className="wordlist-item">
+            <h2>straightforward</h2>
+            <p>находящихся под угрозой исчезновения</p>
+          </div>
+          <div className="wordlist-item">
+            <h2>straightforward</h2>
+            <p>находящихся под угрозой исчезновения</p>
+          </div>
+          <div className="wordlist-item">
+            <h2>straightforward</h2>
+            <p>находящихся под угрозой исчезновения</p>
+          </div>
+          <div className="wordlist-item">
+            <h2>straightforward</h2>
+            <p>находящихся под угрозой исчезновения</p>
+          </div>
+          <div className="wordlist-item">
+            <h2>straightforward</h2>
+            <p>находящихся под угрозой исчезновения</p>
+          </div>
+          <div className="wordlist-item">
+            <h2>straightforward</h2>
+            <p>находящихся под угрозой исчезновения</p>
+          </div>
+          <div className="wordlist-item">
+            <h2>straightforward</h2>
+            <p>находящихся под угрозой исчезновения</p>
+          </div>
+          <div className="wordlist-item">
+            <h2>straightforward</h2>
+            <p>находящихся под угрозой исчезновения</p>
+          </div>
+          <div className="wordlist-item">
+            <h2>straightforward</h2>
+            <p>находящихся под угрозой исчезновения</p>
+          </div>
           <div className="wordlist-item">
             <h2>straightforward</h2>
             <p>находящихся под угрозой исчезновения</p>
@@ -122,10 +167,12 @@ export const Textbook: FC<ITextbook> = ({ sections }) => {
             </div>
             <p className="word_explanation-title">Значение</p>
             <p className="word_explanation-example">
-              АВИБМЛАОАОАО ООАОАОАОАО ВЛВЛВЛВЛ ВОВОВОВАВИБМЛАОАОАО ООАОАОАОАО ВЛВЛВЛВЛ ВОВОВОВ
-              </p>
+              АВИБМЛАОАОАО ООАОАОАОАО ВЛВЛВЛВЛ ВОВОВОВАВИБМЛАОАОАО ООАОАОАОАО
+              ВЛВЛВЛВЛ ВОВОВОВ
+            </p>
             <p className="word_explanation-example">
-              АВИБМЛАОАОАО ООАОАОАОАО ВЛВЛВЛВЛ ВОВОВОВАВИБМЛАОАОАО ООАОАОАОАО ВЛВЛВЛВЛ ВОВОВОВ
+              АВИБМЛАОАОАО ООАОАОАОАО ВЛВЛВЛВЛ ВОВОВОВАВИБМЛАОАОАО ООАОАОАОАО
+              ВЛВЛВЛВЛ ВОВОВОВ
             </p>
             <p className="word_explanation-title">Пример</p>
             <p className="word_explanation-example">
@@ -137,6 +184,11 @@ export const Textbook: FC<ITextbook> = ({ sections }) => {
           </div>
         </div>
       </div>
+      <Paging
+        current={state.pageCounter.currentPage}
+        total={state.pageCounter.countPage}
+        callback={methods.pagingEvent}
+      />
     </div>
   )
 }

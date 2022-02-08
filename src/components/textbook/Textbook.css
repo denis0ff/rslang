@@ -14,6 +14,7 @@
 .title {
   margin: 10px 0 0 0;
   font-size: 2em;
+  
 }
 
 .title-path {
@@ -160,7 +161,8 @@
   display: flex;
   flex-wrap: wrap;
   flex-shrink: 1;
-  gap: 10px;
+  column-gap: 15px;
+  row-gap: 30px;
   align-content: flex-start;
 }
 
@@ -189,6 +191,7 @@
   display: flex;
   flex-direction: column;
   width: 400px;
+  height: fit-content;
   flex-shrink: 0;
   background-color: #ffffff;
   color: #030303;
