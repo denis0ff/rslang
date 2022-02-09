@@ -21,6 +21,7 @@ const NavLink = styled(Link)`
 const Header = styled.header`
   margin-bottom: 0.5rem;
   display: flex;
+  flex-wrap: wrap;
   height: 100%;
 `
 const Logout = styled.button``
