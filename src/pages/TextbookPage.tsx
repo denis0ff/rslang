@@ -3,7 +3,7 @@ import { Textbook } from '../components/textbook/Textbook'
 import { ITextbook, ITextbookMethods } from '../components/textbook/types'
 
 export const TextbookPage = () => {
-  const [textbookState, setTextbookState] = useState<ITextbook>({
+  const [textbook, setTextbook] = useState<ITextbook>({
     sections: [
       { name: 'Easy', code: 'A1', first: 1, last: 600 },
       { name: 'Easy', code: 'A2', first: 601, last: 1200 },
@@ -20,22 +20,18 @@ export const TextbookPage = () => {
     },
   })
 
-  const updateTextbookState = (item: ITextbook) => {
-    setTextbookState(() => ({ ...item }))
+  const updateTextbook = (item: ITextbook) => {
+    setTextbook(() => ({ ...item }))
   }
 
   const methods: ITextbookMethods = {
     pagingEvent: (num: number) => {
-      textbookState.pageCounter.currentPage = num
-      updateTextbookState(textbookState)
+      textbook.pageCounter.currentPage = num
+      updateTextbook(textbook)
     },
   }
 
   return (
-    <Textbook
-      state={textbookState}
-      setState={updateTextbookState}
-      methods={methods}
-    />
+    <Textbook state={textbook} setState={updateTextbook} methods={methods} />
   )
 }

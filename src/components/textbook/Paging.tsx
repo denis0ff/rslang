@@ -30,7 +30,7 @@ const PagingButton = styled.button<{ buttonState: ButtonStateType }>`
   margin: 0 4px;
   color: ${(props) => {
     return props.buttonState === 'skip' ? '#fff;' : '#030303;'
-  }}
+  }};
   background-color: ${(props) => {
     let res = ''
     switch (props.buttonState) {
@@ -68,9 +68,15 @@ const PagingButton = styled.button<{ buttonState: ButtonStateType }>`
   }
 `
 
-const createPaging = (current: number, total: number): Array<string> => {
-  const maxButtons = total <= 9 ? total + 2 : 11
-  const half = 2
+const createPaging = (
+  current: number,
+  total: number,
+  countButton?: number
+): Array<string> => {
+  const half = countButton && countButton >= 9 ? (countButton - 7) / 2 : 2
+  const count = countButton || 11
+  const maxButtons = total <= count - half ? total + half : count
+
   const arr = new Array<string>(maxButtons).fill('')
 
   let ind = 1
@@ -83,7 +89,7 @@ const createPaging = (current: number, total: number): Array<string> => {
     ) {
       if (i === 1) {
         arr[i] = '1'
-        ind = -2
+        ind = -half
       } else if (i === 2 || i === maxButtons - 3) arr[i] = LABEL.SKIP
       else if (i === maxButtons - 2) arr[i] = total.toString()
       else if (i > 2 && i < maxButtons - 3) {
@@ -131,7 +137,7 @@ export const Paging = ({ current, total, callback }: IPaging) => {
 
   return (
     <PagingContainer>
-      {createPaging(current, total).map((page, ind) => {
+      {createPaging(current, total, 11).map((page, ind) => {
         return (
           <PagingButton
             key={page + ind.toString()}

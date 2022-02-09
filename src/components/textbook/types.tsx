@@ -1,3 +1,5 @@
+import { IWord } from '../../utils/types'
+
 export type NameSectionType = 'Easy' | 'Normal' | 'Hard' | 'Difficult'
 
 export type CodeLevelType =
@@ -28,4 +30,16 @@ export interface ITextbook {
 
 export interface ITextbookMethods {
   pagingEvent: (num: number) => void
+}
+
+export type WordlistItemLabelType = 'studied' | 'difficult'
+
+export interface IWordlistItem {
+  word: string
+  trans: string
+  label?: WordlistItemLabelType
+}
+
+export interface IWordObj {
+  word?: IWord
 }
