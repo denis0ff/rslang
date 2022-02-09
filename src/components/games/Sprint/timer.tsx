@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react'
-import svg from './svg/history-solid.svg'
+import { GameStatus } from '../types'
+import { Color, ItimerProps } from './types'
 
 function TimerDisplay(props: { time: number }) {
   const { time } = props
@@ -10,7 +11,7 @@ function TimerDisplay(props: { time: number }) {
     </div>
   )
 }
-function ClockSvg() {
+function ClockSvg({ color }: Color) {
   return (
     <svg
       aria-hidden="true"
@@ -21,7 +22,7 @@ function ClockSvg() {
       viewBox="0 0 512 512"
     >
       <path
-        fill="#ffffff"
+        fill={color}
         d="M504 255.531c.253
         136.64-111.18
         248.372-247.82
@@ -39,18 +40,22 @@ function ClockSvg() {
   )
 }
 
-export default function Timer() {
+export default function Timer({ onTimer, conrols }: ItimerProps) {
   const [value, setValueTimer] = useState(30)
   useEffect(() => {
     window.setTimeout(() => {
       if (value > 0) {
         setValueTimer(value - 1)
       }
+      if (value === 0) {
+        conrols(value)
+        onTimer(GameStatus.RESULT)
+      }
     }, 1000)
-  }, [value])
+  }, [conrols, onTimer, value])
   return (
     <div className="timer-wrapper">
-      <ClockSvg />
+      <ClockSvg color={value < 10 ? '#d31831' : '#ffffff'} />
       <TimerDisplay time={value} />
     </div>
   )

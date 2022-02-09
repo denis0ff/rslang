@@ -20,5 +20,6 @@ export enum Paths {
   SPRINT = 'sprint',
   AUDIO_CALL = 'audiocall',
   TEXTBOOK = 'textbook',
+  AUTH = 'authorization',
   NOT_FOUND = '*',
 }

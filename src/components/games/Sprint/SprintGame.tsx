@@ -1,18 +1,16 @@
 import React, { useCallback, useState } from 'react'
-import { IGameRunProps } from '../types'
+import { IAnswers, IGameRunProps } from '../types'
 import { getWordsPromise } from '../../../utils/services'
 import { getRandomInteger, shuffle } from '../../../utils/utils'
 import Timer from './timer'
 import Score from './total'
 import WordsCompare from './wordsCompare'
 import './styles/style.css'
-import { IWordsLearn } from './types'
 
 const Title = () => <h2>SprintGame</h2>
-const wordsLearn: IWordsLearn = { good: [], bad: [] }
+const wordsLearn: IAnswers = { good: [], bad: [] }
 
-export const SprintGame = (props: IGameRunProps) => {
-  const { words } = props
+export const SprintGame = ({ words, setStatus, setAnswers }: IGameRunProps) => {
   const [index, setIndexWord] = useState(0)
   const [total, setTotal] = useState(0)
   const [coefficient, setCoefficient] = useState(0)
@@ -60,6 +58,11 @@ export const SprintGame = (props: IGameRunProps) => {
     setIndexWord(index + 1)
     setTotal(total + coefficient * 10)
   }
+  const getValue = (value: number) => {
+    if (value === 0) {
+      setAnswers(wordsLearn)
+    }
+  }
 
   const memoizedCallback = useCallback(
     (e: React.MouseEvent<HTMLButtonElement>) => {
@@ -71,7 +74,7 @@ export const SprintGame = (props: IGameRunProps) => {
     <div className="container">
       <div className="wrapper">
         <Title />
-        <Timer />
+        <Timer onTimer={setStatus} conrols={getValue} />
         <Score coefficient={coefficient} total={total} anser={anserButton} />
         <WordsCompare
           onClickIndex={memoizedCallback}
