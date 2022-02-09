@@ -20,16 +20,20 @@ export interface ISection {
 
 export interface ITextbook {
   sections: ISection[]
-  pageCounter: {
-    countItems: number
-    currentPage: number
+  counter: {
+    currentGroup: number
+    currentPage: number[]
+    currentWord: number[]
     countPage: number
-    readonly itemPerPage: number
   }
+  words: Array<IWord>
 }
 
 export interface ITextbookMethods {
-  pagingEvent: (num: number) => void
+  pagingEvent: (page: number) => void
+  groupEvent: (group: number) => void
+  getCurrentPage: () => number
+  getCurrentWord: () => IWord
 }
 
 export type WordlistItemLabelType = 'studied' | 'difficult'
@@ -41,5 +45,5 @@ export interface IWordlistItem {
 }
 
 export interface IWordObj {
-  word?: IWord
+  word: IWord
 }

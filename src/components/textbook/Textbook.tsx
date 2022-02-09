@@ -7,6 +7,19 @@ import './Textbook.css'
 import { WordlistItem } from './WordlistItem'
 import { Word } from './Word'
 
+const Container = styled.div`
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+`
+
+const Sections = styled.div`
+  display: flex;
+  width: 100%;
+  flex-wrap: wrap;
+  gap: 10px;
+`
+
 const Title = styled.div`
   margin: 10px 0 0 0;
   font-size: 2em;
@@ -61,10 +74,10 @@ export const Textbook: FC<{
   methods: ITextbookMethods
 }> = ({ state, setState, methods }) => {
   return (
-    <div className="container">
+    <Container>
       <Title>Электронный учебник</Title>
       <TitlePath>Разделы сложности слов</TitlePath>
-      <div className="sections">
+      <Sections>
         {state.sections.map((item) => {
           return (
             <Section
@@ -76,23 +89,28 @@ export const Textbook: FC<{
             />
           )
         })}
-      </div>
+      </Sections>
       {vocabulary()}
       <Title>Слова</Title>
       <Words>
         <WordList>
-          <WordlistItem
-            word="straightforward"
-            trans="находящихся под угрозой исчезновения"
-          />
+          {state.words.map((item) => {
+            return (
+              <WordlistItem
+                key={item.id}
+                word={item.word}
+                trans={item.wordTranslate}
+              />
+            )
+          })}
         </WordList>
-        <Word />
+        <Word word={methods.getCurrentWord()} />
       </Words>
       <Paging
-        current={state.pageCounter.currentPage}
-        total={state.pageCounter.countPage}
+        current={methods.getCurrentPage()}
+        total={state.counter.countPage}
         callback={methods.pagingEvent}
       />
-    </div>
+    </Container>
   )
 }
