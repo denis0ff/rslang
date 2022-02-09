@@ -18,13 +18,19 @@ const Container = styled.div`
   }
 `
 
-export const Result = ({ answers, words, setStatus }: IResultProps) => {
+const initialResult = { right: [], wrong: [], streak: 0, max: 0 }
+
+export const Result = ({
+  answers,
+  words,
+  setStatus,
+  setAnswers,
+}: IResultProps) => {
   const [active, setActive] = useState(ResultViews.RESULT)
   const audio = useMemo(() => new Audio(), [])
 
   const nextGame = useCallback(() => {
-    answers.good.length = 0
-    answers.bad.length = 0
+    setAnswers({ ...initialResult })
     words.length = 0
     setStatus(GameStatus.SELECT)
   }, [])
@@ -41,8 +47,8 @@ export const Result = ({ answers, words, setStatus }: IResultProps) => {
       <Container>
         {active === ResultViews.RESULT ? (
           <ResultView
-            good={answers.good.length}
-            bad={answers.bad.length}
+            right={answers.right.length}
+            wrong={answers.wrong.length}
             nextGame={nextGame}
           />
         ) : (
@@ -50,12 +56,12 @@ export const Result = ({ answers, words, setStatus }: IResultProps) => {
             <WordList
               type={WordListType.MISTAKE}
               audio={audio}
-              words={answers.bad}
+              words={answers.wrong}
             />
             <WordList
               type={WordListType.SUCCESS}
               audio={audio}
-              words={answers.good}
+              words={answers.right}
             />
           </>
         )}

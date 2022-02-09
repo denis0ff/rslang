@@ -1,10 +1,12 @@
-import { useCallback, useEffect, useMemo, useState } from 'react'
+import { useCallback, useContext, useEffect, useMemo, useState } from 'react'
 import styled from 'styled-components'
 import { getFileResponse } from '../../../utils/config'
+import { AuthContext } from '../../../utils/services'
 import { shuffle } from '../../../utils/utils'
 import { AudioButton } from '../AudioButton'
 import { Wrapper, WrapperRow } from '../Difficulty'
-import { GameStatus, IAnswers, IGameRunProps } from '../types'
+import { GameStatus, GameTypeOption, IGameRunProps, IGameStats } from '../types'
+import { addWord } from '../utils'
 
 const AnswerContainer = styled.div``
 
@@ -25,7 +27,7 @@ const AnswerButton = styled.button``
 
 const ShowAnswer = styled.button``
 
-const answers: IAnswers = { good: [], bad: [] }
+const answers: IGameStats = { right: [], wrong: [], streak: 0, max: 0 }
 
 export const AudioCallGame = ({
   words,
@@ -34,6 +36,7 @@ export const AudioCallGame = ({
 }: IGameRunProps) => {
   const [current, setCurrent] = useState(0)
   const [isAnswered, setIsAnswered] = useState(false)
+  const isAuth = useContext(AuthContext)
 
   const audio = useMemo(() => new Audio(), [])
   const generateAnswers = useMemo(
@@ -49,8 +52,21 @@ export const AudioCallGame = ({
 
   const checkAnswer = useCallback(
     (id: string) => {
-      if (id === words[current].id) answers.good.push(words[current])
-      else answers.bad.push(words[current])
+      const isRight = id === words[current].id
+      if (isRight) {
+        answers.right.push(words[current])
+        answers.streak += 1
+      } else {
+        answers.wrong.push(words[current])
+        if (answers.max < answers.streak) answers.max = answers.streak
+        answers.streak = 0
+      }
+      if (isAuth)
+        addWord({
+          isRight,
+          id: words[current].id,
+          gameType: GameTypeOption.AUDIO_CALL,
+        })
       setIsAnswered(true)
     },
     [current]
@@ -63,8 +79,12 @@ export const AudioCallGame = ({
   }, [current])
 
   const nextQuestion = useCallback(() => {
-    if (current === words.length - 19) {
-      setAnswers((prev) => ({ ...prev, ...answers }))
+    if (current === words.length - 1) {
+      setAnswers((prev) => ({
+        ...prev,
+        right: answers.right,
+        wrong: answers.wrong,
+      }))
       setStatus(GameStatus.RESULT)
     } else {
       setCurrent((prev) => prev + 1)

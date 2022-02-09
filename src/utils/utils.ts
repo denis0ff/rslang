@@ -36,3 +36,13 @@ export const catchError = (status: number) => {
       return Errors.ERROR_SOME
   }
 }
+
+export const sameDay = (dateJSON: string) => {
+  const date = new Date(dateJSON)
+  const now = new Date()
+  return (
+    date.getFullYear() === now.getFullYear() &&
+    date.getDate() === now.getDate() &&
+    date.getMonth() === now.getMonth()
+  )
+}

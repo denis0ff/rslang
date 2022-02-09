@@ -13,11 +13,11 @@ const TextbookLink = styled(Link)`
   padding: 0;
 `
 
-export const ResultView = ({ good, bad, nextGame }: IResultViewProps) => (
+export const ResultView = ({ right, wrong, nextGame }: IResultViewProps) => (
   <>
     <Title>Ты молодец!</Title>
     <TextLink>
-      {good} изучено, {bad} на изучении
+      {right} изучено, {wrong} на изучении
     </TextLink>
     <WrapperRow>
       <GameLink onClick={() => nextGame()}>Сыграть ещё раз</GameLink>
