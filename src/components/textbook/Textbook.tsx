@@ -54,8 +54,8 @@ const WordList = styled.div`
 `
 
 const vocabulary = () => {
-  const authorize = 1
-  if (authorize === 1) {
+  const authorize = !!localStorage.getItem('token')
+  if (authorize) {
     return (
       <>
         <TitlePath>Мой словарь</TitlePath>
@@ -94,12 +94,14 @@ export const Textbook: FC<{
       <Title>Слова</Title>
       <Words>
         <WordList>
-          {state.words.map((item) => {
+          {state.words.map((item, ind) => {
             return (
               <WordlistItem
                 key={item.id}
+                ind={ind}
                 word={item.word}
                 trans={item.wordTranslate}
+                setWord={methods.setCurrentWord}
               />
             )
           })}

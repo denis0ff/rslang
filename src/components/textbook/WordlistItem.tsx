@@ -1,4 +1,4 @@
-import { FC } from 'react'
+import React, { FC } from 'react'
 import styled from 'styled-components'
 import { IWordlistItem, WordlistItemLabelType } from './types'
 
@@ -47,9 +47,24 @@ const P = styled.p`
   height: 48px;
 `
 
-export const WordlistItem: FC<IWordlistItem> = ({ word, trans, label }) => {
+export const WordlistItem: FC<IWordlistItem> = ({
+  ind,
+  word,
+  trans,
+  label,
+  setWord,
+}) => {
+  const itemListener = (e: React.MouseEvent<HTMLDivElement>) => {
+    e.preventDefault()
+    const checkWord = e.currentTarget.dataset.prop || ''
+    console.log(ind)
+    if (checkWord) {
+      setWord(+checkWord)
+    }
+  }
+
   return (
-    <Container label={label}>
+    <Container label={label} onClick={itemListener} data-prop={ind}>
       <H2>{word}</H2>
       <P>{trans}</P>
     </Container>

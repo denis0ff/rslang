@@ -1,6 +1,7 @@
+import parse from 'html-react-parser'
 import { FC } from 'react'
 import styled from 'styled-components'
-import Pic from '../../assets/1.jpg'
+import { BASE } from '../../utils/config'
 import { IWordObj } from './types'
 
 const Container = styled.div`
@@ -11,13 +12,21 @@ const Container = styled.div`
   flex-shrink: 0;
   background-color: #ffffff;
   color: #030303;
+  border-top-left-radius: 160px;
   @media screen and (max-width: 420px) {
     width: 300px;
+    border-top-left-radius: 120px;
   }
   & img {
     width: 100%;
     height: 200px;
+    border-top-left-radius: 160px;
+    border-bottom-right-radius: 160px;
     object-fit: cover;
+    @media screen and (max-width: 420px) {
+      border-top-left-radius: 120px;
+      border-bottom-right-radius: 120px;
+    }
   }
   & .description {
     display: flex;
@@ -46,41 +55,38 @@ const Container = styled.div`
     letter-spacing: 1px;
   }
   & .explanation-example {
-    font-size: 0.9em;
+    font-size: 1em;
   }
 `
 
 export const Word: FC<IWordObj> = ({ word }) => {
+  if (!word) {
+    return null
+  }
   return (
     <Container>
-      <img src={Pic} alt="pic" className="word_image" />
+      <img src={BASE + word.image} alt={word.word} className="word_image" />
       <div className="description">
-        <h2>straightforward</h2>
-        <h3>находящихся под угрозой исчезновения</h3>
+        <h2>{word.word}</h2>
+        <h3>{word.wordTranslate}</h3>
         <h3>
-          транскрипция
+          {word.transcription}
           <button type="button">Vollume</button>
         </h3>
         <div className="buttons">
-          <button className="difficult" type="button">+ В СЛОЖНЫЕ СЛОВА</button>
-          <button className="studied" type="button">ИЗУЧЕННОЕ СЛОВО</button>
+          <button className="difficult" type="button">
+            + В СЛОЖНЫЕ СЛОВА
+          </button>
+          <button className="studied" type="button">
+            ИЗУЧЕННОЕ СЛОВО
+          </button>
         </div>
         <p className="explanation-title">Значение</p>
-        <p className="explanation-example">
-          АВИБМЛАОАОАО ООАОАОАОАО ВЛВЛВЛВЛ ВОВОВОВАВИБМЛАОАОАО ООАОАОАОАО
-          ВЛВЛВЛВЛ ВОВОВОВ
-        </p>
-        <p className="explanation-example">
-          АВИБМЛАОАОАО ООАОАОАОАО ВЛВЛВЛВЛ ВОВОВОВАВИБМЛАОАОАО ООАОАОАОАО
-          ВЛВЛВЛВЛ ВОВОВОВ
-        </p>
+        <p className="explanation-example">{parse(word.textMeaning)}</p>
+        <p className="explanation-example">{word.textMeaningTranslate}</p>
         <p className="explanation-title">Пример</p>
-        <p className="explanation-example">
-          АВИБМЛАОАОАО ООАОАОАОАО ВЛВЛВЛВЛ ВОВОВОВ
-        </p>
-        <p className="explanation-example">
-          Tckb rnj-nj nheljk.,bd jy vnj-nj nheljk.,bd jyjuj hf,jnftn
-        </p>
+        <p className="explanation-example">{parse(word.textExample)}</p>
+        <p className="explanation-example">{word.textExampleTranslate}</p>
       </div>
     </Container>
   )

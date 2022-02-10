@@ -1,4 +1,4 @@
-const BASE = 'https://react-rslang-api.herokuapp.com/'
+export const BASE = 'https://react-rslang-api.herokuapp.com/'
 const WORDS = `${BASE}words`
 
 export const USERS = `${BASE}users`

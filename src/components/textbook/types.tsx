@@ -34,14 +34,17 @@ export interface ITextbookMethods {
   groupEvent: (group: number) => void
   getCurrentPage: () => number
   getCurrentWord: () => IWord
+  setCurrentWord: (num: number) => void
 }
 
 export type WordlistItemLabelType = 'studied' | 'difficult'
 
 export interface IWordlistItem {
+  ind: number
   word: string
   trans: string
   label?: WordlistItemLabelType
+  setWord: (num: number) => void
 }
 
 export interface IWordObj {

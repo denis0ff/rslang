@@ -30,7 +30,7 @@ export const TextbookPage = () => {
   const getWords = () => {
     getWordsService(
       textbook.counter.currentGroup,
-      textbook.counter.currentPage[textbook.counter.currentGroup]
+      textbook.counter.currentPage[textbook.counter.currentGroup] - 1
     ).then((data) => {
       textbook.words = data
       updateTextbook(textbook)
@@ -51,6 +51,10 @@ export const TextbookPage = () => {
       textbook.words[
         textbook.counter.currentWord[textbook.counter.currentGroup]
       ],
+    setCurrentWord: (num: number) => {
+      textbook.counter.currentWord[textbook.counter.currentGroup] = num
+      updateTextbook(textbook)
+    },
   }
 
   React.useEffect(() => {
