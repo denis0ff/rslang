@@ -1,7 +1,11 @@
 import axios from 'axios'
 import { createContext } from 'react'
 import { IRegistration, IsAuthContext, ISignIn } from '../components/auth/types'
-import { IPostWordProps, IPutWordProps } from '../components/games/types'
+import {
+  Errors,
+  IPostWordProps,
+  IPutWordProps,
+} from '../components/games/types'
 import {
   getTokenConfig,
   getUserWordResponse,
@@ -46,9 +50,11 @@ export const getNewToken = async () =>
       localStorage.setItem('token', data.token)
       localStorage.setItem('refreshToken', data.refreshToken)
     })
-    .catch(() => {
-      localStorage.clear()
-      window.location.href = `${window.location.origin}/authorization`
+    .catch(({ response }) => {
+      if (response.status === Errors.ERROR_401) {
+        localStorage.clear()
+        window.location.href = `${window.location.origin}/authorization`
+      }
     })
 
 export const getWordPromise = async (id: string) =>

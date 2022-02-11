@@ -29,6 +29,10 @@ const ShowAnswer = styled.button``
 
 const answers: IGameStats = { right: [], wrong: [], streak: 0, max: 0 }
 
+const keys = ['1', '2', '3', '4', '5']
+
+let variables: string[] = []
+
 export const AudioCallGame = ({
   words,
   setStatus,
@@ -39,16 +43,14 @@ export const AudioCallGame = ({
   const isAuth = useContext(AuthContext)
 
   const audio = useMemo(() => new Audio(), [])
-  const generateAnswers = useMemo(
-    () =>
-      shuffle(
-        Array.from(new Set([words[current], ...shuffle([...words])])).slice(
-          0,
-          5
-        )
-      ),
-    [current, words]
-  )
+
+  const generatedAnswers = useMemo(() => {
+    const newArray = shuffle(
+      Array.from(new Set([words[current], ...shuffle([...words])])).slice(0, 5)
+    )
+    variables = newArray.map((i) => i.id)
+    return newArray
+  }, [current, words])
 
   const checkAnswer = useCallback(
     (id: string) => {
@@ -92,6 +94,25 @@ export const AudioCallGame = ({
     }
   }, [isAnswered])
 
+  useEffect(() => {
+    const onKeydown = (e: KeyboardEvent) => {
+      e.preventDefault()
+      if (e.key === ' ') {
+        if (isAnswered) nextQuestion()
+        else checkAnswer('')
+      }
+      if (keys.includes(e.key) && !isAnswered) {
+        checkAnswer(variables[+e.key])
+      }
+    }
+
+    document.addEventListener('keydown', onKeydown)
+
+    return () => {
+      document.removeEventListener('keydown', onKeydown)
+    }
+  }, [isAnswered])
+
   return (
     <Wrapper>
       {isAnswered ? (
@@ -106,7 +127,7 @@ export const AudioCallGame = ({
         <AudioButton audio={audio} />
       )}
       <WrapperRow>
-        {generateAnswers.map((w) => (
+        {generatedAnswers.map((w) => (
           <AnswerButton
             key={w.id}
             onClick={() => {
