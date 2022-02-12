@@ -2,8 +2,9 @@ interface WordsCompareProps {
   EWord: string
   RWord: string
   anser: boolean
-  onClickIndex: (e: React.MouseEvent<HTMLButtonElement>) => void
+  onClickIndex: (isRight: boolean) => void
 }
+
 const RightAnser = <span>&#10003;</span>
 const NegativeAnser = <span>&#10006;</span>
 const WordsCompare = (props: WordsCompareProps) => {
@@ -27,7 +28,9 @@ const WordsCompare = (props: WordsCompareProps) => {
           type="button"
           data-type
           className="button-compare anser-right"
-          onClick={onClickIndex}
+          onClick={() => {
+            onClickIndex(true)
+          }}
         >
           Верно
         </button>
@@ -35,7 +38,9 @@ const WordsCompare = (props: WordsCompareProps) => {
           type="button"
           data-type={false}
           className="button-compare anser-negative"
-          onClick={onClickIndex}
+          onClick={() => {
+            onClickIndex(false)
+          }}
         >
           Неверно
         </button>

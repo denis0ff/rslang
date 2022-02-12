@@ -2,6 +2,7 @@ import React, { useCallback, useState } from 'react'
 import { IAnswers, IGameRunProps } from '../types'
 import { getWordsPromise } from '../../../utils/services'
 import { getRandomInteger, shuffle } from '../../../utils/utils'
+
 import Timer from './timer'
 import Score from './total'
 import WordsCompare from './wordsCompare'
@@ -10,6 +11,15 @@ import './styles/style.css'
 const Title = () => <h2>SprintGame</h2>
 const wordsLearn: IAnswers = { good: [], bad: [] }
 
+const getRandomAnswers = (currentIindex: number, maxIndex: number): number => {
+  const randomIndex = (max: number): number => {
+    const randomItem = getRandomInteger(0, max)
+    return randomItem === currentIindex ? randomIndex(max) : randomItem
+  }
+  const rIndex = randomIndex(maxIndex)
+  return shuffle([rIndex, currentIindex])[0]
+}
+
 export const SprintGame = ({ words, setStatus, setAnswers }: IGameRunProps) => {
   const [index, setIndexWord] = useState(0)
   const [total, setTotal] = useState(0)
@@ -17,36 +27,21 @@ export const SprintGame = ({ words, setStatus, setAnswers }: IGameRunProps) => {
   const [anserButton, setAnserButton] = useState(true)
   const [enWords, setenWords] = useState(words)
 
-  const randomIndex = (i: number): number => {
-    const randomItem = getRandomInteger(0, enWords.length - 1)
-    return randomItem === i ? randomIndex(i) : randomItem
-  }
-  const getAnswers = (indexRight: number): number => {
-    const rIndex = randomIndex(index)
-    return shuffle([rIndex, indexRight])[0]
-  }
-
-  const randomAnserIndex = getAnswers(index)
+  const randomAnserIndex = getRandomAnswers(index, enWords.length - 1)
   const getAdditionalResurse = async (group: number, page: number) => {
     const arrowWords = await getWordsPromise(group, page)
     const { data } = arrowWords
     setenWords([...enWords, ...data])
   }
 
-  function handleIndex(event: React.MouseEvent<HTMLButtonElement>): void {
-    let anserCompare: string | undefined
-    if (event.target) {
-      const target: HTMLButtonElement = event.target as HTMLButtonElement
-      anserCompare = target.dataset.type
-    }
+  function handleIndex(anserCompare: boolean): void {
     const compare = index === randomAnserIndex
     if (index === enWords.length - 4) {
-      const { page } = words[0]
-      const { group } = words[0]
+      const { page, group } = words[0]
       const newPage = page + 1 >= 30 ? page - 1 : page + 1
       getAdditionalResurse(group, newPage)
     }
-    if (compare.toString() === anserCompare) {
+    if (compare === anserCompare) {
       setAnserButton(true)
       setCoefficient(coefficient + 1)
       wordsLearn.good.push(enWords[index])
@@ -64,9 +59,9 @@ export const SprintGame = ({ words, setStatus, setAnswers }: IGameRunProps) => {
     }
   }
 
-  const memoizedCallback = useCallback(
-    (e: React.MouseEvent<HTMLButtonElement>) => {
-      handleIndex(e)
+  const handleAnser = useCallback(
+    (anser: boolean) => {
+      handleIndex(anser)
     },
     [total, index, coefficient, anserButton]
   )
@@ -77,7 +72,7 @@ export const SprintGame = ({ words, setStatus, setAnswers }: IGameRunProps) => {
         <Timer onTimer={setStatus} conrols={getValue} />
         <Score coefficient={coefficient} total={total} anser={anserButton} />
         <WordsCompare
-          onClickIndex={memoizedCallback}
+          onClickIndex={handleAnser}
           EWord={enWords[index].word}
           RWord={enWords[randomAnserIndex].wordTranslate}
           anser={anserButton}
