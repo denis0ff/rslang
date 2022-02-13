@@ -16,17 +16,27 @@ export interface ISection {
   code?: CodeLevelType
   first?: number
   last?: number
+  ind?: number
+  checked?: boolean
+  callback?: (num: number) => void
+}
+
+export interface ISectionDifficult {
+  name: NameSectionType
+  count: number
+  ind: number
+  callback: (num: number) => void
 }
 
 export interface ITextbook {
-  sections: ISection[]
+  readonly sections: ISection[]
   counter: {
     currentGroup: number
     currentPage: number[]
-    currentWord: number[]
+    currentWord: number
     countPage: number
   }
-  words: Array<IWord>
+  words: Array<IAggregatedWord>
 }
 
 export interface ITextbookMethods {
@@ -34,19 +44,36 @@ export interface ITextbookMethods {
   groupEvent: (group: number) => void
   getCurrentPage: () => number
   getCurrentWord: () => IWord
-  setCurrentWord: (num: number) => void
+  wordEvent: (num: number) => void
+  addDifficultWordEvent: (id: number) => void
+  addStudiedWordEvent: (id: number) => void
 }
 
-export type WordlistItemLabelType = 'studied' | 'difficult'
+export type WordDifficultyType = 'studied' | 'difficult' | 'all'
 
 export interface IWordlistItem {
   ind: number
   word: string
   trans: string
-  label?: WordlistItemLabelType
-  setWord: (num: number) => void
+  active: boolean
+  label?: WordDifficultyType
+  callback: (num: number) => void
 }
 
 export interface IWordObj {
   word: IWord
+  difficultCallback: (id: number) => void
+  studiedCallback: (id: number) => void
+}
+
+export interface IAggregatedWord extends IWord {
+  _id: string
+  userWord?: {
+    difficulty: WordDifficultyType
+  }
+}
+
+export interface IAggregatedResponse {
+  paginatedResults: IAggregatedWord[]
+  totalCount: Array<{ count: number }>
 }

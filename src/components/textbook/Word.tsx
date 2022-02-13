@@ -8,7 +8,7 @@ const Container = styled.div`
   display: flex;
   flex-direction: column;
   width: 400px;
-  height: fit-content;
+  height: 700px;
   flex-shrink: 0;
   background-color: #ffffff;
   color: #030303;
@@ -30,6 +30,8 @@ const Container = styled.div`
   }
   & .description {
     display: flex;
+    flex-grow: 1;
+    justify-content: space-between;
     flex-direction: column;
     row-gap: 5px;
     padding: 15px;
@@ -59,7 +61,27 @@ const Container = styled.div`
   }
 `
 
-export const Word: FC<IWordObj> = ({ word }) => {
+export const Word: FC<IWordObj> = ({
+  word,
+  difficultCallback,
+  studiedCallback,
+}) => {
+  const difficultListener = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault()
+    const checkWord = e.currentTarget.dataset.prop || ''
+    if (checkWord) {
+      difficultCallback(+checkWord)
+    }
+  }
+
+  const studiedListener = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault()
+    const checkWord = e.currentTarget.dataset.prop || ''
+    if (checkWord) {
+      studiedCallback(+checkWord)
+    }
+  }
+
   if (!word) {
     return null
   }
@@ -74,10 +96,20 @@ export const Word: FC<IWordObj> = ({ word }) => {
           <button type="button">Vollume</button>
         </h3>
         <div className="buttons">
-          <button className="difficult" type="button">
+          <button
+            className="difficult"
+            type="button"
+            data-prop={word.id}
+            onClick={difficultListener}
+          >
             + В СЛОЖНЫЕ СЛОВА
           </button>
-          <button className="studied" type="button">
+          <button
+            className="studied"
+            type="button"
+            data-prop={word.id}
+            onClick={studiedListener}
+          >
             ИЗУЧЕННОЕ СЛОВО
           </button>
         </div>

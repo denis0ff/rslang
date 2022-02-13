@@ -1,11 +1,12 @@
-import { FC } from 'react'
+import React, { FC } from 'react'
 import styled from 'styled-components'
 import { ITextbook, ITextbookMethods } from './types'
 import { Paging } from './Paging'
-import { Section } from './Section'
+import { Section, SectionDifficult } from './Section'
 import './Textbook.css'
 import { WordlistItem } from './WordlistItem'
 import { Word } from './Word'
+import { AuthContext } from '../../utils/services'
 
 const Container = styled.div`
   width: 100%;
@@ -53,14 +54,20 @@ const WordList = styled.div`
   }
 `
 
-const vocabulary = () => {
-  const authorize = !!localStorage.getItem('token')
-  if (authorize) {
+const vocabulary = (isAuth: boolean) => {
+  // const authorize = !!localStorage.getItem('token')
+  if (isAuth) {
     return (
       <>
         <TitlePath>Мой словарь</TitlePath>
         <div className="sections sections-vocabulary">
-          <Section key="D" name="Difficult" first={0} />
+          <SectionDifficult
+            key="D"
+            name="Difficult"
+            count={0}
+            ind={7}
+            callback={() => {}}
+          />
         </div>
       </>
     )
@@ -70,15 +77,17 @@ const vocabulary = () => {
 
 export const Textbook: FC<{
   state: ITextbook
-  setState: (item: ITextbook) => void
   methods: ITextbookMethods
-}> = ({ state, setState, methods }) => {
+}> = ({ state, methods }) => {
+  const { isAuth } = React.useContext(AuthContext)
+  const currentWord = methods.getCurrentWord()
+
   return (
     <Container>
       <Title>Электронный учебник</Title>
       <TitlePath>Разделы сложности слов</TitlePath>
       <Sections>
-        {state.sections.map((item) => {
+        {state.sections.map((item, ind) => {
           return (
             <Section
               key={item.code}
@@ -86,11 +95,14 @@ export const Textbook: FC<{
               code={item.code}
               first={item.first}
               last={item.last}
+              ind={ind}
+              checked={ind === state.counter.currentGroup}
+              callback={methods.groupEvent}
             />
           )
         })}
       </Sections>
-      {vocabulary()}
+      {vocabulary(isAuth)}
       <Title>Слова</Title>
       <Words>
         <WordList>
@@ -99,14 +111,20 @@ export const Textbook: FC<{
               <WordlistItem
                 key={item.id}
                 ind={ind}
+                active={item.id === currentWord.id}
                 word={item.word}
                 trans={item.wordTranslate}
-                setWord={methods.setCurrentWord}
+                label={item.userWord ? item.userWord.difficulty : 'all'}
+                callback={methods.wordEvent}
               />
             )
           })}
         </WordList>
-        <Word word={methods.getCurrentWord()} />
+        <Word
+          word={methods.getCurrentWord()}
+          difficultCallback={methods.addDifficultWordEvent}
+          studiedCallback={methods.addStudiedWordEvent}
+        />
       </Words>
       <Paging
         current={methods.getCurrentPage()}

@@ -1,22 +1,27 @@
 import React, { FC } from 'react'
 import styled from 'styled-components'
-import { IWordlistItem, WordlistItemLabelType } from './types'
+import { IWordlistItem, WordDifficultyType } from './types'
 
-const Container = styled.div<{ label?: WordlistItemLabelType }>`
+const Container = styled.div<{
+  label?: WordDifficultyType
+  active: boolean
+}>`
   display: flex;
   flex-direction: column;
   width: 180px;
   height: 95px;
   padding: 5px 10px;
   border-radius: 5px;
-  background-color: #ffffff;
   color: #030303;
   transition: all ease 0.3s;
-  opacity: 0.7;
+  opacity: ${(props) => (props.active ? '1;' : '0.7;')};
   position: relative;
+  cursor: pointer;
+  background-color: #fff;
+  pointer-events: ${(props) => (props.active ? 'none;' : 'auto;')};
   &.active,
   &:hover {
-    opacity: 1;
+    opacity: 0.9;
   }
   &::after {
     position: absolute;
@@ -36,8 +41,9 @@ const Container = styled.div<{ label?: WordlistItemLabelType }>`
   }
 `
 
-const H2 = styled.h2`
+const Title = styled.p`
   font-size: 1.4em;
+  font-weight: bolder;
 }
 `
 
@@ -51,21 +57,27 @@ export const WordlistItem: FC<IWordlistItem> = ({
   ind,
   word,
   trans,
+  active,
   label,
-  setWord,
+  callback,
 }) => {
   const itemListener = (e: React.MouseEvent<HTMLDivElement>) => {
     e.preventDefault()
+
     const checkWord = e.currentTarget.dataset.prop || ''
-    console.log(ind)
     if (checkWord) {
-      setWord(+checkWord)
+      callback(+checkWord)
     }
   }
 
   return (
-    <Container label={label} onClick={itemListener} data-prop={ind}>
-      <H2>{word}</H2>
+    <Container
+      label={label}
+      active={active}
+      onClick={itemListener}
+      data-prop={ind}
+    >
+      <Title>{word}</Title>
       <P>{trans}</P>
     </Container>
   )
