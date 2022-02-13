@@ -1,0 +1,95 @@
+.container {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+}
+.wrapper {
+  width: 70%;
+  height: 70%;
+  margin: 1rem 0 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  border: 1px solid #fff;
+}
+.timer-wrapper {
+  color:#fff;
+  font-size: 1rem;
+}
+.timer-wrapper svg {
+  display: block;
+  width: 30px;
+  height: 30px;
+  margin: 1rem auto;
+}
+
+.time-description span {
+  margin-left: 1rem;
+}
+.score-wrapper,
+.compare-wrapper{
+  display: flex;
+  gap: 0.5rem;
+  margin: 1rem 0;
+}
+.score-calculate,
+.score-total {
+  border: 2px solid #ffffff;
+  border-radius: 10px;
+  padding: 1rem;
+}
+.score-calculate span {
+  margin-left: 1rem;
+}
+.score-total span {
+  margin-left: 0.5rem;
+}
+.compare-wrapper {
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  font-size: 2rem;
+}
+.anser-results {
+  font-size: 2.5rem;
+  font-weight: 900;
+}
+.words-block {
+  display: flex;
+  margin: 2rem 0 5rem 0;
+  gap: 1.5rem;
+}
+.anser-right { 
+  color: #31ba15;
+}
+.anser-negative {
+  color: #d31831;
+}
+.button-compare {
+  padding: 1rem;
+  background-color: transparent;
+  border: 1px solid #ffffff;
+  cursor: pointer;
+  border-radius: 10px;
+  text-transform: uppercase;
+  font-weight: 600;
+}
+.button-compare:first-child {
+  border-radius: 10px 0 0 10px;
+}
+.button-compare:last-child {
+  border-radius:  0  10px 10px 0;
+}
+.button-compare:active {
+  transform: scale(0.99);
+}
+.button-compare:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+.word-compare, h5 {
+ margin: 0;
+}
