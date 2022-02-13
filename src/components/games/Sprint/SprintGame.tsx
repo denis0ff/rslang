@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import { IAnswers, IGameRunProps } from '../types'
 import { getWordsPromise } from '../../../utils/services'
 import { getRandomInteger, shuffle } from '../../../utils/utils'
@@ -31,7 +31,7 @@ export const SprintGame = ({ words, setStatus, setAnswers }: IGameRunProps) => {
   const getAdditionalResurse = async (group: number, page: number) => {
     const arrowWords = await getWordsPromise(group, page)
     const { data } = arrowWords
-    setenWords([...enWords, ...data])
+    setenWords(() => [...enWords, ...data])
   }
 
   const getValue = (value: number) => {
@@ -43,10 +43,12 @@ export const SprintGame = ({ words, setStatus, setAnswers }: IGameRunProps) => {
   const handleAnser = useCallback(
     (anserCompare: boolean) => {
       const compare = index === randomAnserIndex
-      if (index === enWords.length - 4) {
-        const { page, group } = words[0]
-        const newPage = page + 1 >= 30 ? page - 1 : page + 1
-        getAdditionalResurse(group, newPage)
+      if (index === enWords.length - 10) {
+        const { group } = words[0]
+        const { page } = enWords[enWords.length - 1]
+        const newGroup = page + 1 >= 30 ? group + 1 : group
+        const newPage = page + 1 >= 30 ? 0 : page + 1
+        getAdditionalResurse(newGroup, newPage)
       }
       if (compare === anserCompare) {
         setAnserButton(true)
@@ -62,6 +64,18 @@ export const SprintGame = ({ words, setStatus, setAnswers }: IGameRunProps) => {
     },
     [total, index, coefficient, anserButton]
   )
+
+  useEffect(() => {
+    const onKeydown = (e: KeyboardEvent) => {
+      if (e.code === 'ArrowLeft') handleAnser(true)
+      if (e.code === 'ArrowRight') handleAnser(false)
+    }
+    document.addEventListener('keyup', onKeydown)
+    return () => {
+      document.removeEventListener('keyup', onKeydown)
+    }
+  }, [handleAnser])
+
   return (
     <div className="container">
       <div className="wrapper">
