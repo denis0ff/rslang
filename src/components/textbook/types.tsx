@@ -32,6 +32,13 @@ export interface ISectionDifficult {
   callback: (num: number) => void
 }
 
+export interface IAggregatedWord extends IWord {
+  _id: string
+  userWord?: {
+    difficulty: WordDifficultyType
+  }
+}
+
 export interface ITextbook {
   readonly sections: ISectionData[]
   counter: {
@@ -49,10 +56,10 @@ export interface ITextbookMethods {
   groupEvent: (group: number) => void
   groupDifficultEvent: (group: number) => void
   getCurrentPage: () => number
-  getCurrentWord: () => IWord
+  getCurrentWord: () => IAggregatedWord
   wordEvent: (num: number) => void
-  addDifficultWordEvent: (id: number) => void
-  addStudiedWordEvent: (id: number) => void
+  difficultyWordEvent: (check: IWordAddition) => void
+  deleteDifficultyWordEvent: (id: string) => void
 }
 
 export type WordDifficultyType = 'studied' | 'difficult' | 'all'
@@ -66,17 +73,17 @@ export interface IWordlistItem {
   callback: (num: number) => void
 }
 
-export interface IWordObj {
-  word: IWord
-  difficultCallback: (id: number) => void
-  studiedCallback: (id: number) => void
+export interface IWordAddition {
+  id: string
+  difficulty: WordDifficultyType
+  isNew: boolean
 }
 
-export interface IAggregatedWord extends IWord {
-  _id: string
-  userWord?: {
-    difficulty: WordDifficultyType
-  }
+export interface IWordObj {
+  word: IAggregatedWord
+  difficulty: (check: IWordAddition) => void
+  deleteDifficulty: (id: string) => void
+  state: ITextbook
 }
 
 export interface IAggregatedResponse {

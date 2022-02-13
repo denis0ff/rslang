@@ -15,3 +15,7 @@ export const getUserAggregatedWordsAllFilter = (
 export const getUserAggregatedWordsDifficultFilter = () => `
   {"$and":[{"userWord.difficulty":"difficult"}]}
 `
+
+export const getUserWordURL = (userId: string, wordId: string) => `
+  ${BASE}users/${userId}/words/${wordId}
+`

@@ -134,8 +134,9 @@ export const Textbook: FC<{
         </WordList>
         <Word
           word={methods.getCurrentWord()}
-          difficultCallback={methods.addDifficultWordEvent}
-          studiedCallback={methods.addStudiedWordEvent}
+          difficulty={methods.difficultyWordEvent}
+          deleteDifficulty={methods.deleteDifficultyWordEvent}
+          state={state}
         />
       </Words>
       {createPaging()}

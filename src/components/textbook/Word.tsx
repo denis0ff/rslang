@@ -1,10 +1,14 @@
 import parse from 'html-react-parser'
-import { FC } from 'react'
+import React, { FC } from 'react'
 import styled from 'styled-components'
 import { BASE } from '../../utils/config'
-import { IWordObj } from './types'
+import { AuthContext } from '../../utils/services'
+import { IWordAddition, IWordObj, WordDifficultyType } from './types'
 
-const Container = styled.div`
+const Container = styled.div<{
+  difficulty?: WordDifficultyType
+  isDifficultGroup: boolean
+}>`
   display: flex;
   flex-direction: column;
   width: 400px;
@@ -44,13 +48,41 @@ const Container = styled.div`
     font-size: 1.2em;
   }
   & .buttons {
+    display: flex;
+    flex-wrap: wrap;
+    column-gap: 10px;
+    row-gap: 10px;
     margin: 10px 0;
   }
+  & .buttons button {
+    border: none;
+    border-radius: 5px;
+    width: 175px;
+    height: 26px;
+    text-align: center;
+    text-transform: uppercase;
+    opacity: 0.8;
+    transition: all ease 0.3s;
+    cursor: pointer;
+  }
+  & .buttons button:hover {
+    opacity: 1;
+  }
   & .buttons .difficult {
-    background-color: #d651ff;
+    background-color: ${(props) =>
+      props.difficulty === 'difficult' && !props.isDifficultGroup
+        ? '#ccc;'
+        : '#d651ff;'};
+    pointer-events: ${(props) =>
+      props.difficulty === 'difficult' && !props.isDifficultGroup
+        ? 'none;'
+        : 'auto;'};
   }
   & .buttons .studied {
-    background-color: #65c6ff;
+    background-color: ${(props) =>
+      props.difficulty === 'studied' ? '#ccc' : '#65c6ff;'};
+    pointer-events: ${(props) =>
+      props.difficulty === 'studied' ? 'none;' : 'auto;'};
   }
   & .explanation-title {
     font-size: 1.2em;
@@ -61,32 +93,67 @@ const Container = styled.div`
   }
 `
 
+const getProp = (e: React.MouseEvent<HTMLButtonElement>): IWordAddition => {
+  return JSON.parse(e.currentTarget.dataset.prop || '')
+}
+
+const getButtonName = (isAdd: boolean) => {
+  return isAdd ? 'Добавить в сложные' : 'Удалить из сложных'
+}
+
 export const Word: FC<IWordObj> = ({
   word,
-  difficultCallback,
-  studiedCallback,
+  difficulty,
+  deleteDifficulty,
+  state,
 }) => {
-  const difficultListener = (e: React.MouseEvent<HTMLButtonElement>) => {
+  const { isAuth } = React.useContext(AuthContext)
+  const difficultyListener = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault()
-    const checkWord = e.currentTarget.dataset.prop || ''
-    if (checkWord) {
-      difficultCallback(+checkWord)
-    }
+    const checkWord = getProp(e)
+    console.log(checkWord)
+    difficulty(checkWord)
   }
 
-  const studiedListener = (e: React.MouseEvent<HTMLButtonElement>) => {
+  const deleteDifficultyListener = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault()
-    const checkWord = e.currentTarget.dataset.prop || ''
-    if (checkWord) {
-      studiedCallback(+checkWord)
+    const checkWord = getProp(e)
+    // console.log("checkWord", checkWord)
+    deleteDifficulty(checkWord.id)
+  }
+
+  const buttonDifficulty = (name: WordDifficultyType, child: string) => {
+    if (isAuth) {
+      return (
+        <button
+          className={name}
+          type="button"
+          data-prop={JSON.stringify({
+            id: word.id,
+            difficulty: name,
+            isNew: word.userWord ? !!word.userWord.difficulty : false,
+          })}
+          onClick={
+            state.counter.currentGroup < 6
+              ? difficultyListener
+              : deleteDifficultyListener
+          }
+        >
+          {child}
+        </button>
+      )
     }
+    return ''
   }
 
   if (!word) {
     return null
   }
   return (
-    <Container>
+    <Container
+      difficulty={word.userWord ? word.userWord.difficulty : undefined}
+      isDifficultGroup={state.counter.currentGroup === 6}
+    >
       <img src={BASE + word.image} alt={word.word} className="word_image" />
       <div className="description">
         <h2>{word.word}</h2>
@@ -96,22 +163,11 @@ export const Word: FC<IWordObj> = ({
           <button type="button">Vollume</button>
         </h3>
         <div className="buttons">
-          <button
-            className="difficult"
-            type="button"
-            data-prop={word.id}
-            onClick={difficultListener}
-          >
-            + В СЛОЖНЫЕ СЛОВА
-          </button>
-          <button
-            className="studied"
-            type="button"
-            data-prop={word.id}
-            onClick={studiedListener}
-          >
-            ИЗУЧЕННОЕ СЛОВО
-          </button>
+          {buttonDifficulty(
+            'difficult',
+            getButtonName(state.counter.currentGroup < 6)
+          )}
+          {buttonDifficulty('studied', 'Добавить в изученые')}
         </div>
         <p className="explanation-title">Значение</p>
         <p className="explanation-example">{parse(word.textMeaning)}</p>

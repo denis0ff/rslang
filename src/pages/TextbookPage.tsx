@@ -1,5 +1,7 @@
 import React, { useState } from 'react'
 import {
+  addUserDifficultWordService,
+  deleteUserDifficultWordService,
   getUserAggregatedWordsService,
   getWordsService,
 } from '../components/textbook/services'
@@ -8,6 +10,7 @@ import {
   IAggregatedWord,
   ITextbook,
   ITextbookMethods,
+  IWordAddition,
 } from '../components/textbook/types'
 import { AuthContext } from '../utils/services'
 
@@ -24,7 +27,7 @@ export const TextbookPage = () => {
     ],
     counter: {
       currentGroup: 0,
-      currentPage: new Array(6).fill(1),
+      currentPage: new Array(7).fill(1),
       currentWord: 0,
       countPage: 30,
     },
@@ -36,13 +39,13 @@ export const TextbookPage = () => {
     setTextbook(() => ({ ...item }))
   }
 
-  const updateWords = (data: IAggregatedWord[]) => {
+  const updateWords = (data: IAggregatedWord[], isNotReset?: boolean) => {
     textbook.words = data
-    textbook.counter.currentWord = 0
+    if (!isNotReset) textbook.counter.currentWord = 0
     updateTextbook(textbook)
   }
 
-  const getWords = () => {
+  const getWords = (isNotReset?: boolean) => {
     const wordProm = getWordsService(
       textbook.counter.currentGroup,
       textbook.counter.currentPage[textbook.counter.currentGroup] - 1
@@ -66,9 +69,13 @@ export const TextbookPage = () => {
                 }
               }
             })
-            textbook.difficultWordsCount = aggDiffResp.totalCount[0].count
+            textbook.difficultWordsCount =
+              aggDiffResp.totalCount.length > 0
+                ? aggDiffResp.totalCount[0].count
+                : 0
           }
-          updateWords(words)
+          console.log(words)
+          updateWords(words, isNotReset)
         }
       )
     } else {
@@ -83,8 +90,14 @@ export const TextbookPage = () => {
       const aggrDiffWordsProm = getUserAggregatedWordsService('difficult')
       aggrDiffWordsProm.then((data) => {
         if (data) {
-          textbook.difficultWordsCount = data.totalCount[0].count
-          updateWords(data.paginatedResults)
+          const words = data.paginatedResults.map((item) => {
+            item.id = item._id
+            return item
+          })
+          textbook.difficultWordsCount = data.totalCount.length
+            ? data.totalCount[0].count
+            : 0
+          updateWords(words)
         }
       })
     }
@@ -110,11 +123,21 @@ export const TextbookPage = () => {
       textbook.counter.currentWord = num
       updateTextbook(textbook)
     },
-    addDifficultWordEvent: (id: number) => {
-      console.log(id)
+    difficultyWordEvent: (check: IWordAddition) => {
+      addUserDifficultWordService(check).then((data) => {
+        if (data) {
+          if (textbook.counter.currentGroup < 6) getWords(true)
+          else getDifficultWords()
+        }
+      })
     },
-    addStudiedWordEvent: (id: number) => {
-      console.log(id)
+    deleteDifficultyWordEvent: (id: string) => {
+      deleteUserDifficultWordService(id).then((data) => {
+        if (data) {
+          if (textbook.counter.currentGroup < 6) getWords(true)
+          else getDifficultWords()
+        }
+      })
     },
   }
   React.useEffect(() => {
