@@ -54,33 +54,45 @@ const WordList = styled.div`
   }
 `
 
-const vocabulary = (isAuth: boolean) => {
-  // const authorize = !!localStorage.getItem('token')
-  if (isAuth) {
-    return (
-      <>
-        <TitlePath>Мой словарь</TitlePath>
-        <div className="sections sections-vocabulary">
-          <SectionDifficult
-            key="D"
-            name="Difficult"
-            count={0}
-            ind={7}
-            callback={() => {}}
-          />
-        </div>
-      </>
-    )
-  }
-  return ''
-}
-
 export const Textbook: FC<{
   state: ITextbook
   methods: ITextbookMethods
 }> = ({ state, methods }) => {
   const { isAuth } = React.useContext(AuthContext)
   const currentWord = methods.getCurrentWord()
+
+  const vocabulary = () => {
+    if (isAuth) {
+      return (
+        <>
+          <TitlePath>Мой словарь</TitlePath>
+          <div className="sections sections-vocabulary">
+            <SectionDifficult
+              key="D"
+              name="Difficult"
+              count={state.difficultWordsCount}
+              ind={6}
+              checked={state.counter.currentGroup === 6}
+              callback={methods.groupDifficultEvent}
+            />
+          </div>
+        </>
+      )
+    }
+    return ''
+  }
+
+  const createPaging = () => {
+    if (state.counter.currentGroup < 6)
+      return (
+        <Paging
+          current={methods.getCurrentPage()}
+          total={state.counter.countPage}
+          callback={methods.pagingEvent}
+        />
+      )
+    return ''
+  }
 
   return (
     <Container>
@@ -102,7 +114,7 @@ export const Textbook: FC<{
           )
         })}
       </Sections>
-      {vocabulary(isAuth)}
+      {vocabulary()}
       <Title>Слова</Title>
       <Words>
         <WordList>
@@ -126,11 +138,7 @@ export const Textbook: FC<{
           studiedCallback={methods.addStudiedWordEvent}
         />
       </Words>
-      <Paging
-        current={methods.getCurrentPage()}
-        total={state.counter.countPage}
-        callback={methods.pagingEvent}
-      />
+      {createPaging()}
     </Container>
   )
 }

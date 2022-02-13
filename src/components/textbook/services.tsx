@@ -46,9 +46,9 @@ export const getWordsService = async (group: number, page: number) => {
 }
 
 export const getUserAggregatedWordsService = async (
-  group: number,
-  page: number,
-  filter: WordDifficultyType
+  filter: WordDifficultyType,
+  group?: number,
+  page?: number
 ) => {
   const userId = () => localStorage.getItem('userId') || ''
   const token = () => localStorage.getItem('token') || ''
@@ -56,8 +56,8 @@ export const getUserAggregatedWordsService = async (
 
   let difficultyType = ''
   if (filter === 'difficult')
-    difficultyType = getUserAggregatedWordsDifficultFilter(group, page)
-  else difficultyType = getUserAggregatedWordsAllFilter(group, page)
+    difficultyType = getUserAggregatedWordsDifficultFilter()
+  else difficultyType = getUserAggregatedWordsAllFilter(group || 0, page || 0)
 
   const response = (activeToken: string) => {
     return fetch(getAggregatedWordsURL(userId(), difficultyType), {
@@ -100,7 +100,7 @@ export const getUserAggregatedWordsService = async (
     .then((content: IAggregatedResponse[] | null) => {
       if (content !== null) {
         console.log('content ', content)
-        return content[0].paginatedResults
+        return content[0]
       }
       return null
     })

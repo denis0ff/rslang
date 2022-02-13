@@ -11,25 +11,29 @@ export type CodeLevelType =
   | 'C2'
   | 'difficult'
 
-export interface ISection {
+export interface ISectionData {
   name: NameSectionType
-  code?: CodeLevelType
-  first?: number
-  last?: number
-  ind?: number
-  checked?: boolean
-  callback?: (num: number) => void
+  code: CodeLevelType
+  first: number
+  last: number
+}
+
+export interface ISection extends ISectionData {
+  ind: number
+  checked: boolean
+  callback: (num: number) => void
 }
 
 export interface ISectionDifficult {
   name: NameSectionType
   count: number
   ind: number
+  checked: boolean
   callback: (num: number) => void
 }
 
 export interface ITextbook {
-  readonly sections: ISection[]
+  readonly sections: ISectionData[]
   counter: {
     currentGroup: number
     currentPage: number[]
@@ -37,11 +41,13 @@ export interface ITextbook {
     countPage: number
   }
   words: Array<IAggregatedWord>
+  difficultWordsCount: number
 }
 
 export interface ITextbookMethods {
   pagingEvent: (page: number) => void
   groupEvent: (group: number) => void
+  groupDifficultEvent: (group: number) => void
   getCurrentPage: () => number
   getCurrentWord: () => IWord
   wordEvent: (num: number) => void

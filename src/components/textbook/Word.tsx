@@ -47,10 +47,10 @@ const Container = styled.div`
     margin: 10px 0;
   }
   & .buttons .difficult {
-    background-color: #ff5500;
+    background-color: #d651ff;
   }
   & .buttons .studied {
-    background-color: #00aaff;
+    background-color: #65c6ff;
   }
   & .explanation-title {
     font-size: 1.2em;

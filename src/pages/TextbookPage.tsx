@@ -29,6 +29,7 @@ export const TextbookPage = () => {
       countPage: 30,
     },
     words: new Array<IAggregatedWord>(),
+    difficultWordsCount: 0,
   })
 
   const updateTextbook = (item: ITextbook) => {
@@ -47,27 +48,44 @@ export const TextbookPage = () => {
       textbook.counter.currentPage[textbook.counter.currentGroup] - 1
     )
     if (isAuth) {
-      const aggregatedWordsProm = getUserAggregatedWordsService(
+      const aggrAllWordsProm = getUserAggregatedWordsService(
+        'all',
         textbook.counter.currentGroup,
-        textbook.counter.currentPage[textbook.counter.currentGroup] - 1,
-        'all'
+        textbook.counter.currentPage[textbook.counter.currentGroup] - 1
       )
-      Promise.all([wordProm, aggregatedWordsProm]).then(([words, aggWords]) => {
-        if (aggWords) {
-          aggWords.forEach((item) => {
-            for (let i = 0; i < words.length; i += 1) {
-              if (words[i].id === item._id) {
-                words[i].userWord = item.userWord
-                break
+      const aggrDiffWordsProm = getUserAggregatedWordsService('difficult')
+
+      Promise.all([wordProm, aggrAllWordsProm, aggrDiffWordsProm]).then(
+        ([words, aggAllResp, aggDiffResp]) => {
+          if (aggAllResp && aggDiffResp) {
+            aggAllResp.paginatedResults.forEach((item) => {
+              for (let i = 0; i < words.length; i += 1) {
+                if (words[i].id === item._id) {
+                  words[i].userWord = item.userWord
+                  break
+                }
               }
-            }
-          })
+            })
+            textbook.difficultWordsCount = aggDiffResp.totalCount[0].count
+          }
+          updateWords(words)
         }
-        updateWords(words)
-      })
+      )
     } else {
       wordProm.then((data) => {
         updateWords(data)
+      })
+    }
+  }
+
+  const getDifficultWords = () => {
+    if (isAuth) {
+      const aggrDiffWordsProm = getUserAggregatedWordsService('difficult')
+      aggrDiffWordsProm.then((data) => {
+        if (data) {
+          textbook.difficultWordsCount = data.totalCount[0].count
+          updateWords(data.paginatedResults)
+        }
       })
     }
   }
@@ -80,6 +98,10 @@ export const TextbookPage = () => {
     groupEvent: (group: number) => {
       textbook.counter.currentGroup = group
       getWords()
+    },
+    groupDifficultEvent: (group: number) => {
+      textbook.counter.currentGroup = group
+      getDifficultWords()
     },
     getCurrentPage: () =>
       textbook.counter.currentPage[textbook.counter.currentGroup],

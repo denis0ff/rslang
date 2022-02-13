@@ -12,9 +12,6 @@ export const getUserAggregatedWordsAllFilter = (
 ) => `
   {"$and":[{ "page": ${page}},{ "group": ${group}},{"$or":[{"userWord.difficulty":"difficult"},{"userWord.difficulty":"studied"}]}]}
 `
-export const getUserAggregatedWordsDifficultFilter = (
-  group: number,
-  page: number
-) => `
-  {"$and":[{ "page": ${page}},{ "group": ${group}},{"userWord.difficulty":"difficult"}]}
+export const getUserAggregatedWordsDifficultFilter = () => `
+  {"$and":[{"userWord.difficulty":"difficult"}]}
 `

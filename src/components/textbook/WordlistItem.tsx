@@ -34,8 +34,8 @@ const Container = styled.div<{
     width: 30px;
     height: 30px;
     background-color: ${(props) => {
-      if (props.label === 'difficult') return '#ff5500;'
-      if (props.label === 'studied') return '#00aaff;'
+      if (props.label === 'difficult') return '#d651ff;'
+      if (props.label === 'studied') return '#65c6ff;'
       return 'transparent;'
     }};
   }
@@ -63,7 +63,6 @@ export const WordlistItem: FC<IWordlistItem> = ({
 }) => {
   const itemListener = (e: React.MouseEvent<HTMLDivElement>) => {
     e.preventDefault()
-
     const checkWord = e.currentTarget.dataset.prop || ''
     if (checkWord) {
       callback(+checkWord)
