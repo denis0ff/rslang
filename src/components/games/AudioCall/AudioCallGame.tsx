@@ -5,8 +5,8 @@ import { AuthContext } from '../../../utils/services'
 import { shuffle } from '../../../utils/utils'
 import { AudioButton } from '../AudioButton'
 import { Wrapper, WrapperRow } from '../Difficulty'
-import { GameStatus, GameTypeOption, IGameRunProps, IGameStats } from '../types'
-import { addWord } from '../utils'
+import { GameStatus, GameTypeOption, IGameRunProps } from '../types'
+import { addWord, addWordStat } from '../utils'
 
 const AnswerContainer = styled.div``
 
@@ -27,14 +27,13 @@ const AnswerButton = styled.button``
 
 const ShowAnswer = styled.button``
 
-const answers: IGameStats = { right: [], wrong: [], streak: 0, max: 0 }
-
 const keys = ['1', '2', '3', '4', '5']
 
 let variables: string[] = []
 
 export const AudioCallGame = ({
   words,
+  answers,
   setStatus,
   setAnswers,
 }: IGameRunProps) => {
@@ -55,13 +54,23 @@ export const AudioCallGame = ({
   const checkAnswer = useCallback(
     (id: string) => {
       const isRight = id === words[current].id
-      if (isRight) {
-        answers.right.push(words[current])
-        answers.streak += 1
-      } else {
-        answers.wrong.push(words[current])
-        if (answers.max < answers.streak) answers.max = answers.streak
-        answers.streak = 0
+      if (isRight)
+        setAnswers((prev) => ({
+          ...prev,
+          ...{
+            right: [...prev.right, words[current]],
+            streak: prev.streak + 1,
+          },
+        }))
+      else {
+        setAnswers((prev) => ({
+          ...prev,
+          ...{
+            wrong: [...prev.wrong, words[current]],
+            max: prev.max < prev.streak ? prev.streak : prev.max,
+            streak: 0,
+          },
+        }))
       }
       if (isAuth)
         addWord({
@@ -82,11 +91,7 @@ export const AudioCallGame = ({
 
   const nextQuestion = useCallback(() => {
     if (current === words.length - 1) {
-      setAnswers((prev) => ({
-        ...prev,
-        right: answers.right,
-        wrong: answers.wrong,
-      }))
+      if (isAuth) addWordStat({ answers, gameType: GameTypeOption.AUDIO_CALL })
       setStatus(GameStatus.RESULT)
     } else {
       setCurrent((prev) => prev + 1)

@@ -11,7 +11,10 @@ export const AudioCall = () => {
   const [answers, setAnswers] = useState<IAnswers>({
     right: [],
     wrong: [],
+    streak: 0,
+    max: 0,
   })
+
   if (status === GameStatus.SELECT)
     return (
       <Difficulty
@@ -26,14 +29,16 @@ export const AudioCall = () => {
       <Result
         answers={answers}
         words={words}
-        setStatus={setStatus}
         setAnswers={setAnswers}
+        setWords={setWords}
+        setStatus={setStatus}
       />
     )
   if (status === GameStatus.GAME)
     return (
       <AudioCallGame
         words={words}
+        answers={answers}
         setStatus={setStatus}
         setAnswers={setAnswers}
       />

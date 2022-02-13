@@ -1,5 +1,5 @@
 import { Dispatch, SetStateAction } from 'react'
-import { IGotUserWord, IWord } from '../../utils/types'
+import { IGotUserWord, IStat, IWord } from '../../utils/types'
 
 export enum GameType {
   AUDIO_CALL = 'Аудиовызов',
@@ -14,9 +14,6 @@ export enum GameStatus {
 export interface IAnswers {
   right: IWord[]
   wrong: IWord[]
-}
-
-export interface IGameStats extends IAnswers {
   streak: number
   max: number
 }
@@ -30,15 +27,16 @@ export interface IDifficultyProps {
 
 export interface IGameRunProps {
   words: IWord[]
+  answers: IAnswers
   setAnswers: Dispatch<SetStateAction<IAnswers>>
   setStatus: Dispatch<SetStateAction<GameStatus>>
 }
 
-export interface IResultProps {
+export interface IResultProps extends IGameRunProps {
   answers: IAnswers
-  words: IWord[]
-  setStatus: Dispatch<SetStateAction<GameStatus>>
   setAnswers: Dispatch<SetStateAction<IAnswers>>
+  setStatus: Dispatch<SetStateAction<GameStatus>>
+  setWords: Dispatch<SetStateAction<IWord[]>>
 }
 
 export interface IAudioButtonProps {
@@ -86,4 +84,13 @@ export interface IPutWordProps extends IPostWordProps {
 export enum GameTypeOption {
   AUDIO_CALL = 'audioCall',
   SPRINT = 'sprint',
+}
+
+export interface IAddWordStatProps {
+  answers: IAnswers
+  gameType: GameTypeOption
+}
+
+export interface IUpdateStatProps extends IAddWordStatProps {
+  data: IStat
 }

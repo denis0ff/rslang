@@ -18,20 +18,18 @@ const Container = styled.div`
   }
 `
 
-const initialResult = { right: [], wrong: [], streak: 0, max: 0 }
-
 export const Result = ({
   answers,
-  words,
-  setStatus,
   setAnswers,
+  setWords,
+  setStatus,
 }: IResultProps) => {
   const [active, setActive] = useState(ResultViews.RESULT)
   const audio = useMemo(() => new Audio(), [])
 
   const nextGame = useCallback(() => {
-    setAnswers({ ...initialResult })
-    words.length = 0
+    setAnswers({ right: [], wrong: [], streak: 0, max: 0 })
+    setWords([])
     setStatus(GameStatus.SELECT)
   }, [])
   return (

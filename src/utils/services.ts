@@ -5,18 +5,23 @@ import {
   Errors,
   IPostWordProps,
   IPutWordProps,
+  IAddWordStatProps,
+  IUpdateStatProps,
 } from '../components/games/types'
 import {
+  createStatConfig,
   getTokenConfig,
   getUserWordResponse,
   getWordsResponse,
   postWordConfig,
   putWordConfig,
   SIGN_IN,
+  updateStatConfig,
   USERS,
+  USER_STAT,
   USER_TOKEN,
 } from './config'
-import { IGotUserWord, Tokens } from './types'
+import { IGotUserWord, IStat, Tokens } from './types'
 import { getRandomInteger } from './utils'
 
 export const getWordsPromise = async (group: number, page?: number) =>
@@ -82,3 +87,12 @@ export const putWordPromise = async ({
     putWordConfig({ data, isRight, gameType }),
     getTokenConfig()
   )
+
+export const getStatPromise = async () =>
+  axios.get<IStat>(USER_STAT, getTokenConfig())
+
+export const createStatPromise = async (props: IAddWordStatProps) =>
+  axios.put(USER_STAT, createStatConfig(props), getTokenConfig())
+
+export const putStatPromise = async (props: IUpdateStatProps) =>
+  axios.put(USER_STAT, updateStatConfig(props), getTokenConfig())

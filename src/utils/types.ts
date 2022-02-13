@@ -51,3 +51,28 @@ export interface IGotUserWord extends IUserWord {
   id?: string
   wordId?: string
 }
+
+export interface ILongStat {
+  date: string // дата долгосрочной статы, т.е. если дата сегоднешняя данные обновлять, нет - добавить с новой датой
+  newWords: number // количество новых слов за этот день
+}
+
+export interface IGameStat {
+  newWords: number
+  allWords: number
+  right: number
+  streak: number
+}
+export interface IStat {
+  id?: string
+  learnedWords: number
+  optional: {
+    words: string // массив id всех изученных слов
+    date: string
+    games: {
+      sprint: IGameStat
+      audioCall: IGameStat
+    }
+    longStat: string // если последний элемент в массиве прошлого дня дата - пушишь новый, нет - добавляешь/обновляешь элемент с датой сегодня
+  }
+}
