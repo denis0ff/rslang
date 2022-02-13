@@ -34,25 +34,6 @@ export const SprintGame = ({ words, setStatus, setAnswers }: IGameRunProps) => {
     setenWords([...enWords, ...data])
   }
 
-  function handleIndex(anserCompare: boolean): void {
-    const compare = index === randomAnserIndex
-    if (index === enWords.length - 4) {
-      const { page, group } = words[0]
-      const newPage = page + 1 >= 30 ? page - 1 : page + 1
-      getAdditionalResurse(group, newPage)
-    }
-    if (compare === anserCompare) {
-      setAnserButton(true)
-      setCoefficient(coefficient + 1)
-      wordsLearn.good.push(enWords[index])
-    } else {
-      setAnserButton(false)
-      setCoefficient(0)
-      wordsLearn.bad.push(enWords[index])
-    }
-    setIndexWord(index + 1)
-    setTotal(total + coefficient * 10)
-  }
   const getValue = (value: number) => {
     if (value === 0) {
       setAnswers(wordsLearn)
@@ -60,8 +41,24 @@ export const SprintGame = ({ words, setStatus, setAnswers }: IGameRunProps) => {
   }
 
   const handleAnser = useCallback(
-    (anser: boolean) => {
-      handleIndex(anser)
+    (anserCompare: boolean) => {
+      const compare = index === randomAnserIndex
+      if (index === enWords.length - 4) {
+        const { page, group } = words[0]
+        const newPage = page + 1 >= 30 ? page - 1 : page + 1
+        getAdditionalResurse(group, newPage)
+      }
+      if (compare === anserCompare) {
+        setAnserButton(true)
+        setCoefficient(coefficient + 1)
+        wordsLearn.good.push(enWords[index])
+      } else {
+        setAnserButton(false)
+        setCoefficient(0)
+        wordsLearn.bad.push(enWords[index])
+      }
+      setIndexWord(index + 1)
+      setTotal(total + coefficient * 10)
     },
     [total, index, coefficient, anserButton]
   )

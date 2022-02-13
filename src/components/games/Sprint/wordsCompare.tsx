@@ -1,3 +1,4 @@
+import { useEffect } from 'react'
 interface WordsCompareProps {
   EWord: string
   RWord: string
@@ -9,6 +10,16 @@ const RightAnser = <span>&#10003;</span>
 const NegativeAnser = <span>&#10006;</span>
 const WordsCompare = (props: WordsCompareProps) => {
   const { EWord = 'Car', RWord = 'Машина', anser = true, onClickIndex } = props
+  useEffect(() => {
+    const onKeydown = (e: KeyboardEvent) => {
+      if (e.code === 'ArrowLeft') onClickIndex(true)
+      if (e.code === 'ArrowRight') onClickIndex(false)
+    }
+    document.addEventListener('keydown', onKeydown)
+    return () => {
+      document.removeEventListener('keydown', onKeydown)
+    }
+  }, [onClickIndex])
   return (
     <div className="compare-wrapper">
       <div
@@ -25,8 +36,8 @@ const WordsCompare = (props: WordsCompareProps) => {
       </div>
       <div className="button-block">
         <button
+          tabIndex={-1}
           type="button"
-          data-type
           className="button-compare anser-right"
           onClick={() => {
             onClickIndex(true)
@@ -36,7 +47,6 @@ const WordsCompare = (props: WordsCompareProps) => {
         </button>
         <button
           type="button"
-          data-type={false}
           className="button-compare anser-negative"
           onClick={() => {
             onClickIndex(false)
