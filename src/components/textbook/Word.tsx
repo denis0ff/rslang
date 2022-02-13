@@ -111,14 +111,12 @@ export const Word: FC<IWordObj> = ({
   const difficultyListener = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault()
     const checkWord = getProp(e)
-    console.log(checkWord)
     difficulty(checkWord)
   }
 
   const deleteDifficultyListener = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault()
     const checkWord = getProp(e)
-    // console.log("checkWord", checkWord)
     deleteDifficulty(checkWord.id)
   }
 

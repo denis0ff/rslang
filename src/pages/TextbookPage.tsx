@@ -74,7 +74,6 @@ export const TextbookPage = () => {
                 ? aggDiffResp.totalCount[0].count
                 : 0
           }
-          console.log(words)
           updateWords(words, isNotReset)
         }
       )

@@ -94,25 +94,6 @@ export const getUserAggregatedWordsService = async (
           }
           return null
         })
-        /*
-        getNewUserToken(userId(), refreshToken())
-          .then((resp2: Response) => {
-            if (resp2.status === 200) {
-              return resp2.json()
-            }
-            expireTokens()
-            return null
-          })
-          .then((data: ITokens | null) => {
-            if (data !== null) {
-              saveNewToken(data)
-              return response(token()).then((resp3) => {
-                return resp3.json()
-              })
-            }
-            return null
-          })
-          */
       }
       if (resp.status === 200) {
         return resp.json()
