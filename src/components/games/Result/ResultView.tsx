@@ -3,7 +3,7 @@ import styled from 'styled-components'
 import { Title } from '../../../pages/NotFound'
 import { Paths } from '../../../utils/types'
 import { WrapperRow } from '../Difficulty'
-import { GameStatus, IResultViewProps } from '../types'
+import { IResultViewProps } from '../types'
 
 const TextLink = styled.p``
 
@@ -13,16 +13,14 @@ const TextbookLink = styled(Link)`
   padding: 0;
 `
 
-export const ResultView = ({ good, bad, setStatus }: IResultViewProps) => (
+export const ResultView = ({ right, wrong, nextGame }: IResultViewProps) => (
   <>
     <Title>Ты молодец!</Title>
     <TextLink>
-      {good} изучено, {bad} на изучении
+      {right} изучено, {wrong} на изучении
     </TextLink>
     <WrapperRow>
-      <GameLink onClick={() => setStatus(GameStatus.SELECT)}>
-        Сыграть ещё раз
-      </GameLink>
+      <GameLink onClick={() => nextGame()}>Сыграть ещё раз</GameLink>
       <TextbookLink to={Paths.TEXTBOOK}>Перейти в учебник</TextbookLink>
     </WrapperRow>
   </>
