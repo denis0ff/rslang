@@ -39,7 +39,7 @@ export const AudioCallGame = ({
 }: IGameRunProps) => {
   const [current, setCurrent] = useState(0)
   const [isAnswered, setIsAnswered] = useState(false)
-  const isAuth = useContext(AuthContext)
+  const { isAuth } = useContext(AuthContext)
 
   const audio = useMemo(() => new Audio(), [])
 

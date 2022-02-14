@@ -1,4 +1,5 @@
 import { useEffect } from 'react'
+
 interface WordsCompareProps {
   EWord: string
   RWord: string

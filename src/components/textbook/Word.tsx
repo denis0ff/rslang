@@ -62,8 +62,12 @@ export const Word: FC<IWordObj> = ({ word }) => {
           <button type="button">Vollume</button>
         </h3>
         <div className="buttons">
-          <button className="difficult" type="button">+ В СЛОЖНЫЕ СЛОВА</button>
-          <button className="studied" type="button">ИЗУЧЕННОЕ СЛОВО</button>
+          <button className="difficult" type="button">
+            + В СЛОЖНЫЕ СЛОВА
+          </button>
+          <button className="studied" type="button">
+            ИЗУЧЕННОЕ СЛОВО
+          </button>
         </div>
         <p className="explanation-title">Значение</p>
         <p className="explanation-example">
