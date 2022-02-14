@@ -11,6 +11,8 @@ export const Sprint = () => {
   const [answers, setAnswers] = useState<IAnswers>({
     right: [],
     wrong: [],
+    streak: 0,
+    max: 0,
   })
   if (status === GameStatus.SELECT)
     return (
@@ -26,13 +28,19 @@ export const Sprint = () => {
       <Result
         answers={answers}
         words={words}
-        setStatus={setStatus}
         setAnswers={setAnswers}
+        setWords={setWords}
+        setStatus={setStatus}
       />
     )
   if (status === GameStatus.GAME)
     return (
-      <SprintGame words={words} setStatus={setStatus} setAnswers={setAnswers} />
+      <SprintGame
+        words={words}
+        answers={answers}
+        setStatus={setStatus}
+        setAnswers={setAnswers}
+      />
     )
   return null
 }

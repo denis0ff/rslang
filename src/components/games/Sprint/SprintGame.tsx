@@ -1,16 +1,15 @@
-import React, { useCallback, useEffect, useState } from 'react'
-import { IAnswers, IGameRunProps } from '../types'
-import { getWordsPromise } from '../../../utils/services'
+import React, { useCallback, useContext, useEffect, useState } from 'react'
+import { GameStatus, GameTypeOption, IGameRunProps } from '../types'
+import { AuthContext, getWordsPromise } from '../../../utils/services'
 import { getRandomInteger, shuffle } from '../../../utils/utils'
 
 import Timer from './timer'
 import Score from './total'
 import WordsCompare from './wordsCompare'
 import './styles/style.css'
+import { addWord, addWordStat } from '../utils'
 
 const Title = () => <h2>SprintGame</h2>
-const wordsLearn: IAnswers = { good: [], bad: [] }
-
 const getRandomAnswers = (currentIindex: number, maxIndex: number): number => {
   const randomIndex = (max: number): number => {
     const randomItem = getRandomInteger(0, max)
@@ -20,7 +19,13 @@ const getRandomAnswers = (currentIindex: number, maxIndex: number): number => {
   return shuffle([rIndex, currentIindex])[0]
 }
 
-export const SprintGame = ({ words, setStatus, setAnswers }: IGameRunProps) => {
+export const SprintGame = ({
+  words,
+  answers,
+  setStatus,
+  setAnswers,
+}: IGameRunProps) => {
+  const isAuth = useContext(AuthContext)
   const [index, setIndexWord] = useState(0)
   const [total, setTotal] = useState(0)
   const [coefficient, setCoefficient] = useState(0)
@@ -36,13 +41,15 @@ export const SprintGame = ({ words, setStatus, setAnswers }: IGameRunProps) => {
 
   const getValue = (value: number) => {
     if (value === 0) {
-      setAnswers(wordsLearn)
+      if (isAuth) addWordStat({ answers, gameType: GameTypeOption.SPRINT })
+      setStatus(GameStatus.RESULT)
     }
   }
 
   const handleAnser = useCallback(
     (anserCompare: boolean) => {
       const compare = index === randomAnserIndex
+      const isRight = compare === anserCompare
       if (index === enWords.length - 10) {
         const { group } = words[0]
         const { page } = enWords[enWords.length - 1]
@@ -53,14 +60,33 @@ export const SprintGame = ({ words, setStatus, setAnswers }: IGameRunProps) => {
       if (compare === anserCompare) {
         setAnserButton(true)
         setCoefficient(coefficient + 1)
-        wordsLearn.good.push(enWords[index])
+        setAnswers((prev) => ({
+          ...prev,
+          ...{
+            right: [...prev.right, enWords[index]],
+            streak: prev.streak + 1,
+          },
+        }))
       } else {
         setAnserButton(false)
         setCoefficient(0)
-        wordsLearn.bad.push(enWords[index])
+        setAnswers((prev) => ({
+          ...prev,
+          ...{
+            wrong: [...prev.wrong, enWords[index]],
+            max: prev.max < prev.streak ? prev.streak : prev.max,
+            streak: 0,
+          },
+        }))
       }
       setIndexWord(index + 1)
       setTotal(total + coefficient * 10)
+      if (isAuth)
+        addWord({
+          isRight,
+          id: words[index].id,
+          gameType: GameTypeOption.SPRINT,
+        })
     },
     [total, index, coefficient, anserButton]
   )
