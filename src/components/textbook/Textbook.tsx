@@ -1,12 +1,12 @@
 import React, { FC } from 'react'
 import styled from 'styled-components'
-import { ITextbook, ITextbookMethods } from './types'
+import { ITextbook, ITextbookMethods } from './textbookTypes'
 import { Paging } from './Paging'
 import { Section, SectionDifficult } from './Section'
 import { WordlistItem } from './WordlistItem'
 import { Word } from './Word'
 import { AuthContext } from '../../utils/services'
-import { sections } from './config'
+import { sections } from './textbookConfig'
 
 const Container = styled.div`
   width: 100%;

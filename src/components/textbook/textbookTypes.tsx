@@ -57,6 +57,7 @@ export interface ITextbook {
 }
 
 export interface ITextbookMethods {
+  getWords: (isNotReset?: boolean) => void
   pagingEvent: (page: number) => void
   groupEvent: (group: number) => void
   groupDifficultEvent: (group: number) => void

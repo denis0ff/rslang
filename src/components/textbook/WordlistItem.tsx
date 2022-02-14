@@ -1,6 +1,6 @@
 import React, { FC } from 'react'
 import styled from 'styled-components'
-import { IWordlistItem, WordDifficultyType } from './types'
+import { IWordlistItem, WordDifficultyType } from './textbookTypes'
 
 const Container = styled.div<{
   label?: WordDifficultyType

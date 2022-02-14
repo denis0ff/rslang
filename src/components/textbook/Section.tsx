@@ -1,6 +1,6 @@
 import { FC } from 'react'
 import styled from 'styled-components'
-import { ISection, ISectionDifficult } from './types'
+import { ISection, ISectionDifficult } from './textbookTypes'
 
 const codeColors = [
   '#00aa00',

@@ -6,13 +6,12 @@ import {
   getUserWordURL,
   getUserAggregatedAllWordsURL,
   getUserAggregatedDifficultWordsURL,
-} from './config'
+} from './textbookConfig'
 import {
   IAggregatedResponse,
   IAggregatedWord,
-  IWordAddition,
   WordDifficultyType,
-} from './types'
+} from './textbookTypes'
 
 interface ITokens {
   token: string
@@ -111,17 +110,23 @@ export const getUserAggregatedWordsService = async (
   return res
 }
 
-export const addUserDifficultWordService = async (check: IWordAddition) => {
+export const addUserDifficultWordService = async (
+  word: IAggregatedWord,
+  isNew: boolean,
+  diff: WordDifficultyType
+) => {
+  const opt =
+    word.userWord && word.userWord.optional ? word.userWord.optional : {}
   const response = (activeToken: string) => {
-    return fetch(getUserWordURL(userId(), check.id), {
-      method: check.isNew ? 'PUT' : 'POST',
+    return fetch(getUserWordURL(userId(), word.id), {
+      method: isNew ? 'PUT' : 'POST',
       withCredentials: true,
       headers: {
         Authorization: `Bearer ${activeToken}`,
         Accept: 'application/json',
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ difficulty: check.difficulty, optional: {} }),
+      body: JSON.stringify({ difficulty: diff, optional: opt }),
     })
   }
   const res = await response(token())

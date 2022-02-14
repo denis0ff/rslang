@@ -1,4 +1,4 @@
-import { ISectionData } from './types'
+import { ISectionData } from './textbookTypes'
 
 export const BASE = 'https://react-rslang-api.herokuapp.com/'
 

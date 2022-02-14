@@ -1,9 +1,9 @@
 import parse from 'html-react-parser'
 import React, { FC } from 'react'
 import styled from 'styled-components'
-import { BASE } from './config'
+import { BASE } from './textbookConfig'
 import { AuthContext } from '../../utils/services'
-import { IWordAddition, IWordObj, WordDifficultyType } from './types'
+import { IWordAddition, IWordObj, WordDifficultyType } from './textbookTypes'
 
 const Container = styled.div<{
   difficulty?: WordDifficultyType
@@ -133,7 +133,7 @@ export const Word: FC<IWordObj> = ({
           data-prop={JSON.stringify({
             id: word.id,
             difficulty: name,
-            isNew: word.userWord ? !!word.userWord.difficulty : false,
+            isNew: !!word.userWord,
           })}
           onClick={click}
         >
