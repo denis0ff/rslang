@@ -17,6 +17,7 @@ import { AuthContext } from '../utils/services'
 export const TextbookPage = () => {
   const { isAuth } = React.useContext(AuthContext)
   const [textbook, setTextbook] = useState<ITextbook>({
+    /*
     sections: [
       { name: 'Easy', code: 'A1', first: 1, last: 600 },
       { name: 'Easy', code: 'A2', first: 601, last: 1200 },
@@ -25,6 +26,7 @@ export const TextbookPage = () => {
       { name: 'Hard', code: 'C1', first: 2401, last: 3000 },
       { name: 'Hard', code: 'C2', first: 3001, last: 3600 },
     ],
+    */
     counter: {
       currentGroup: 0,
       currentPage: new Array(7).fill(1),
@@ -90,7 +92,7 @@ export const TextbookPage = () => {
       aggrDiffWordsProm.then((data) => {
         if (data) {
           const words = data.paginatedResults.map((item) => {
-            item.id = item._id
+            item.id = item._id || ''
             return item
           })
           textbook.difficultWordsCount = data.totalCount.length
@@ -142,6 +144,7 @@ export const TextbookPage = () => {
   React.useEffect(() => {
     getWords()
   }, [])
-
+  console.log(localStorage.getItem('token'))
+  console.log(localStorage.getItem('userId'))
   return <Textbook state={textbook} methods={methods} />
 }

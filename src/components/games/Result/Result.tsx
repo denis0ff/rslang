@@ -1,7 +1,7 @@
-import { useMemo, useState } from 'react'
+import { useCallback, useMemo, useState } from 'react'
 import styled from 'styled-components'
 import { Wrapper, WrapperRow } from '../Difficulty'
-import { IResultProps, ResultViews, WordListType } from '../types'
+import { GameStatus, IResultProps, ResultViews, WordListType } from '../types'
 import { ResultView } from './ResultView'
 import { WordList } from './WordList'
 
@@ -18,9 +18,20 @@ const Container = styled.div`
   }
 `
 
-export const Result = ({ answers, setStatus }: IResultProps) => {
+export const Result = ({
+  answers,
+  setAnswers,
+  setWords,
+  setStatus,
+}: IResultProps) => {
   const [active, setActive] = useState(ResultViews.RESULT)
   const audio = useMemo(() => new Audio(), [])
+
+  const nextGame = useCallback(() => {
+    setAnswers({ right: [], wrong: [], streak: 0, max: 0 })
+    setWords([])
+    setStatus(GameStatus.SELECT)
+  }, [])
   return (
     <Wrapper>
       <WrapperRow>
@@ -34,21 +45,21 @@ export const Result = ({ answers, setStatus }: IResultProps) => {
       <Container>
         {active === ResultViews.RESULT ? (
           <ResultView
-            good={answers.good.length}
-            bad={answers.bad.length}
-            setStatus={setStatus}
+            right={answers.right.length}
+            wrong={answers.wrong.length}
+            nextGame={nextGame}
           />
         ) : (
           <>
             <WordList
               type={WordListType.MISTAKE}
               audio={audio}
-              words={answers.bad}
+              words={answers.wrong}
             />
             <WordList
               type={WordListType.SUCCESS}
               audio={audio}
-              words={answers.good}
+              words={answers.right}
             />
           </>
         )}

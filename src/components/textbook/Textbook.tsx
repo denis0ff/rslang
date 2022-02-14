@@ -6,6 +6,7 @@ import { Section, SectionDifficult } from './Section'
 import { WordlistItem } from './WordlistItem'
 import { Word } from './Word'
 import { AuthContext } from '../../utils/services'
+import { sections } from './config'
 
 const Container = styled.div`
   width: 100%;
@@ -98,7 +99,7 @@ export const Textbook: FC<{
       <Title>Электронный учебник</Title>
       <TitlePath>Разделы сложности слов</TitlePath>
       <Sections>
-        {state.sections.map((item, ind) => {
+        {sections.map((item, ind) => {
           return (
             <Section
               key={item.code}

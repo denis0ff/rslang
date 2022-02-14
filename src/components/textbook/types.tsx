@@ -1,4 +1,4 @@
-import { IWord } from '../../utils/types'
+import { IUserWord, IWord } from '../../utils/types'
 
 export type NameSectionType = 'Easy' | 'Normal' | 'Hard' | 'Difficult'
 
@@ -31,16 +31,21 @@ export interface ISectionDifficult {
   checked: boolean
   callback: (num: number) => void
 }
-
+/*
 export interface IAggregatedWord extends IWord {
   _id: string
   userWord?: {
     difficulty: WordDifficultyType
   }
 }
+*/
+export interface IAggregatedWord extends IWord {
+  _id?: string
+  userWord?: IUserWord
+}
 
 export interface ITextbook {
-  readonly sections: ISectionData[]
+  /* readonly sections: ISectionData[] */
   counter: {
     currentGroup: number
     currentPage: number[]

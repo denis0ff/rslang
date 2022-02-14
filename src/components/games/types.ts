@@ -1,5 +1,5 @@
 import { Dispatch, SetStateAction } from 'react'
-import { IWord } from '../../utils/types'
+import { IGotUserWord, IStat, IWord } from '../../utils/types'
 
 export enum GameType {
   AUDIO_CALL = 'Аудиовызов',
@@ -12,8 +12,10 @@ export enum GameStatus {
   RESULT,
 }
 export interface IAnswers {
-  good: IWord[]
-  bad: IWord[]
+  right: IWord[]
+  wrong: IWord[]
+  streak: number
+  max: number
 }
 
 export interface IDifficultyProps {
@@ -25,13 +27,16 @@ export interface IDifficultyProps {
 
 export interface IGameRunProps {
   words: IWord[]
+  answers: IAnswers
   setAnswers: Dispatch<SetStateAction<IAnswers>>
   setStatus: Dispatch<SetStateAction<GameStatus>>
 }
 
-export interface IResultProps {
+export interface IResultProps extends IGameRunProps {
   answers: IAnswers
+  setAnswers: Dispatch<SetStateAction<IAnswers>>
   setStatus: Dispatch<SetStateAction<GameStatus>>
+  setWords: Dispatch<SetStateAction<IWord[]>>
 }
 
 export interface IAudioButtonProps {
@@ -56,7 +61,36 @@ export interface IWordListProps {
 }
 
 export interface IResultViewProps {
-  good: number
-  bad: number
-  setStatus: Dispatch<SetStateAction<GameStatus>>
+  right: number
+  wrong: number
+  nextGame: () => void
+}
+
+export interface IPostWordProps {
+  isRight: boolean
+  id: string
+  gameType: GameTypeOption
+}
+
+export enum Errors {
+  ERROR_401 = 401,
+  ERROR_404 = 404,
+}
+
+export interface IPutWordProps extends IPostWordProps {
+  data: IGotUserWord
+}
+
+export enum GameTypeOption {
+  AUDIO_CALL = 'audioCall',
+  SPRINT = 'sprint',
+}
+
+export interface IAddWordStatProps {
+  answers: IAnswers
+  gameType: GameTypeOption
+}
+
+export interface IUpdateStatProps extends IAddWordStatProps {
+  data: IStat
 }

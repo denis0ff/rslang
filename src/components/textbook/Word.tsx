@@ -1,7 +1,7 @@
 import parse from 'html-react-parser'
 import React, { FC } from 'react'
 import styled from 'styled-components'
-import { BASE } from '../../utils/config'
+import { BASE } from './config'
 import { AuthContext } from '../../utils/services'
 import { IWordAddition, IWordObj, WordDifficultyType } from './types'
 
@@ -120,7 +120,11 @@ export const Word: FC<IWordObj> = ({
     deleteDifficulty(checkWord.id)
   }
 
-  const buttonDifficulty = (name: WordDifficultyType, child: string) => {
+  const buttonDifficulty = (
+    name: WordDifficultyType,
+    child: string,
+    click: (e: React.MouseEvent<HTMLButtonElement>) => void
+  ) => {
     if (isAuth) {
       return (
         <button
@@ -131,11 +135,7 @@ export const Word: FC<IWordObj> = ({
             difficulty: name,
             isNew: word.userWord ? !!word.userWord.difficulty : false,
           })}
-          onClick={
-            state.counter.currentGroup < 6
-              ? difficultyListener
-              : deleteDifficultyListener
-          }
+          onClick={click}
         >
           {child}
         </button>
@@ -163,9 +163,16 @@ export const Word: FC<IWordObj> = ({
         <div className="buttons">
           {buttonDifficulty(
             'difficult',
-            getButtonName(state.counter.currentGroup < 6)
+            getButtonName(state.counter.currentGroup < 6),
+            state.counter.currentGroup < 6
+              ? difficultyListener
+              : deleteDifficultyListener
           )}
-          {buttonDifficulty('studied', 'Добавить в изученые')}
+          {buttonDifficulty(
+            'studied',
+            'Добавить в изученые',
+            difficultyListener
+          )}
         </div>
         <p className="explanation-title">Значение</p>
         <p className="explanation-example">{parse(word.textMeaning)}</p>

@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useMemo, useState } from 'react'
 import { Link, Route, Routes } from 'react-router-dom'
 import styled from 'styled-components'
 import { AudioCall } from './pages/AudioCall'
@@ -28,8 +28,9 @@ const Logout = styled.button``
 
 export const App = () => {
   const [isAuth, setIsAuth] = useState(() => !!localStorage.getItem('token'))
+  const memoizedAuth = useMemo(() => ({ isAuth, setIsAuth }), [isAuth])
   return (
-    <AuthContext.Provider value={{ isAuth, setIsAuth }}>
+    <AuthContext.Provider value={memoizedAuth}>
       <Header>
         <NavLink to={Paths.HOME}>Домой</NavLink>
         <NavLink to={Paths.SPRINT}>Спринт</NavLink>

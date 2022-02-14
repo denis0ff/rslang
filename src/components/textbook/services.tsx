@@ -2,11 +2,10 @@ import axios from 'axios'
 import { getWordsResponse } from '../../utils/config'
 import { Paths } from '../../utils/types'
 import {
-  getAggregatedWordsURL,
   getNewUserTokenURL,
   getUserWordURL,
-  getUserAggregatedWordsAllFilter,
-  getUserAggregatedWordsDifficultFilter,
+  getUserAggregatedAllWordsURL,
+  getUserAggregatedDifficultWordsURL,
 } from './config'
 import {
   IAggregatedResponse,
@@ -66,13 +65,12 @@ export const getUserAggregatedWordsService = async (
   group?: number,
   page?: number
 ) => {
-  let difficultyType = ''
-  if (filter === 'difficult')
-    difficultyType = getUserAggregatedWordsDifficultFilter()
-  else difficultyType = getUserAggregatedWordsAllFilter(group || 0, page || 0)
+  let url = ''
+  if (filter === 'difficult') url = getUserAggregatedDifficultWordsURL(userId())
+  else url = getUserAggregatedAllWordsURL(userId(), group || 0, page || 0)
 
   const response = (activeToken: string) => {
-    return fetch(getAggregatedWordsURL(userId(), difficultyType), {
+    return fetch(url, {
       method: 'GET',
       withCredentials: true,
       headers: {
