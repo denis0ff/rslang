@@ -21,7 +21,7 @@ import {
   USER_STAT,
   USER_TOKEN,
 } from './config'
-import { IGotUserWord, IStat, Tokens } from './types'
+import { IGotUserWord, IStat, Paths, Tokens } from './types'
 import { getRandomInteger } from './utils'
 
 export const getWordsPromise = async (group: number, page?: number) =>
@@ -58,7 +58,7 @@ export const getNewToken = async () =>
     .catch(({ response }) => {
       if (response.status === Errors.ERROR_401) {
         localStorage.clear()
-        window.location.href = `${window.location.origin}/authorization`
+        window.location.href = Paths.AUTH
       }
     })
 

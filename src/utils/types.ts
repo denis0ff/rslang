@@ -21,6 +21,7 @@ export enum Paths {
   AUDIO_CALL = 'audiocall',
   TEXTBOOK = 'textbook',
   AUTH = 'authorization',
+  STAT = 'statistics',
   NOT_FOUND = '*',
 }
 

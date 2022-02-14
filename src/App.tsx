@@ -6,6 +6,7 @@ import { Auth } from './pages/Auth'
 import { Main } from './pages/Main'
 import { NotFound } from './pages/NotFound'
 import { Sprint } from './pages/Sprint'
+import { Statistics } from './pages/Statistics'
 import { TextbookPage } from './pages/TextbookPage'
 import { AuthContext } from './utils/services'
 import { Paths } from './utils/types'
@@ -36,6 +37,7 @@ export const App = () => {
         <NavLink to={Paths.SPRINT}>Спринт</NavLink>
         <NavLink to={Paths.AUDIO_CALL}>Аудиовызов</NavLink>
         <NavLink to={Paths.TEXTBOOK}>Учебник</NavLink>
+        <NavLink to={Paths.STAT}>Статистика</NavLink>
         {isAuth ? (
           <Logout
             onClick={() => {
@@ -55,6 +57,7 @@ export const App = () => {
         <Route path={Paths.AUDIO_CALL} element={<AudioCall />} />
         <Route path={Paths.TEXTBOOK} element={<TextbookPage />} />
         <Route path={Paths.AUTH} element={<Auth />} />
+        <Route path={Paths.STAT} element={<Statistics />} />
         <Route path={Paths.NOT_FOUND} element={<NotFound />} />
       </Routes>
     </AuthContext.Provider>
