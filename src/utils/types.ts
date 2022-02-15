@@ -33,6 +33,7 @@ export enum Tokens {
 export enum WordDifficulties {
   DIFFICULT = 'difficult',
   STUDIED = 'studied',
+  NEW = 'NEW',
 }
 
 export interface IUserWord {
@@ -56,6 +57,7 @@ export interface IGotUserWord extends IUserWord {
 export interface ILongStat {
   date: string // дата долгосрочной статы, т.е. если дата сегоднешняя данные обновлять, нет - добавить с новой датой
   newWords: number // количество новых слов за этот день
+  learnedWords: number
 }
 
 export interface IGameStat {

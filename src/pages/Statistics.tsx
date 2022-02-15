@@ -37,7 +37,10 @@ export const Statistics = () => {
         }
       />
       <GameStat games={stats.optional.games} />
-      <LongStats />
+      <LongStats
+        longStat={stats.optional.longStat}
+        allWords={stats.optional.words}
+      />
     </>
   )
 }

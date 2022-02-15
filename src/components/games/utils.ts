@@ -1,5 +1,6 @@
 import {
   createStatPromise,
+  getAllUserWordsPromise,
   getNewToken,
   getStatPromise,
   getWordPromise,
@@ -7,6 +8,8 @@ import {
   putStatPromise,
   putWordPromise,
 } from '../../utils/services'
+import { IGotUserWord, WordDifficulties } from '../../utils/types'
+import { sameDay } from '../../utils/utils'
 import {
   Errors,
   IAddWordStatProps,
@@ -54,13 +57,39 @@ const createStat = async (props: IAddWordStatProps) =>
     }
   })
 
-const updateStat = async (props: IUpdateStatProps) =>
-  putStatPromise(props).catch(async ({ response }) => {
+const setLearnedWordsLength = ({
+  learnedWords,
+  data,
+}: {
+  learnedWords: { length: number }
+  data: IGotUserWord[]
+}) => {
+  learnedWords.length = data.filter(
+    (w) =>
+      w.difficulty === WordDifficulties.STUDIED && sameDay(w.optional.lastTime)
+  ).length
+}
+
+const updateStat = async (props: IUpdateStatProps) => {
+  const learnedWords = { length: 0 }
+  await getAllUserWordsPromise()
+    .then(({ data }) => setLearnedWordsLength({ learnedWords, data }))
+    .catch(async ({ response }) => {
+      if (response.status === Errors.ERROR_401) {
+        await getNewToken()
+        getAllUserWordsPromise().then(({ data }) =>
+          setLearnedWordsLength({ learnedWords, data })
+        )
+      }
+    })
+  const data = { ...props, learnedWords: learnedWords.length }
+  putStatPromise(data).catch(async ({ response }) => {
     if (response.status === Errors.ERROR_401) {
       await getNewToken()
-      putStatPromise(props)
+      putStatPromise(data)
     }
   })
+}
 
 export const addWordStat = async (props: IAddWordStatProps) => {
   getStatPromise()

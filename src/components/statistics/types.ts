@@ -18,3 +18,8 @@ export interface IGameCardProps {
   game: IGameStat
   type: GameType
 }
+
+export interface ILongStatProps {
+  longStat: string
+  allWords: string
+}

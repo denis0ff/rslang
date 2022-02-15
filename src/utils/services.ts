@@ -6,7 +6,7 @@ import {
   IPostWordProps,
   IPutWordProps,
   IAddWordStatProps,
-  IUpdateStatProps,
+  IPutStatPromiseProps,
 } from '../components/games/types'
 import {
   createStatConfig,
@@ -20,6 +20,7 @@ import {
   USERS,
   USER_STAT,
   USER_TOKEN,
+  USER_WORDS,
 } from './config'
 import { IGotUserWord, IStat, Paths, Tokens } from './types'
 import { getRandomInteger } from './utils'
@@ -94,5 +95,8 @@ export const getStatPromise = async () =>
 export const createStatPromise = async (props: IAddWordStatProps) =>
   axios.put(USER_STAT, createStatConfig(props), getTokenConfig())
 
-export const putStatPromise = async (props: IUpdateStatProps) =>
+export const putStatPromise = async (props: IPutStatPromiseProps) =>
   axios.put(USER_STAT, updateStatConfig(props), getTokenConfig())
+
+export const getAllUserWordsPromise = async () =>
+  axios.get<IGotUserWord[]>(USER_WORDS, getTokenConfig())
