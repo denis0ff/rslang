@@ -38,25 +38,7 @@ export const options = {
   },
 }
 
-// export const data: IChartData = {
-//   labels: [],
-//   datasets: [
-//     {
-//       label: 'Новые слова',
-//       data: [],
-//       backgroundColor: 'rgba(172, 3, 129, 0.9)',
-//     },
-//     {
-//       label: 'Изученные слова',
-//       data: [],
-//       backgroundColor: 'rgba(45, 15, 179, 0.9)',
-//     },
-//   ],
-// }
-
 const Wrapper = styled.div`
-  height: 50%;
-  width: 50%;
   margin: 5em;
   background-color: whitesmoke;
 `
@@ -64,18 +46,8 @@ const Wrapper = styled.div`
 export const LongStats = ({ longStat }: ILongStatProps) => {
   const [data, setData] = useState<IChartData>({
     labels: [],
-    datasets: [
-      {
-        label: 'Новые слова',
-        data: [],
-        backgroundColor: 'rgba(172, 3, 129, 0.9)',
-      },
-      {
-        label: 'Изученные слова',
-        data: [],
-        backgroundColor: 'rgba(45, 15, 179, 0.9)',
-      },
-    ],
+    dataset1: [],
+    dataset2: [],
   })
   useEffect(() => {
     const stat: ILongStat[] =
@@ -83,9 +55,8 @@ export const LongStats = ({ longStat }: ILongStatProps) => {
     if (Array.isArray(stat))
       setData((prev) => {
         prev.labels = stat.map((el) => el.date.slice(0, 10))
-        prev.datasets[0].data = stat.map((el) => el.newWords)
-        prev.datasets[1].data = stat.map((el) => el.learnedWords)
-
+        prev.dataset1 = stat.map((el) => el.newWords)
+        prev.dataset2 = stat.map((el) => el.learnedWords)
         return { ...prev }
       })
   }, [longStat])
@@ -94,7 +65,24 @@ export const LongStats = ({ longStat }: ILongStatProps) => {
     <article>
       <h2>Статистика за всё время</h2>
       <Wrapper>
-        <Bar options={options} data={data} />
+        <Bar
+          options={options}
+          data={{
+            labels: data.labels,
+            datasets: [
+              {
+                label: 'Новые слова',
+                data: data.dataset1,
+                backgroundColor: 'rgba(172, 3, 129, 0.9)',
+              },
+              {
+                label: 'Изученные слова',
+                data: data.dataset2,
+                backgroundColor: 'rgba(45, 15, 179, 0.9)',
+              },
+            ],
+          }}
+        />
       </Wrapper>
     </article>
   )

@@ -23,12 +23,8 @@ export interface ILongStatProps {
   longStat: string
 }
 
-export interface IChartDataset {
-  label: string
-  data: number[]
-  backgroundColor?: string
-}
 export interface IChartData {
   labels: string[]
-  datasets: IChartDataset[]
+  dataset1: number[]
+  dataset2: number[]
 }
