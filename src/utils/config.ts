@@ -13,7 +13,7 @@ export const USERS = `${BASE}users`
 export const SIGN_IN = `${BASE}signin`
 
 export const USER = `${USERS}/${localStorage.getItem('userId')}`
-export const USER_WORDS = `${USERS}/words`
+export const USER_WORDS = `${USERS}/${localStorage.getItem('userId')}/words`
 export const USER_TOKEN = `${USER}/tokens`
 export const USER_STAT = `${USER}/statistics`
 
@@ -137,10 +137,11 @@ export const updateStatConfig = ({
   delete data.id
   const { words, games, date, longStat } = data.optional
   const { right, wrong, max } = answers
+  const parsedWords = JSON.parse(words)
   const newWords = Array.from(
-    new Set([...JSON.parse(words), ...[...right, ...wrong].map((w) => w.id)])
+    new Set([...parsedWords, ...[...right, ...wrong].map((w) => w.id)])
   )
-  const newWordsCount = newWords.length - words.length
+  const newWordsCount = newWords.length - parsedWords.length
   const longStatArray = JSON.parse(longStat)
   if (sameDay(date)) {
     games[gameType].newWords += newWordsCount

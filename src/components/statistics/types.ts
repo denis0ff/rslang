@@ -21,5 +21,14 @@ export interface IGameCardProps {
 
 export interface ILongStatProps {
   longStat: string
-  allWords: string
+}
+
+export interface IChartDataset {
+  label: string
+  data: number[]
+  backgroundColor?: string
+}
+export interface IChartData {
+  labels: string[]
+  datasets: IChartDataset[]
 }

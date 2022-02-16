@@ -1,4 +1,4 @@
-import { useCallback, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { GameStat } from '../components/statistics/GameStats'
 import { LongStats } from '../components/statistics/LongStats'
 import { getStats } from '../components/statistics/utils'
@@ -21,6 +21,8 @@ export const Statistics = () => {
   const getStatsCallback = useCallback(() => {
     getStats(setStats)
   }, [])
+  useEffect(getStatsCallback, [getStatsCallback])
+
   return (
     <>
       <WordStat
@@ -37,10 +39,7 @@ export const Statistics = () => {
         }
       />
       <GameStat games={stats.optional.games} />
-      <LongStats
-        longStat={stats.optional.longStat}
-        allWords={stats.optional.words}
-      />
+      <LongStats longStat={stats.optional.longStat} />
     </>
   )
 }

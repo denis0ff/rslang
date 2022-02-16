@@ -6,7 +6,7 @@ export const GameCard = ({ game, type }: IGameCardProps) => {
     <div>
       <h2>{type}</h2>
       <ul>
-        <li>Изучено слов: {game.newWords}</li>
+        <li>Новых слов: {game.newWords}</li>
         <li>
           Правильных ответов:{' '}
           {(checkIsNaN(game.right / game.allWords) * 100).toFixed(2)}%
