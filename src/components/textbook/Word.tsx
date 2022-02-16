@@ -1,13 +1,20 @@
 import parse from 'html-react-parser'
-import React, { FC } from 'react'
+import React, { FC, useState } from 'react'
 import styled from 'styled-components'
 import { BASE } from './textbookConfig'
 import { AuthContext } from '../../utils/services'
-import { IWordAddition, IWordObj, WordDifficultyType } from './textbookTypes'
+import {
+  IWordAddition,
+  IWordAudioFiles,
+  IWordObj,
+  WordDifficultyType,
+} from './textbookTypes'
+import { VolumeSVG } from './VolumeSVG'
 
 const Container = styled.div<{
   difficulty?: WordDifficultyType
   isDifficultGroup: boolean
+  isPlay: boolean
 }>`
   display: flex;
   flex-direction: column;
@@ -41,11 +48,13 @@ const Container = styled.div<{
     padding: 15px;
   }
   & h2 {
-    font-size: 2.2em;
+    font-size: 20px;
     letter-spacing: 1px;
+    line-height: 22px;
   }
   & h3 {
     font-size: 1.2em;
+    line-height: 22px;
   }
   & .buttons {
     display: flex;
@@ -85,11 +94,32 @@ const Container = styled.div<{
       props.difficulty === 'studied' ? 'none;' : 'auto;'};
   }
   & .explanation-title {
-    font-size: 1.2em;
-    letter-spacing: 1px;
+    font-size: 1.3em;
+    letter-spacing: 2px;
   }
   & .explanation-example {
     font-size: 1em;
+  }
+  & .line {
+    display: flex;
+    width: 26px;
+    height: 26px;
+    & div {
+      margin-left: 25px;
+      width: 26px;
+      height: 26px;
+      transition: all ease 0.3s;
+      cursor: pointer;
+      pointer-events: ${(props) => (!props.isPlay ? 'none;' : 'auto;')};
+      opacity: ${(props) => (!props.isPlay ? '0.3' : '1')};
+      & svg {
+        width: 26px;
+        height: 26px;
+      }
+      &:hover {
+        opacity: 0.8;
+      }
+    }
   }
 `
 
@@ -108,6 +138,13 @@ export const Word: FC<IWordObj> = ({
   state,
 }) => {
   const { isAuth } = React.useContext(AuthContext)
+  const [isPlay, setIsPlay] = useState(false)
+  const [audioFiles] = useState<IWordAudioFiles>({
+    audio: new Audio(),
+    audioMeaning: new Audio(),
+    audioExample: new Audio(),
+  })
+
   const difficultyListener = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault()
     const checkWord = getProp(e)
@@ -118,6 +155,30 @@ export const Word: FC<IWordObj> = ({
     e.preventDefault()
     const checkWord = getProp(e)
     deleteDifficulty(checkWord.id)
+  }
+
+  const audioPlay = () => {
+    setIsPlay(false)
+    const items = [
+      audioFiles.audio,
+      audioFiles.audioMeaning,
+      audioFiles.audioExample,
+    ]
+    for (let i = 0; i < items.length; i += 1) {
+      items[i].onended = () => {
+        if (i + 1 < items.length) items[i + 1].play()
+        else setIsPlay(true)
+      }
+    }
+    items[0].play()
+  }
+
+  const audioKeyPressListener = () => {
+    audioPlay()
+  }
+  const audioClickListener = (e: React.MouseEvent<HTMLDivElement>) => {
+    e.preventDefault()
+    audioPlay()
   }
 
   const buttonDifficulty = (
@@ -144,22 +205,71 @@ export const Word: FC<IWordObj> = ({
     return ''
   }
 
+  React.useEffect(() => {
+    const audioPromise = new Promise<boolean>((resolve) => {
+      audioFiles.audio.onloadeddata = () => {
+        if (audioFiles.audio.readyState >= 2) {
+          resolve(true)
+        }
+      }
+    })
+    const audioMeaningPromise = new Promise<boolean>((resolve) => {
+      audioFiles.audioMeaning.onloadeddata = () => {
+        if (audioFiles.audioMeaning.readyState >= 2) {
+          resolve(true)
+        }
+      }
+    })
+    const audioExamplePromise = new Promise<boolean>((resolve) => {
+      audioFiles.audioExample.onloadeddata = () => {
+        if (audioFiles.audioExample.readyState >= 2) {
+          resolve(true)
+        }
+      }
+    })
+
+    audioFiles.audio.src = BASE + word.audio
+    audioFiles.audioMeaning.src = BASE + word.audioMeaning
+    audioFiles.audioExample.src = BASE + word.audioExample
+
+    Promise.all([audioPromise, audioMeaningPromise, audioExamplePromise]).then(
+      (res) => {
+        if (res.every((item) => item)) setIsPlay(true)
+      },
+      () => {
+        throw Error('audio not load')
+      }
+    )
+    return () => {
+      setIsPlay(false)
+    }
+  }, [state.words[state.counter.currentWord]])
+
   if (!word) {
     return null
   }
+
   return (
     <Container
       difficulty={word.userWord ? word.userWord.difficulty : undefined}
       isDifficultGroup={state.counter.currentGroup === 6}
+      isPlay={isPlay}
     >
       <img src={BASE + word.image} alt={word.word} className="word_image" />
       <div className="description">
         <h2>{word.word}</h2>
         <h3>{word.wordTranslate}</h3>
-        <h3>
-          {word.transcription}
-          <button type="button">Vollume</button>
-        </h3>
+        <div className="line">
+          <h3>{word.transcription}</h3>
+          <div
+            role="button"
+            onKeyPress={audioKeyPressListener}
+            onClick={audioClickListener}
+            tabIndex={0}
+          >
+            <VolumeSVG color="#333" />
+          </div>
+        </div>
         <div className="buttons">
           {buttonDifficulty(
             'difficult',

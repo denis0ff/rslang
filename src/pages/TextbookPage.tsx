@@ -29,5 +29,6 @@ export const TextbookPage = () => {
   React.useEffect(() => {
     methods.getWords()
   }, [])
+
   return <Textbook state={textbook} methods={methods} />
 }

@@ -27,6 +27,7 @@ export const textbookPageLogic = (
       textbook.counter.currentGroup,
       textbook.counter.currentPage[textbook.counter.currentGroup] - 1
     )
+
     if (isAuth) {
       const aggrAllWordsProm = getUserAggregatedWordsService(
         'all',

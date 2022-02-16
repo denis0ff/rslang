@@ -132,12 +132,19 @@ export const Textbook: FC<{
             )
           })}
         </WordList>
-        <Word
-          word={methods.getCurrentWord()}
-          difficulty={methods.difficultyWordEvent}
-          deleteDifficulty={methods.deleteDifficultyWordEvent}
-          state={state}
-        />
+        {(() => {
+          if (state.words[state.counter.currentWord]) {
+            return (
+              <Word
+                word={methods.getCurrentWord()}
+                difficulty={methods.difficultyWordEvent}
+                deleteDifficulty={methods.deleteDifficultyWordEvent}
+                state={state}
+              />
+            )
+          }
+          return null
+        })()}
       </Words>
       {createPaging()}
     </Container>

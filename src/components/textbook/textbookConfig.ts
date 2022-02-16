@@ -10,7 +10,7 @@ export const getUserAggregatedAllWordsURL = (
   group: number,
   page: number
 ) => `
-  ${BASE}users/${userId}/aggregatedWords?filter=${`{"$and":[{ "page": ${page}},{ "group": ${group}},{"$or":[{"userWord.difficulty":"difficult"},{"userWord.difficulty":"studied"}]}]}`}
+  ${BASE}users/${userId}/aggregatedWords?wordsPerPage=20&filter=${`{"$and":[{ "page": ${page}},{ "group": ${group}},{"$or":[{"userWord.difficulty":"difficult"},{"userWord.difficulty":"studied"}]}]}`}
 `
 
 export const getUserAggregatedDifficultWordsURL = (userId: string) => `

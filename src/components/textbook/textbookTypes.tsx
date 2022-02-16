@@ -31,21 +31,13 @@ export interface ISectionDifficult {
   checked: boolean
   callback: (num: number) => void
 }
-/*
-export interface IAggregatedWord extends IWord {
-  _id: string
-  userWord?: {
-    difficulty: WordDifficultyType
-  }
-}
-*/
+
 export interface IAggregatedWord extends IWord {
   _id?: string
   userWord?: IUserWord
 }
 
 export interface ITextbook {
-  /* readonly sections: ISectionData[] */
   counter: {
     currentGroup: number
     currentPage: number[]
@@ -92,7 +84,17 @@ export interface IWordObj {
   state: ITextbook
 }
 
+export interface IWordAudioFiles {
+  audio: HTMLAudioElement
+  audioMeaning: HTMLAudioElement
+  audioExample: HTMLAudioElement
+}
+
 export interface IAggregatedResponse {
   paginatedResults: IAggregatedWord[]
   totalCount: Array<{ count: number }>
+}
+
+export interface IVolumeSVG {
+  color: string
 }
