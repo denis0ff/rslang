@@ -7,6 +7,7 @@ import { IGotUserWord, Tokens, WordDifficulties } from './types'
 import { sameDay } from './utils'
 
 const BASE = 'https://react-rslang-api.herokuapp.com/'
+
 const WORDS = `${BASE}words`
 
 export const USERS = `${BASE}users`

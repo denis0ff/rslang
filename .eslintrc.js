@@ -26,6 +26,7 @@ module.exports = {
   ],
   rules: {
     'no-unused-vars': 'off',
+    'no-underscore-dangle': ["error", { "allow": ["_id"] }],
     'import/prefer-default-export': 'off',
     '@typescript-eslint/no-unused-vars': ['error'],
     '@typescript-eslint/no-var-requires': 'off',
