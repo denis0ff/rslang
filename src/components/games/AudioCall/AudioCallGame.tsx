@@ -109,6 +109,9 @@ export const AudioCallGame = ({
       if (keys.includes(e.key) && !isAnswered) {
         checkAnswer(variables[+e.key])
       }
+      if (e.key === 'Enter') {
+        audio.play()
+      }
     }
 
     document.addEventListener('keydown', onKeydown)
