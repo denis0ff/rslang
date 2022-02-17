@@ -43,13 +43,14 @@ export interface ITextbook {
     currentPage: number[]
     currentWord: number
     countPage: number
+    difficultWordsCount: number
   }
   words: Array<IAggregatedWord>
-  difficultWordsCount: number
+  aggrWords: Array<IAggregatedWord>
 }
 
 export interface ITextbookMethods {
-  getWords: (isNotReset?: boolean) => void
+  getPageWords: () => void
   pagingEvent: (page: number) => void
   groupEvent: (group: number) => void
   groupDifficultEvent: (group: number) => void
@@ -58,6 +59,7 @@ export interface ITextbookMethods {
   wordEvent: (num: number) => void
   difficultyWordEvent: (check: IWordAddition) => void
   deleteDifficultyWordEvent: (id: string) => void
+  // getDifficultWordsCount: () => number
 }
 
 export type WordDifficultyType = 'studied' | 'difficult' | 'all'

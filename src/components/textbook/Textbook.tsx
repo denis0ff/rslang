@@ -74,7 +74,7 @@ export const Textbook: FC<{
             <SectionDifficult
               key="D"
               name="Difficult"
-              count={state.difficultWordsCount}
+              count={state.counter.difficultWordsCount}
               ind={6}
               checked={state.counter.currentGroup === 6}
               callback={methods.groupDifficultEvent}

@@ -5,12 +5,8 @@ export const BASE = 'https://react-rslang-api.herokuapp.com/'
 export const getNewUserTokenURL = (id: string | null) =>
   `${BASE}users/${id}/tokens`
 
-export const getUserAggregatedAllWordsURL = (
-  userId: string,
-  group: number,
-  page: number
-) => `
-  ${BASE}users/${userId}/aggregatedWords?wordsPerPage=20&filter=${`{"$and":[{ "page": ${page}},{ "group": ${group}},{"$or":[{"userWord.difficulty":"difficult"},{"userWord.difficulty":"studied"}]}]}`}
+export const getUserAggregatedWordsURL = (userId: string) => `
+  ${BASE}users/${userId}/aggregatedWords?wordsPerPage=3600&filter=${`{"$or":[{"userWord.difficulty":"difficult"},{"userWord.difficulty":"studied"}]}`}
 `
 
 export const getUserAggregatedDifficultWordsURL = (userId: string) => `

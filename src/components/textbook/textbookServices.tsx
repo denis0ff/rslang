@@ -4,8 +4,8 @@ import { Paths } from '../../utils/types'
 import {
   getNewUserTokenURL,
   getUserWordURL,
-  getUserAggregatedAllWordsURL,
   getUserAggregatedDifficultWordsURL,
+  getUserAggregatedWordsURL,
 } from './textbookConfig'
 import {
   IAggregatedResponse,
@@ -60,13 +60,11 @@ export const getWordsService = async (group: number, page: number) => {
 }
 
 export const getUserAggregatedWordsService = async (
-  filter: WordDifficultyType,
-  group?: number,
-  page?: number
+  filter: WordDifficultyType
 ) => {
   let url = ''
   if (filter === 'difficult') url = getUserAggregatedDifficultWordsURL(userId())
-  else url = getUserAggregatedAllWordsURL(userId(), group || 0, page || 0)
+  else url = getUserAggregatedWordsURL(userId())
 
   const response = (activeToken: string) => {
     return fetch(url, {
