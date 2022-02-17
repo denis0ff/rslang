@@ -94,3 +94,7 @@ export interface IAddWordStatProps {
 export interface IUpdateStatProps extends IAddWordStatProps {
   data: IStat
 }
+
+export interface IPutStatPromiseProps extends IUpdateStatProps {
+  learnedWords: number
+}
