@@ -36,8 +36,9 @@ export const TextbookPage = () => {
   }, [textbook])
 
   React.useEffect(() => {
-    if (textbook.counter.currentGroup < 6) methods.getPageWords()
-    else methods.groupDifficultEvent(6)
+    if (textbook.counter.currentGroup > 5 && isAuth)
+      methods.groupDifficultEvent(6)
+    else methods.getPageWords()
   }, [isAuth])
   return <Textbook state={textbook} methods={methods} />
 }

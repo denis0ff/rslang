@@ -94,7 +94,6 @@ export const textbookPageLogic = (
 
   const methods: ITextbookMethods = {
     getPageWords: () => {
-      console.log('getPageWords  ')
       let group = textbook.counter.currentGroup
       if (textbook.counter.currentGroup > 5 && !isAuth) group = 0
       getWords(
@@ -156,7 +155,7 @@ export const textbookPageLogic = (
     },
     getMarkPages: (group: number) => {
       const arrCount = new Array<number>(textbook.counter.countPage).fill(0)
-      if (textbook.aggrWords.length > 0) {
+      if (isAuth && textbook.aggrWords.length > 0) {
         for (let i = 0; i < arrCount.length; i += 1) {
           arrCount[i] = textbook.aggrWords.filter(
             (word) =>
