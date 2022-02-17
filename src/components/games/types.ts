@@ -96,5 +96,5 @@ export interface IUpdateStatProps extends IAddWordStatProps {
 }
 
 export interface IPutStatPromiseProps extends IUpdateStatProps {
-  learnedWords: number
+  learnedWords: { all: number; today: number }
 }
