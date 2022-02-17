@@ -57,7 +57,7 @@ const createStat = async (props: IAddWordStatProps) =>
     }
   })
 
-const setLearnedWordsLength = ({
+export const setLearnedWordsLength = ({
   learnedWords,
   data,
 }: {
