@@ -46,3 +46,5 @@ export const sameDay = (dateJSON: string) => {
     date.getMonth() === now.getMonth()
   )
 }
+
+export const checkIsNaN = (value: number) => (Number.isNaN(value) ? 0 : value)

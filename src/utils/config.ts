@@ -1,7 +1,7 @@
 import {
   GameTypeOption,
   IAddWordStatProps,
-  IUpdateStatProps,
+  IPutStatPromiseProps,
 } from '../components/games/types'
 import { IGotUserWord, Tokens, WordDifficulties } from './types'
 import { sameDay } from './utils'
@@ -14,6 +14,7 @@ export const USERS = `${BASE}users`
 export const SIGN_IN = `${BASE}signin`
 
 export const USER = `${USERS}/${localStorage.getItem('userId')}`
+export const USER_WORDS = `${USERS}/${localStorage.getItem('userId')}/words`
 export const USER_TOKEN = `${USER}/tokens`
 export const USER_STAT = `${USER}/statistics`
 
@@ -30,9 +31,10 @@ export const getTokenConfig = (type = Tokens.token) => {
   }
 }
 
-export const getUserWordResponse = (wordId: string) => `${USER}/words/${wordId}`
+export const getUserWordResponse = (wordId: string) => `${USER_WORDS}/${wordId}`
 
-const MIN_FOR_STUDIED = 3
+const MIN_FOR_NEW = 3
+const MIN_FOR_DIFFICULT = 5
 
 export const postWordConfig = ({
   isRight,
@@ -48,7 +50,7 @@ export const postWordConfig = ({
   if (isRight) gamesTemplate[gameType].right = 1
   else gamesTemplate[gameType].wrong = 1
   return {
-    difficulty: WordDifficulties.STUDIED,
+    difficulty: WordDifficulties.NEW,
     optional: {
       lastTime: new Date().toJSON(),
       allTry: 1,
@@ -71,7 +73,15 @@ export const putWordConfig = ({
   delete data.wordId
   if (isRight) {
     data.optional.streak += 1
-    if (data.optional.streak >= MIN_FOR_STUDIED)
+    if (
+      data.difficulty === WordDifficulties.NEW &&
+      data.optional.streak >= MIN_FOR_NEW
+    )
+      data.difficulty = WordDifficulties.STUDIED
+    if (
+      data.difficulty === WordDifficulties.DIFFICULT &&
+      data.optional.streak >= MIN_FOR_DIFFICULT
+    )
       data.difficulty = WordDifficulties.STUDIED
     data.optional.games[gameType].right += 1
   } else {
@@ -97,21 +107,22 @@ const newDayTemplate = {
 
 export const createStatConfig = ({ answers, gameType }: IAddWordStatProps) => {
   const { right, wrong, max } = answers
-  const learnedWords = right.length + wrong.length
+  const newWords = right.length + wrong.length
   const template = { ...newDayTemplate }
-  template.games[gameType].newWords = learnedWords
-  template.games[gameType].allWords = learnedWords
+  template.games[gameType].newWords = newWords
+  template.games[gameType].allWords = newWords
   template.games[gameType].right = right.length
   template.games[gameType].streak = max
   return {
-    learnedWords,
+    learnedWords: 0,
     optional: {
       words: JSON.stringify([...right, ...wrong].map((w) => w.id)),
       ...template,
       longStat: JSON.stringify([
         {
           date: template.date,
-          newWords: learnedWords,
+          newWords,
+          learnedWords: 0,
         },
       ]),
     },
@@ -122,14 +133,16 @@ export const updateStatConfig = ({
   data,
   answers,
   gameType,
-}: IUpdateStatProps) => {
+  learnedWords,
+}: IPutStatPromiseProps) => {
   delete data.id
   const { words, games, date, longStat } = data.optional
   const { right, wrong, max } = answers
+  const parsedWords = JSON.parse(words)
   const newWords = Array.from(
-    new Set([...JSON.parse(words), ...[...right, ...wrong].map((w) => w.id)])
+    new Set([...parsedWords, ...[...right, ...wrong].map((w) => w.id)])
   )
-  const newWordsCount = newWords.length - data.learnedWords
+  const newWordsCount = newWords.length - parsedWords.length
   const longStatArray = JSON.parse(longStat)
   if (sameDay(date)) {
     games[gameType].newWords += newWordsCount
@@ -146,7 +159,8 @@ export const updateStatConfig = ({
     longStatArray.push({ date: template.date, newWords: newWordsCount })
     data.optional = { ...data.optional, ...template }
   }
-  data.learnedWords = newWords.length
+  longStatArray[longStatArray.length - 1].learnedWords = learnedWords
+  data.learnedWords = learnedWords
   data.optional.words = JSON.stringify(newWords)
   data.optional.longStat = JSON.stringify(longStatArray)
   return data

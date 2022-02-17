@@ -17,11 +17,11 @@ export const ResultView = ({ right, wrong, nextGame }: IResultViewProps) => (
   <>
     <Title>Ты молодец!</Title>
     <TextLink>
-      {right} изучено, {wrong} на изучении
+      {right} ответил успешно, {wrong} ответил не верно
     </TextLink>
     <WrapperRow>
       <GameLink onClick={() => nextGame()}>Сыграть ещё раз</GameLink>
-      <TextbookLink to={Paths.TEXTBOOK}>Перейти в учебник</TextbookLink>
+      <TextbookLink to={`../${Paths.TEXTBOOK}`}>Перейти в учебник</TextbookLink>
     </WrapperRow>
   </>
 )
