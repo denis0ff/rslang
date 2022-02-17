@@ -92,6 +92,7 @@ export const Textbook: FC<{
         <Paging
           current={methods.getCurrentPage()}
           total={state.counter.countPage}
+          markPages={methods.getMarkPages(state.counter.currentGroup)}
           callback={methods.pagingEvent}
         />
       )

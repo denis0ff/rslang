@@ -154,6 +154,23 @@ export const textbookPageLogic = (
         }
       })
     },
+    getMarkPages: (group: number) => {
+      const arrCount = new Array<number>(textbook.counter.countPage).fill(0)
+      if (textbook.aggrWords.length > 0) {
+        for (let i = 0; i < arrCount.length; i += 1) {
+          arrCount[i] = textbook.aggrWords.filter(
+            (word) =>
+              word.group === group &&
+              word.page === i &&
+              word.userWord &&
+              (word.userWord?.difficulty === 'difficult' ||
+                word.userWord?.difficulty === 'studied')
+          ).length
+        }
+      }
+      console.log(arrCount)
+      return arrCount.map((item) => item === 20)
+    },
   }
   return methods
 }

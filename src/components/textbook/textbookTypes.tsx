@@ -59,7 +59,7 @@ export interface ITextbookMethods {
   wordEvent: (num: number) => void
   difficultyWordEvent: (check: IWordAddition) => void
   deleteDifficultyWordEvent: (id: string) => void
-  // getDifficultWordsCount: () => number
+  getMarkPages: (group: number) => Array<boolean>
 }
 
 export type WordDifficultyType = 'studied' | 'difficult' | 'all'
