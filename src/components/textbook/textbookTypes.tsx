@@ -98,3 +98,8 @@ export interface IAggregatedResponse {
 export interface IVolumeSVG {
   color: string
 }
+
+export enum TPColors {
+  STUDIED = '#366a89;',
+  STUDY = '#4a4a4a;',
+}

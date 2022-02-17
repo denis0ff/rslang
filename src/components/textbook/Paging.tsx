@@ -41,7 +41,7 @@ const PagingButton = styled.button<{ buttonState: ButtonStateType }>`
         res = '#555;'
         break
       case 'studied':
-        res = '#00aa00;'
+        res = '#366a89;'
         break
       case 'skip':
         res = 'transparent;'
