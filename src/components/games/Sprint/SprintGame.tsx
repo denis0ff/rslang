@@ -1,23 +1,15 @@
 import React, { useCallback, useContext, useEffect, useState } from 'react'
 import { GameStatus, GameTypeOption, IGameRunProps } from '../types'
 import { AuthContext, getWordsPromise } from '../../../utils/services'
-import { getRandomInteger, shuffle } from '../../../utils/utils'
 
 import Timer from './timer'
 import Score from './total'
 import WordsCompare from './wordsCompare'
 import './styles/style.css'
 import { addWord, addWordStat } from '../utils'
+import { getRandomAnswers } from '../../../utils/utils'
 
 const Title = () => <h2>SprintGame</h2>
-const getRandomAnswers = (currentIindex: number, maxIndex: number): number => {
-  const randomIndex = (max: number): number => {
-    const randomItem = getRandomInteger(0, max)
-    return randomItem === currentIindex ? randomIndex(max) : randomItem
-  }
-  const rIndex = randomIndex(maxIndex)
-  return shuffle([rIndex, currentIindex])[0]
-}
 
 export const SprintGame = ({
   words,
@@ -25,8 +17,9 @@ export const SprintGame = ({
   setStatus,
   setAnswers,
 }: IGameRunProps) => {
-  const isAuth = useContext(AuthContext)
+  const { isAuth } = useContext(AuthContext)
   const [index, setIndexWord] = useState(0)
+  const [end, setGameEnd] = useState(true)
   const [total, setTotal] = useState(0)
   const [coefficient, setCoefficient] = useState(0)
   const [anserButton, setAnserButton] = useState(true)
@@ -39,8 +32,8 @@ export const SprintGame = ({
     setenWords(() => [...enWords, ...data])
   }
 
-  const getValue = (value: number) => {
-    if (value === 0) {
+  const getValue = (value: number, flag?: boolean) => {
+    if (value === 0 || flag) {
       if (isAuth) addWordStat({ answers, gameType: GameTypeOption.SPRINT })
       setStatus(GameStatus.RESULT)
     }
@@ -50,13 +43,22 @@ export const SprintGame = ({
     (anserCompare: boolean) => {
       const compare = index === randomAnserIndex
       const isRight = compare === anserCompare
-      if (index === enWords.length - 10) {
+      if (index === enWords.length - 5) {
         const { group } = words[0]
         const { page } = enWords[enWords.length - 1]
-        const newGroup = page + 1 >= 30 ? group + 1 : group
-        const newPage = page + 1 >= 30 ? 0 : page + 1
-        getAdditionalResurse(newGroup, newPage)
+        if (page - 1 < 0) {
+          setGameEnd(!end)
+        } else {
+          const newPage = page - 1 >= 0 ? page - 1 : 0
+          if (newPage !== 0) {
+            getAdditionalResurse(group, newPage)
+          }
+        }
       }
+      if (index === enWords.length - 1) {
+        setGameEnd(!end)
+      }
+
       if (compare === anserCompare) {
         setAnserButton(true)
         setCoefficient(coefficient + 1)
@@ -92,13 +94,13 @@ export const SprintGame = ({
   )
 
   useEffect(() => {
-    const onKeydown = (e: KeyboardEvent) => {
+    const onKeyup = (e: KeyboardEvent) => {
       if (e.code === 'ArrowLeft') handleAnser(true)
       if (e.code === 'ArrowRight') handleAnser(false)
     }
-    document.addEventListener('keyup', onKeydown)
+    document.addEventListener('keyup', onKeyup)
     return () => {
-      document.removeEventListener('keyup', onKeydown)
+      document.removeEventListener('keyup', onKeyup)
     }
   }, [handleAnser])
 
@@ -106,7 +108,7 @@ export const SprintGame = ({
     <div className="container">
       <div className="wrapper">
         <Title />
-        <Timer onTimer={setStatus} conrols={getValue} />
+        <Timer onTimer={setStatus} end={end} conrols={getValue} />
         <Score coefficient={coefficient} total={total} anser={anserButton} />
         <WordsCompare
           onClickIndex={handleAnser}

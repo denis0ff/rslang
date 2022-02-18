@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { GameStatus } from '../types'
-import { Color, ItimerProps } from './types'
+import { Color, ITimerProps } from './types'
 
 function TimerDisplay(props: { time: number }) {
   const { time } = props
@@ -40,19 +40,19 @@ function ClockSvg({ color }: Color) {
   )
 }
 
-export default function Timer({ onTimer, conrols }: ItimerProps) {
+export default function Timer({ onTimer, conrols, end }: ITimerProps) {
   const [value, setValueTimer] = useState(30)
   useEffect(() => {
-    window.setTimeout(() => {
-      if (value > 0) {
+    if (value > 0 && end) {
+      window.setTimeout(() => {
         setValueTimer(value - 1)
-      }
-      if (value === 0) {
-        conrols(value)
-        onTimer(GameStatus.RESULT)
-      }
-    }, 1000)
-  }, [conrols, onTimer, value])
+      }, 1000)
+    } else {
+      conrols(value)
+      onTimer(GameStatus.RESULT)
+    }
+  }, [end])
+
   return (
     <div className="timer-wrapper">
       <ClockSvg color={value < 10 ? '#d31831' : '#ffffff'} />
