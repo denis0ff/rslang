@@ -43,13 +43,14 @@ export interface ITextbook {
     currentPage: number[]
     currentWord: number
     countPage: number
+    difficultWordsCount: number
   }
   words: Array<IAggregatedWord>
-  difficultWordsCount: number
+  aggrWords: Array<IAggregatedWord>
 }
 
 export interface ITextbookMethods {
-  getWords: (isNotReset?: boolean) => void
+  getPageWords: () => void
   pagingEvent: (page: number) => void
   groupEvent: (group: number) => void
   groupDifficultEvent: (group: number) => void
@@ -58,14 +59,14 @@ export interface ITextbookMethods {
   wordEvent: (num: number) => void
   difficultyWordEvent: (check: IWordAddition) => void
   deleteDifficultyWordEvent: (id: string) => void
+  getMarkPages: (group: number) => Array<boolean>
 }
 
 export type WordDifficultyType = 'studied' | 'difficult' | 'all'
 
 export interface IWordlistItem {
   ind: number
-  word: string
-  trans: string
+  word: IAggregatedWord
   active: boolean
   label?: WordDifficultyType
   callback: (num: number) => void
@@ -97,4 +98,9 @@ export interface IAggregatedResponse {
 
 export interface IVolumeSVG {
   color: string
+}
+
+export enum TPColors {
+  STUDIED = '#366a89;',
+  STUDY = '#4a4a4a;',
 }

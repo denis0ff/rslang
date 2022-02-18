@@ -1,6 +1,6 @@
 import React, { FC } from 'react'
 import styled from 'styled-components'
-import { ITextbook, ITextbookMethods } from './textbookTypes'
+import { ITextbook, ITextbookMethods, TPColors } from './textbookTypes'
 import { Paging } from './Paging'
 import { Section, SectionDifficult } from './Section'
 import { WordlistItem } from './WordlistItem'
@@ -31,11 +31,15 @@ const TitlePath = styled.div`
   font-size: 1.2em;
 `
 
-const Words = styled.div`
+const Words = styled.div<{ isStudied: boolean }>`
   width: 100%;
   display: flex;
   justify-content: space-between;
   gap: 10px;
+  background-color: ${(prop) =>
+    prop.isStudied ? TPColors.STUDIED : TPColors.STUDY}
+  padding: 15px;
+  border-radius: 5px;
   @media screen and (max-width: 640px) {
     flex-wrap: wrap-reverse;
     justify-content: center;
@@ -54,6 +58,49 @@ const WordList = styled.div`
   }
 `
 
+const WordContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  width: 400px;
+`
+
+const Games = styled.div`
+  display: flex;
+  width: 100%;
+`
+
+const GameLink = styled.button`
+  border: none;
+  border-radius: 5px;
+  width: 175px;
+  height: 26px;
+  text-align: center;
+  text-transform: uppercase;
+  opacity: 0.8;
+  transition: all ease 0.3s;
+  cursor: pointer;
+  :hover {
+    opacity: 1;
+  }
+  .audioCall {
+    background-color: ${(props) =>
+      props.difficulty === 'difficult' && !props.isDifficultGroup
+        ? '#ccc;'
+        : '#d651ff;'};
+    pointer-events: ${(props) =>
+      props.difficulty === 'difficult' && !props.isDifficultGroup
+        ? 'none;'
+        : 'auto;'};
+  }
+  .sprint {
+    background-color: ${(props) =>
+      props.difficulty === 'studied' ? '#ccc' : '#65c6ff;'};
+    pointer-events: ${(props) =>
+      props.difficulty === 'studied' ? 'none;' : 'auto;'};
+  }
+}
+`
+
 export const Textbook: FC<{
   state: ITextbook
   methods: ITextbookMethods
@@ -70,7 +117,7 @@ export const Textbook: FC<{
             <SectionDifficult
               key="D"
               name="Difficult"
-              count={state.difficultWordsCount}
+              count={state.counter.difficultWordsCount}
               ind={6}
               checked={state.counter.currentGroup === 6}
               callback={methods.groupDifficultEvent}
@@ -88,6 +135,7 @@ export const Textbook: FC<{
         <Paging
           current={methods.getCurrentPage()}
           total={state.counter.countPage}
+          markPages={methods.getMarkPages(state.counter.currentGroup)}
           callback={methods.pagingEvent}
         />
       )
@@ -116,36 +164,52 @@ export const Textbook: FC<{
       </Sections>
       {vocabulary()}
       <Title>Слова</Title>
-      <Words>
-        <WordList>
-          {state.words.map((item, ind) => {
-            return (
-              <WordlistItem
-                key={item.id}
-                ind={ind}
-                active={item.id === currentWord.id}
-                word={item.word}
-                trans={item.wordTranslate}
-                label={item.userWord ? item.userWord.difficulty : 'all'}
-                callback={methods.wordEvent}
-              />
-            )
-          })}
-        </WordList>
-        {(() => {
-          if (state.words[state.counter.currentWord]) {
-            return (
-              <Word
-                word={methods.getCurrentWord()}
-                difficulty={methods.difficultyWordEvent}
-                deleteDifficulty={methods.deleteDifficultyWordEvent}
-                state={state}
-              />
-            )
-          }
-          return null
-        })()}
-      </Words>
+      {(() => {
+        if (state.words.length > 0) {
+          return (
+            <Words
+              isStudied={state.words.every(
+                (item) => item.userWord && item.userWord.difficulty
+              )}
+            >
+              <WordList>
+                {state.words.map((item, ind) => {
+                  return (
+                    <WordlistItem
+                      key={item.id}
+                      ind={ind}
+                      active={item.id === currentWord.id}
+                      word={item}
+                      label={item.userWord ? item.userWord.difficulty : 'all'}
+                      callback={methods.wordEvent}
+                    />
+                  )
+                })}
+              </WordList>
+              {(() => {
+                if (state.words[state.counter.currentWord]) {
+                  return (
+                    <WordContainer>
+                      <Word
+                        word={methods.getCurrentWord()}
+                        difficulty={methods.difficultyWordEvent}
+                        deleteDifficulty={methods.deleteDifficultyWordEvent}
+                        state={state}
+                      />
+                      <Games>
+                        <GameLink className="sprint">Спринт</GameLink>
+                        <GameLink className="audioCall">Аудиовызов</GameLink>
+                      </Games>
+                    </WordContainer>
+                  )
+                }
+                return null
+              })()}
+            </Words>
+          )
+        }
+        return null
+      })()}
       {createPaging()}
     </Container>
   )

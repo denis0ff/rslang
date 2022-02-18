@@ -23,6 +23,7 @@ const Container = styled.div<{
   flex-shrink: 0;
   background-color: #ffffff;
   color: #030303;
+  border-radius: 5px;
   border-top-left-radius: 160px;
   @media screen and (max-width: 420px) {
     width: 300px;
@@ -33,6 +34,7 @@ const Container = styled.div<{
     height: 200px;
     border-top-left-radius: 160px;
     border-bottom-right-radius: 160px;
+    border-top-right-radius: 5px;
     object-fit: cover;
     @media screen and (max-width: 420px) {
       border-top-left-radius: 120px;
@@ -255,7 +257,7 @@ export const Word: FC<IWordObj> = ({
       isDifficultGroup={state.counter.currentGroup === 6}
       isPlay={isPlay}
     >
-      <img src={BASE + word.image} alt={word.word} className="word_image" />
+      <img src={BASE + word.image} alt={word.word} />
       <div className="description">
         <h2>{word.word}</h2>
         <h3>{word.wordTranslate}</h3>
