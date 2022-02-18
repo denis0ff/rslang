@@ -1,5 +1,5 @@
 import React, { useCallback, useContext, useEffect, useState } from 'react'
-import { GameStatus, GameTypeOption, IGameRunProps } from '../types'
+import { GameTypeOption, IGameRunProps } from '../types'
 import { AuthContext, getWordsPromise } from '../../../utils/services'
 
 import Timer from './timer'
@@ -32,10 +32,9 @@ export const SprintGame = ({
     setenWords(() => [...enWords, ...data])
   }
 
-  const getValue = (value: number, flag?: boolean) => {
-    if (value === 0 || flag) {
+  const getValue = (value: number) => {
+    if (value === 0) {
       if (isAuth) addWordStat({ answers, gameType: GameTypeOption.SPRINT })
-      setStatus(GameStatus.RESULT)
     }
   }
 
@@ -43,20 +42,12 @@ export const SprintGame = ({
     (anserCompare: boolean) => {
       const compare = index === randomAnserIndex
       const isRight = compare === anserCompare
-      if (index === enWords.length - 5) {
-        const { group } = words[0]
-        const { page } = enWords[enWords.length - 1]
-        if (page - 1 < 0) {
-          setGameEnd(!end)
-        } else {
-          const newPage = page - 1 >= 0 ? page - 1 : 0
-          if (newPage !== 0) {
-            getAdditionalResurse(group, newPage)
-          }
-        }
-      }
-      if (index === enWords.length - 1) {
-        setGameEnd(!end)
+      const { page, group } = enWords[enWords.length - 1]
+      if (index === enWords.length - 5 && page !== 0) {
+        getAdditionalResurse(group, page - 1)
+      } else if (index === enWords.length - 1) {
+        setGameEnd(() => false)
+        return
       }
 
       if (compare === anserCompare) {
@@ -83,12 +74,13 @@ export const SprintGame = ({
       }
       setIndexWord(index + 1)
       setTotal(total + coefficient * 10)
-      if (isAuth)
+      if (isAuth) {
         addWord({
           isRight,
-          id: words[index].id,
+          id: enWords[index].id,
           gameType: GameTypeOption.SPRINT,
         })
+      }
     },
     [total, index, coefficient, anserButton]
   )
@@ -103,7 +95,6 @@ export const SprintGame = ({
       document.removeEventListener('keyup', onKeyup)
     }
   }, [handleAnser])
-
   return (
     <div className="container">
       <div className="wrapper">
