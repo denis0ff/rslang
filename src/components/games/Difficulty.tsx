@@ -5,11 +5,11 @@ import { AudioCallDescription } from './AudioCall/AudioCallDescription'
 import { SprintDescription } from './Sprint/SprintDescription'
 import { GameStatus, GameType, IDifficultyProps } from './types'
 
-const Container = styled.section`
+export const Container = styled.section`
   text-align: center;
 `
 
-const Description = styled.article``
+export const Description = styled.article``
 
 export const Wrapper = styled.div`
   display: flex;
@@ -25,7 +25,7 @@ export const WrapperRow = styled.div`
   gap: 0.5em;
 `
 
-const Button = styled.button`
+export const Button = styled.button`
   width: max-content;
 `
 

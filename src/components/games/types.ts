@@ -10,6 +10,8 @@ export enum GameStatus {
   SELECT,
   GAME,
   RESULT,
+  TEXTBOOK,
+  ERROR,
 }
 export interface IAnswers {
   right: IWord[]
@@ -97,4 +99,13 @@ export interface IUpdateStatProps extends IAddWordStatProps {
 
 export interface IPutStatPromiseProps extends IUpdateStatProps {
   learnedWords: { all: number; today: number }
+}
+
+export interface IGameProps {
+  textbookWords?: IWord[]
+}
+
+export interface IGameErrorProps {
+  setStatus: Dispatch<SetStateAction<GameStatus>>
+  setWords: Dispatch<SetStateAction<IWord[]>>
 }
