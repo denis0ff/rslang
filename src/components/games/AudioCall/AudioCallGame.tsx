@@ -23,7 +23,14 @@ const AnswerImg = styled.div<{ img: string }>`
   background: center / cover no-repeat ${(props) => `url(${props.img})`};
 `
 
-const AnswerButton = styled.button``
+const AnswerButton = styled.button<{ isRight: boolean; isAnswered: boolean }>`
+  padding: 0.4em 0.8em;
+  background-color: ${({ isRight, isAnswered }) => {
+    if (isAnswered) return isRight ? '#35c77f' : '#b93939'
+    return 'transparent'
+  }};
+  color: inherit;
+`
 
 const ShowAnswer = styled.button``
 
@@ -109,6 +116,9 @@ export const AudioCallGame = ({
       if (keys.includes(e.key) && !isAnswered) {
         checkAnswer(variables[+e.key])
       }
+      if (e.key === 'Enter') {
+        audio.play()
+      }
     }
 
     document.addEventListener('keydown', onKeydown)
@@ -135,6 +145,8 @@ export const AudioCallGame = ({
         {generatedAnswers.map((w) => (
           <AnswerButton
             key={w.id}
+            isRight={w.id === words[current].id}
+            isAnswered={isAnswered}
             onClick={() => {
               if (!isAnswered) checkAnswer(w.id)
             }}

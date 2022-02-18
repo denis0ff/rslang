@@ -5,11 +5,11 @@ import { Paths } from '../../../utils/types'
 import { WrapperRow } from '../Difficulty'
 import { IResultViewProps } from '../types'
 
-const TextLink = styled.p``
+export const TextLink = styled.h3``
 
-const GameLink = styled.div``
+export const GameLink = styled.div``
 
-const TextbookLink = styled(Link)`
+export const TextbookLink = styled(Link)`
   padding: 0;
 `
 

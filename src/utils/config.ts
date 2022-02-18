@@ -89,11 +89,8 @@ export const putWordConfig = ({
     data.optional.streak = 0
     data.optional.games[gameType].wrong += 1
   }
-  if (sameDay(data.optional.lastTime)) data.optional.allTry += 1
-  else {
-    data.optional.lastTime = new Date().toJSON()
-    data.optional.allTry = 1
-  }
+  data.optional.allTry += 1
+  data.optional.lastTime = new Date().toJSON()
   return data
 }
 
@@ -159,8 +156,8 @@ export const updateStatConfig = ({
     longStatArray.push({ date: template.date, newWords: newWordsCount })
     data.optional = { ...data.optional, ...template }
   }
-  longStatArray[longStatArray.length - 1].learnedWords = learnedWords
-  data.learnedWords = learnedWords
+  longStatArray[longStatArray.length - 1].learnedWords = learnedWords.all
+  data.learnedWords = learnedWords.today
   data.optional.words = JSON.stringify(newWords)
   data.optional.longStat = JSON.stringify(longStatArray)
   return data
