@@ -26,8 +26,7 @@ const saveNewToken = (data: ITokens) => {
 }
 
 const expireTokens = () => {
-  localStorage.removeItem('token')
-  localStorage.removeItem('refreshToken')
+  localStorage.clear()
   window.location.href = Paths.AUTH
 }
 
