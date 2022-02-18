@@ -1,10 +1,11 @@
+import { WordDifficulties } from '../../utils/types'
 import {
   addUserDifficultWordService,
   deleteUserDifficultWordService,
   getUserAggregatedWordsService,
   getWordsService,
 } from './textbookServices'
-import { ITextbook, ITextbookMethods, IWordAddition } from './textbookTypes'
+import { Game, ITextbook, ITextbookMethods, IWordAddition } from './textbookTypes'
 
 export const textbookPageLogic = (
   isAuth: boolean,
@@ -20,7 +21,7 @@ export const textbookPageLogic = (
     const cW = !isNotReset ? 0 : textbook.counter.currentWord
 
     if (isAuth) {
-      const aggrWordsProm = getUserAggregatedWordsService('all')
+      const aggrWordsProm = getUserAggregatedWordsService()
 
       Promise.all([wordProm, aggrWordsProm]).then(([words, aggResp]) => {
         if (aggResp) {
@@ -67,7 +68,9 @@ export const textbookPageLogic = (
 
   const getDifficultWords = (group: number) => {
     if (isAuth) {
-      const aggrDiffWordsProm = getUserAggregatedWordsService('difficult')
+      const aggrDiffWordsProm = getUserAggregatedWordsService(
+        WordDifficulties.DIFFICULT
+      )
       aggrDiffWordsProm.then((data) => {
         if (data) {
           const words = data.paginatedResults.map((item) => {
@@ -83,7 +86,8 @@ export const textbookPageLogic = (
               currentWord: 0,
               difficultWordsCount: words.filter(
                 (word) =>
-                  !!word.userWord && word.userWord.difficulty === 'difficult'
+                  !!word.userWord &&
+                  word.userWord.difficulty === WordDifficulties.DIFFICULT
               ).length,
             },
           }))
@@ -168,6 +172,9 @@ export const textbookPageLogic = (
         }
       }
       return arrCount.map((item) => item === 20)
+    },
+    gameCall: (gameType: Game) => {
+      console.log(`GAME ${gameType} IS CALL`)
     },
   }
   return methods

@@ -1,3 +1,4 @@
+import { WordDifficulties } from '../../utils/types'
 import { ISectionData } from './textbookTypes'
 
 export const BASE = 'https://react-rslang-api.herokuapp.com/'
@@ -6,7 +7,7 @@ export const getNewUserTokenURL = (id: string | null) =>
   `${BASE}users/${id}/tokens`
 
 export const getUserAggregatedWordsURL = (userId: string) => `
-  ${BASE}users/${userId}/aggregatedWords?wordsPerPage=3600&filter=${`{"$or":[{"userWord.difficulty":"difficult"},{"userWord.difficulty":"studied"}]}`}
+  ${BASE}users/${userId}/aggregatedWords?wordsPerPage=3600&filter=${`{"$or":[{"userWord.difficulty":"${WordDifficulties.DIFFICULT}"},{"userWord.difficulty":"${WordDifficulties.STUDIED}"},{"userWord.difficulty":"${WordDifficulties.NEW}"}]}`}
 `
 
 export const getUserAggregatedDifficultWordsURL = (userId: string) => `

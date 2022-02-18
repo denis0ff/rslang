@@ -1,4 +1,4 @@
-import { IUserWord, IWord } from '../../utils/types'
+import { IUserWord, IWord, WordDifficulties } from '../../utils/types'
 
 export type NameSectionType = 'Easy' | 'Normal' | 'Hard' | 'Difficult'
 
@@ -60,21 +60,20 @@ export interface ITextbookMethods {
   difficultyWordEvent: (check: IWordAddition) => void
   deleteDifficultyWordEvent: (id: string) => void
   getMarkPages: (group: number) => Array<boolean>
+  gameCall: (gameType: Game) => void
 }
-
-export type WordDifficultyType = 'studied' | 'difficult' | 'all'
 
 export interface IWordlistItem {
   ind: number
   word: IAggregatedWord
   active: boolean
-  label?: WordDifficultyType
+  label?: WordDifficulties
   callback: (num: number) => void
 }
 
 export interface IWordAddition {
   id: string
-  difficulty: WordDifficultyType
+  difficulty: WordDifficulties
   isNew: boolean
 }
 
@@ -103,4 +102,9 @@ export interface IVolumeSVG {
 export enum TPColors {
   STUDIED = '#366a89;',
   STUDY = '#4a4a4a;',
+}
+
+export enum Game {
+  AUDIOCALL = 'audioCall',
+  SPRINT = 'sprint',
 }

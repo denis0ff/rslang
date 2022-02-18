@@ -1,17 +1,13 @@
 import axios from 'axios'
 import { getWordsResponse } from '../../utils/config'
-import { Paths } from '../../utils/types'
+import { Paths, WordDifficulties } from '../../utils/types'
 import {
   getNewUserTokenURL,
   getUserWordURL,
   getUserAggregatedDifficultWordsURL,
   getUserAggregatedWordsURL,
 } from './textbookConfig'
-import {
-  IAggregatedResponse,
-  IAggregatedWord,
-  WordDifficultyType,
-} from './textbookTypes'
+import { IAggregatedResponse, IAggregatedWord } from './textbookTypes'
 
 interface ITokens {
   token: string
@@ -61,10 +57,11 @@ export const getWordsService = async (group: number, page: number) => {
 }
 
 export const getUserAggregatedWordsService = async (
-  filter: WordDifficultyType
+  filter?: WordDifficulties
 ) => {
   let url = ''
-  if (filter === 'difficult') url = getUserAggregatedDifficultWordsURL(userId())
+  if (filter === WordDifficulties.DIFFICULT)
+    url = getUserAggregatedDifficultWordsURL(userId())
   else url = getUserAggregatedWordsURL(userId())
 
   const response = (activeToken: string) => {
@@ -112,7 +109,7 @@ export const getUserAggregatedWordsService = async (
 export const addUserDifficultWordService = async (
   word: IAggregatedWord,
   isNew: boolean,
-  diff: WordDifficultyType
+  diff: WordDifficulties
 ) => {
   const opt =
     word.userWord && word.userWord.optional ? word.userWord.optional : {}

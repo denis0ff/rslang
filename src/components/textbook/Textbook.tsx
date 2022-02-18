@@ -1,6 +1,6 @@
 import React, { FC } from 'react'
 import styled from 'styled-components'
-import { ITextbook, ITextbookMethods, TPColors } from './textbookTypes'
+import { Game, ITextbook, ITextbookMethods, TPColors } from './textbookTypes'
 import { Paging } from './Paging'
 import { Section, SectionDifficult } from './Section'
 import { WordlistItem } from './WordlistItem'
@@ -62,14 +62,24 @@ const WordContainer = styled.div`
   display: flex;
   flex-direction: column;
   width: 400px;
+  height: 750px;
+  flex-shrink: 0;
+  background-color: #ffffff;
+  color: #030303;
+  border-radius: 5px;
+  border-top-left-radius: 160px;
 `
 
 const Games = styled.div`
   display: flex;
   width: 100%;
+  padding: 5px 15px;
+  column-gap: 10px;
 `
 
-const GameLink = styled.button`
+const GameLink = styled.button<{
+  active: boolean
+}>`
   border: none;
   border-radius: 5px;
   width: 175px;
@@ -79,24 +89,13 @@ const GameLink = styled.button`
   opacity: 0.8;
   transition: all ease 0.3s;
   cursor: pointer;
+  font-weight: bold;
+  letter-spacing: 1px;
+  font-family: inherit;
+  background-color: ${(props) => (props.active ? '#ccc;' : '#b3065c;')};
+  pointer-events: ${(props) => (props.active ? 'none;' : 'auto;')};
   :hover {
     opacity: 1;
-  }
-  .audioCall {
-    background-color: ${(props) =>
-      props.difficulty === 'difficult' && !props.isDifficultGroup
-        ? '#ccc;'
-        : '#d651ff;'};
-    pointer-events: ${(props) =>
-      props.difficulty === 'difficult' && !props.isDifficultGroup
-        ? 'none;'
-        : 'auto;'};
-  }
-  .sprint {
-    background-color: ${(props) =>
-      props.difficulty === 'studied' ? '#ccc' : '#65c6ff;'};
-    pointer-events: ${(props) =>
-      props.difficulty === 'studied' ? 'none;' : 'auto;'};
   }
 }
 `
@@ -107,6 +106,13 @@ export const Textbook: FC<{
 }> = ({ state, methods }) => {
   const { isAuth } = React.useContext(AuthContext)
   const currentWord = methods.getCurrentWord()
+  const markPages = methods.getMarkPages(state.counter.currentGroup)
+
+  const gameTypeListener = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault()
+    const gameType = e.currentTarget.dataset.prop || ''
+    methods.gameCall(gameType)
+  }
 
   const vocabulary = () => {
     if (isAuth) {
@@ -135,7 +141,7 @@ export const Textbook: FC<{
         <Paging
           current={methods.getCurrentPage()}
           total={state.counter.countPage}
-          markPages={methods.getMarkPages(state.counter.currentGroup)}
+          markPages={markPages}
           callback={methods.pagingEvent}
         />
       )
@@ -180,7 +186,9 @@ export const Textbook: FC<{
                       ind={ind}
                       active={item.id === currentWord.id}
                       word={item}
-                      label={item.userWord ? item.userWord.difficulty : 'all'}
+                      label={
+                        item.userWord ? item.userWord.difficulty : undefined
+                      }
                       callback={methods.wordEvent}
                     />
                   )
@@ -197,8 +205,34 @@ export const Textbook: FC<{
                         state={state}
                       />
                       <Games>
-                        <GameLink className="sprint">Спринт</GameLink>
-                        <GameLink className="audioCall">Аудиовызов</GameLink>
+                        <GameLink
+                          active={
+                            markPages[
+                              state.counter.currentPage[
+                                state.counter.currentGroup
+                              ] - 1
+                            ]
+                          }
+                          className="game"
+                          onClick={gameTypeListener}
+                          data-prop={Game.SPRINT}
+                        >
+                          Спринт
+                        </GameLink>
+                        <GameLink
+                          active={
+                            markPages[
+                              state.counter.currentPage[
+                                state.counter.currentGroup
+                              ] - 1
+                            ]
+                          }
+                          className="game"
+                          onClick={gameTypeListener}
+                          data-prop={Game.AUDIOCALL}
+                        >
+                          Аудиовызов
+                        </GameLink>
                       </Games>
                     </WordContainer>
                   )
