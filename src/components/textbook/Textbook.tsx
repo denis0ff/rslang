@@ -58,6 +58,49 @@ const WordList = styled.div`
   }
 `
 
+const WordContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  width: 400px;
+`
+
+const Games = styled.div`
+  display: flex;
+  width: 100%;
+`
+
+const GameLink = styled.button`
+  border: none;
+  border-radius: 5px;
+  width: 175px;
+  height: 26px;
+  text-align: center;
+  text-transform: uppercase;
+  opacity: 0.8;
+  transition: all ease 0.3s;
+  cursor: pointer;
+  :hover {
+    opacity: 1;
+  }
+  .audioCall {
+    background-color: ${(props) =>
+      props.difficulty === 'difficult' && !props.isDifficultGroup
+        ? '#ccc;'
+        : '#d651ff;'};
+    pointer-events: ${(props) =>
+      props.difficulty === 'difficult' && !props.isDifficultGroup
+        ? 'none;'
+        : 'auto;'};
+  }
+  .sprint {
+    background-color: ${(props) =>
+      props.difficulty === 'studied' ? '#ccc' : '#65c6ff;'};
+    pointer-events: ${(props) =>
+      props.difficulty === 'studied' ? 'none;' : 'auto;'};
+  }
+}
+`
+
 export const Textbook: FC<{
   state: ITextbook
   methods: ITextbookMethods
@@ -146,12 +189,18 @@ export const Textbook: FC<{
               {(() => {
                 if (state.words[state.counter.currentWord]) {
                   return (
-                    <Word
-                      word={methods.getCurrentWord()}
-                      difficulty={methods.difficultyWordEvent}
-                      deleteDifficulty={methods.deleteDifficultyWordEvent}
-                      state={state}
-                    />
+                    <WordContainer>
+                      <Word
+                        word={methods.getCurrentWord()}
+                        difficulty={methods.difficultyWordEvent}
+                        deleteDifficulty={methods.deleteDifficultyWordEvent}
+                        state={state}
+                      />
+                      <Games>
+                        <GameLink className="sprint">Спринт</GameLink>
+                        <GameLink className="audioCall">Аудиовызов</GameLink>
+                      </Games>
+                    </WordContainer>
                   )
                 }
                 return null
