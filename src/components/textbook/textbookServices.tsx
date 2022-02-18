@@ -1,7 +1,5 @@
 import axios from 'axios'
-import { useContext } from 'react'
 import { getWordsResponse } from '../../utils/config'
-import { AuthContext } from '../../utils/services'
 import { Paths } from '../../utils/types'
 import {
   getNewUserTokenURL,

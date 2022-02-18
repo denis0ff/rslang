@@ -167,7 +167,6 @@ export const textbookPageLogic = (
           ).length
         }
       }
-      console.log(arrCount)
       return arrCount.map((item) => item === 20)
     },
   }

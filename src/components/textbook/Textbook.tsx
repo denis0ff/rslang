@@ -136,8 +136,7 @@ export const Textbook: FC<{
                       key={item.id}
                       ind={ind}
                       active={item.id === currentWord.id}
-                      word={item.word}
-                      trans={item.wordTranslate}
+                      word={item}
                       label={item.userWord ? item.userWord.difficulty : 'all'}
                       callback={methods.wordEvent}
                     />

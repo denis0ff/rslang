@@ -66,8 +66,7 @@ export type WordDifficultyType = 'studied' | 'difficult' | 'all'
 
 export interface IWordlistItem {
   ind: number
-  word: string
-  trans: string
+  word: IAggregatedWord
   active: boolean
   label?: WordDifficultyType
   callback: (num: number) => void

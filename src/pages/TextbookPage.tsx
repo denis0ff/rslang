@@ -40,5 +40,6 @@ export const TextbookPage = () => {
       methods.groupDifficultEvent(6)
     else methods.getPageWords()
   }, [isAuth])
+
   return <Textbook state={textbook} methods={methods} />
 }
