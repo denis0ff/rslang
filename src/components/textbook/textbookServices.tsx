@@ -1,5 +1,7 @@
 import axios from 'axios'
+import { useContext } from 'react'
 import { getWordsResponse } from '../../utils/config'
+import { AuthContext } from '../../utils/services'
 import { Paths } from '../../utils/types'
 import {
   getNewUserTokenURL,
@@ -24,6 +26,8 @@ const saveNewToken = (data: ITokens) => {
 }
 
 const expireTokens = () => {
+  localStorage.removeItem('token')
+  localStorage.removeItem('refreshToken')
   window.location.href = Paths.AUTH
 }
 
