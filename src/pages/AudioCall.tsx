@@ -14,7 +14,7 @@ import { IWord } from '../utils/types'
 
 export const AudioCall = ({ textbookWords }: IGameProps) => {
   const [status, setStatus] = useState(
-    textbookWords ? GameStatus.SELECT : GameStatus.TEXTBOOK
+    textbookWords ? GameStatus.TEXTBOOK : GameStatus.SELECT
   )
   const [words, setWords] = useState<IWord[]>(textbookWords || [])
   const [answers, setAnswers] = useState<IAnswers>({
