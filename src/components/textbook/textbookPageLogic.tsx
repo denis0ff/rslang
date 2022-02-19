@@ -15,7 +15,6 @@ export const textbookPageLogic = (
 ) => {
   const getWords = (group: number, page: number, isNotReset?: boolean) => {
     const wordProm = getWordsService(group, page - 1)
-
     const arrPage = [...textbook.counter.currentPage]
     arrPage[group] = page
 
@@ -24,19 +23,11 @@ export const textbookPageLogic = (
     if (isAuth) {
       const aggrWordsProm = getUserAggregatedWordsService()
 
-      Promise.all([wordProm, aggrWordsProm]).then(([words, aggResp]) => {
+      Promise.all([wordProm, aggrWordsProm]).then(([wordsResp, aggResp]) => {
         if (aggResp) {
-          words.forEach((word) => {
-            for (let i = 0; i < aggResp.paginatedResults.length; i += 1) {
-              if (word.id === aggResp.paginatedResults[i]._id) {
-                word.userWord = aggResp.paginatedResults[i].userWord
-                break
-              }
-            }
-          })
           setTextbook((prev) => ({
             ...prev,
-            words,
+            words: wordsResp,
             aggrWords: aggResp.paginatedResults,
             counter: {
               ...prev.counter,
@@ -45,7 +36,8 @@ export const textbookPageLogic = (
               currentPage: arrPage,
               difficultWordsCount: aggResp.paginatedResults.filter(
                 (word) =>
-                  !!word.userWord && word.userWord.difficulty === 'difficult'
+                  !!word.userWord &&
+                  word.userWord.difficulty === WordDifficulties.DIFFICULT
               ).length,
             },
           }))
@@ -125,6 +117,8 @@ export const textbookPageLogic = (
           ...prev.counter,
           currentWord: num,
         },
+        words: [...prev.words],
+        aggrWords: [...prev.aggrWords],
       }))
     },
     difficultyWordEvent: (check: IWordAddition) => {

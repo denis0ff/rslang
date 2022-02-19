@@ -22,7 +22,6 @@ const Container = styled.div<{
   cursor: pointer;
   background-color: #fff;
   pointer-events: ${(props) => (props.active ? 'none;' : 'auto;')};
-  &.active,
   &:hover {
     opacity: 0.9;
   }
@@ -37,8 +36,10 @@ const Container = styled.div<{
     width: 30px;
     height: 30px;
     background-color: ${(props) => {
-      if (props.label && props.label === 'difficult') return '#d651ff;'
-      if (props.label && props.label === 'studied') return '#65c6ff;'
+      if (props.label && props.label === WordDifficulties.DIFFICULT)
+        return '#d651ff;'
+      if (props.label && props.label === WordDifficulties.STUDIED)
+        return '#65c6ff;'
       return 'transparent;'
     }};
   }
@@ -72,6 +73,7 @@ const Progress = styled.p`
 
 export const WordlistItem: FC<IWordlistItem> = ({
   ind,
+  state,
   word,
   active,
   label,
@@ -79,14 +81,29 @@ export const WordlistItem: FC<IWordlistItem> = ({
 }) => {
   const { isAuth } = React.useContext(AuthContext)
 
-  const getRightTry = () => {
-    const n1 = word.userWord?.optional.games.audioCall
-      ? word.userWord.optional.games.audioCall.right
-      : 0
-    const n2 = word.userWord?.optional.games.sprint
-      ? word.userWord?.optional.games.sprint.right
-      : 0
-    return n1 + n2
+  const getStatistic = () => {
+    const f = state.aggrWords.find((el) => el._id === word.id)
+    if (
+      isAuth &&
+      f &&
+      f.userWord &&
+      f.userWord.optional &&
+      f.userWord.optional.games
+    ) {
+      const n1 = f.userWord.optional.games.audioCall
+        ? f.userWord.optional.games.audioCall.right
+        : 0
+      const n2 = f.userWord.optional.games.sprint
+        ? f.userWord.optional.games.sprint.right
+        : 0
+      return (
+        <Progress>
+          <img src={Pic} alt="прогресс" />
+          {`${n1 + n2}/${f.userWord.optional.allTry}`}
+        </Progress>
+      )
+    }
+    return null
   }
 
   const itemListener = (e: React.MouseEvent<HTMLDivElement>) => {
@@ -106,22 +123,7 @@ export const WordlistItem: FC<IWordlistItem> = ({
     >
       <Title>{word.word}</Title>
       <P>{word.wordTranslate}</P>
-      {(() => {
-        if (
-          isAuth &&
-          word.userWord &&
-          word.userWord.optional &&
-          word.userWord.optional.games
-        ) {
-          return (
-            <Progress>
-              <img src={Pic} alt="прогресс" />
-              {`${getRightTry()}/${word.userWord?.optional.allTry}`}
-            </Progress>
-          )
-        }
-        return null
-      })()}
+      {getStatistic()}
     </Container>
   )
 }

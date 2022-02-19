@@ -64,6 +64,7 @@ export interface ITextbookMethods {
 
 export interface IWordlistItem {
   ind: number
+  state: ITextbook
   word: IAggregatedWord
   active: boolean
   label?: WordDifficulties

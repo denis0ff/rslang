@@ -111,16 +111,15 @@ export const Textbook: FC<{
   const markPages = methods.getMarkPages(state.counter.currentGroup)
 
   const getChankWords = (): IWord[] => {
-    const res = state.words.filter(
-      (word) =>
-        !word.userWord ||
-        (word.userWord && word.userWord.difficulty !== WordDifficulties.STUDIED)
-    )
-    res.map((word) => {
-      delete word._id
-      delete word.userWord
-      return word
-    })
+    const res = state.words.filter((word) => {
+      const f = state.aggrWords.find((el) => el._id === word.id)
+      return (
+        (f &&
+          f.userWord &&
+          f.userWord.difficulty !== WordDifficulties.STUDIED) ||
+        !f
+      )
+    }) as IWord[]
     return res
   }
 
@@ -185,21 +184,34 @@ export const Textbook: FC<{
           if (state.words.length > 0) {
             return (
               <Words
-                isStudied={state.words.every(
-                  (item) => item.userWord && item.userWord.difficulty
-                )}
+                isStudied={state.words.every((item) => {
+                  const f = state.aggrWords.find((el) => item.id === el._id)
+                  return (
+                    f &&
+                    f.userWord &&
+                    item.id === f._id &&
+                    (f.userWord.difficulty === WordDifficulties.DIFFICULT ||
+                      f.userWord.difficulty === WordDifficulties.STUDIED)
+                  )
+                })}
               >
                 <WordList>
                   {state.words.map((item, ind) => {
                     return (
                       <WordlistItem
                         key={item.id}
+                        state={state}
                         ind={ind}
                         active={item.id === currentWord.id}
                         word={item}
-                        label={
-                          item.userWord ? item.userWord.difficulty : undefined
-                        }
+                        label={(() => {
+                          const res = state.aggrWords.find(
+                            (el) => el._id === item.id
+                          )
+                          return res && res.userWord
+                            ? res.userWord.difficulty
+                            : undefined
+                        })()}
                         callback={methods.wordEvent}
                       />
                     )

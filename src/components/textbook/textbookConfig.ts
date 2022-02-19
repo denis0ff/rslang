@@ -11,7 +11,7 @@ export const getUserAggregatedWordsURL = (userId: string) => `
 `
 
 export const getUserAggregatedDifficultWordsURL = (userId: string) => `
-  ${BASE}users/${userId}/aggregatedWords?wordsPerPage=3600&filter=${`{"$and":[{"userWord.difficulty":"difficult"}]}`}
+  ${BASE}users/${userId}/aggregatedWords?wordsPerPage=3600&filter=${`{"$and":[{"userWord.difficulty":"${WordDifficulties.DIFFICULT}"}]}`}
 `
 
 export const getUserWordURL = (userId: string, wordId: string) => `
