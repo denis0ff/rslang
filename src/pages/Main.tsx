@@ -1,5 +1,5 @@
 import styled from 'styled-components'
-import { Container } from '../components/ui/Footer/elements'
+import { Container } from '../components/ui/elements'
 import { Footer } from '../components/ui/Footer/Footer'
 
 const Title = styled.h2``
