@@ -10,8 +10,6 @@ import { IWord } from '../utils/types'
 
 export const AudioCall = () => {
   const { state } = useLocation()
-  console.log(state)
-
   const [status, setStatus] = useState(
     state ? GameStatus.TEXTBOOK : GameStatus.SELECT
   )
