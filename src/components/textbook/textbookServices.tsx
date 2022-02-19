@@ -31,6 +31,7 @@ const refreshToken = () => localStorage.getItem('refreshToken') || ''
 const getNewUserToken = (id: string | null, rt: string | null) => {
   return fetch(getNewUserTokenURL(id), {
     method: 'GET',
+    // @ts-expect-error: Unreachable code error
     withCredentials: true,
     headers: {
       Authorization: `Bearer ${rt}`,
@@ -67,6 +68,7 @@ export const getUserAggregatedWordsService = async (
   const response = (activeToken: string) => {
     return fetch(url, {
       method: 'GET',
+      // @ts-expect-error: Unreachable code error
       withCredentials: true,
       headers: {
         Authorization: `Bearer ${activeToken}`,
@@ -116,6 +118,7 @@ export const addUserDifficultWordService = async (
   const response = (activeToken: string) => {
     return fetch(getUserWordURL(userId(), word.id), {
       method: isNew ? 'PUT' : 'POST',
+      // @ts-expect-error: Unreachable code error
       withCredentials: true,
       headers: {
         Authorization: `Bearer ${activeToken}`,
@@ -151,6 +154,7 @@ export const deleteUserDifficultWordService = async (id: string) => {
   const response = (activeToken: string) => {
     return fetch(getUserWordURL(userId(), id), {
       method: 'DELETE',
+      // @ts-expect-error: Unreachable code error
       withCredentials: true,
       headers: {
         Authorization: `Bearer ${activeToken}`,

@@ -5,7 +5,8 @@ import {
   getUserAggregatedWordsService,
   getWordsService,
 } from './textbookServices'
-import { Game, ITextbook, ITextbookMethods, IWordAddition } from './textbookTypes'
+import { ITextbook, ITextbookMethods, IWordAddition } from './textbookTypes'
+import { changeStats } from './utils/stats'
 
 export const textbookPageLogic = (
   isAuth: boolean,
@@ -132,13 +133,15 @@ export const textbookPageLogic = (
         addUserDifficultWordService(word, check.isNew, check.difficulty).then(
           (data) => {
             if (data) {
-              if (textbook.counter.currentGroup < 6)
-                getWords(
-                  textbook.counter.currentGroup,
-                  textbook.counter.currentPage[textbook.counter.currentGroup],
-                  true
-                )
-              else getDifficultWords(textbook.counter.currentGroup)
+              changeStats().then(() => {
+                if (textbook.counter.currentGroup < 6)
+                  getWords(
+                    textbook.counter.currentGroup,
+                    textbook.counter.currentPage[textbook.counter.currentGroup],
+                    true
+                  )
+                else getDifficultWords(textbook.counter.currentGroup)
+              })
             }
           }
         )
@@ -147,6 +150,7 @@ export const textbookPageLogic = (
     deleteDifficultyWordEvent: (id: string) => {
       deleteUserDifficultWordService(id).then((data) => {
         if (data) {
+          changeStats()
           if (textbook.counter.currentGroup < 6)
             getWords(
               textbook.counter.currentGroup,
@@ -172,9 +176,6 @@ export const textbookPageLogic = (
         }
       }
       return arrCount.map((item) => item === 20)
-    },
-    gameCall: (gameType: Game) => {
-      console.log(`GAME ${gameType} IS CALL`)
     },
   }
   return methods

@@ -1,5 +1,6 @@
 import React, { FC } from 'react'
 import styled from 'styled-components'
+import { useNavigate } from 'react-router-dom'
 import { Game, ITextbook, ITextbookMethods, TPColors } from './textbookTypes'
 import { Paging } from './Paging'
 import { Section, SectionDifficult } from './Section'
@@ -108,10 +109,12 @@ export const Textbook: FC<{
   const currentWord = methods.getCurrentWord()
   const markPages = methods.getMarkPages(state.counter.currentGroup)
 
+  const navigate = useNavigate()
+
   const gameTypeListener = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault()
-    const gameType = e.currentTarget.dataset.prop || ''
-    methods.gameCall(gameType)
+    const gameType: Game = e.currentTarget.dataset.prop as Game
+    navigate(`../${gameType}`)
   }
 
   const vocabulary = () => {

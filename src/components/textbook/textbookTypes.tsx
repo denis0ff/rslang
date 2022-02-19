@@ -60,7 +60,6 @@ export interface ITextbookMethods {
   difficultyWordEvent: (check: IWordAddition) => void
   deleteDifficultyWordEvent: (id: string) => void
   getMarkPages: (group: number) => Array<boolean>
-  gameCall: (gameType: Game) => void
 }
 
 export interface IWordlistItem {

@@ -10,7 +10,10 @@ import { textbookPageLogic } from '../components/textbook/textbookPageLogic'
 const local = () => {
   const data = localStorage.getItem('textbookState')
   if (data) {
-    return JSON.parse(data) as ITextbook
+    const state = JSON.parse(data) as ITextbook
+    state.words = new Array<IAggregatedWord>()
+    state.aggrWords = new Array<IAggregatedWord>()
+    return state
   }
   return {
     counter: {
