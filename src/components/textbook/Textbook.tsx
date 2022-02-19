@@ -8,7 +8,7 @@ import { WordlistItem } from './WordlistItem'
 import { Word } from './Word'
 import { AuthContext } from '../../utils/services'
 import { sections } from './textbookConfig'
-import { IWord, Paths } from '../../utils/types'
+import { IWord, Paths, WordDifficulties } from '../../utils/types'
 
 const Container = styled.div`
   width: 100%;
@@ -110,12 +110,17 @@ export const Textbook: FC<{
   const markPages = methods.getMarkPages(state.counter.currentGroup)
 
   const getChankWords = (): IWord[] => {
-    const res = [...state.words]
-    return res.map((word) => {
+    const res = state.words.filter(
+      (word) =>
+        !word.userWord ||
+        (word.userWord && word.userWord.difficulty !== WordDifficulties.STUDIED)
+    )
+    res.map((word) => {
       delete word._id
       delete word.userWord
       return word
     })
+    return res
   }
 
   const vocabulary = () => {
