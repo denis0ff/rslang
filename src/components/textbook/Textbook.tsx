@@ -9,7 +9,7 @@ import { Word } from './Word'
 import { AuthContext } from '../../utils/services'
 import { sections } from './textbookConfig'
 import { IWord, Paths, WordDifficulties } from '../../utils/types'
-import { Container } from '../ui/Footer/elements'
+import { Container } from '../ui/elements'
 
 const Wrapper = styled.div`
   width: 100%;
