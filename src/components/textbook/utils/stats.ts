@@ -37,6 +37,7 @@ const createStatConfig = ({ learnedWords }: ICreateStatProps) => {
 }
 
 const updateStatConfig = ({ data, learnedWords }: IUpdateStatProps) => {
+  delete data.id
   data.learnedWords = learnedWords.today
   const parsedLongStat = JSON.parse(data.optional.longStat)
   if (sameDay(data.optional.date))
