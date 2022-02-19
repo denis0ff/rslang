@@ -1,11 +1,12 @@
 import React, { FC } from 'react'
 import styled from 'styled-components'
-import { IWordlistItem, WordDifficultyType } from './textbookTypes'
+import { IWordlistItem } from './textbookTypes'
 import Pic from '../../assets/progress.png'
 import { AuthContext } from '../../utils/services'
+import { WordDifficulties } from '../../utils/types'
 
 const Container = styled.div<{
-  label?: WordDifficultyType
+  label?: WordDifficulties
   active: boolean
 }>`
   display: flex;
@@ -36,8 +37,8 @@ const Container = styled.div<{
     width: 30px;
     height: 30px;
     background-color: ${(props) => {
-      if (props.label === 'difficult') return '#d651ff;'
-      if (props.label === 'studied') return '#65c6ff;'
+      if (props.label && props.label === 'difficult') return '#d651ff;'
+      if (props.label && props.label === 'studied') return '#65c6ff;'
       return 'transparent;'
     }};
   }
@@ -114,7 +115,7 @@ export const WordlistItem: FC<IWordlistItem> = ({
         ) {
           return (
             <Progress>
-              <img src={Pic} alt="прогресс угадывания слова в играх" />
+              <img src={Pic} alt="прогресс" />
               {`${getRightTry()}/${word.userWord?.optional.allTry}`}
             </Progress>
           )

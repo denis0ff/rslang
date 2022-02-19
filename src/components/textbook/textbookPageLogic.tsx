@@ -1,3 +1,4 @@
+import { WordDifficulties } from '../../utils/types'
 import {
   addUserDifficultWordService,
   deleteUserDifficultWordService,
@@ -5,6 +6,7 @@ import {
   getWordsService,
 } from './textbookServices'
 import { ITextbook, ITextbookMethods, IWordAddition } from './textbookTypes'
+import { changeStats } from './utils/stats'
 
 export const textbookPageLogic = (
   isAuth: boolean,
@@ -20,7 +22,7 @@ export const textbookPageLogic = (
     const cW = !isNotReset ? 0 : textbook.counter.currentWord
 
     if (isAuth) {
-      const aggrWordsProm = getUserAggregatedWordsService('all')
+      const aggrWordsProm = getUserAggregatedWordsService()
 
       Promise.all([wordProm, aggrWordsProm]).then(([words, aggResp]) => {
         if (aggResp) {
@@ -67,7 +69,9 @@ export const textbookPageLogic = (
 
   const getDifficultWords = (group: number) => {
     if (isAuth) {
-      const aggrDiffWordsProm = getUserAggregatedWordsService('difficult')
+      const aggrDiffWordsProm = getUserAggregatedWordsService(
+        WordDifficulties.DIFFICULT
+      )
       aggrDiffWordsProm.then((data) => {
         if (data) {
           const words = data.paginatedResults.map((item) => {
@@ -83,7 +87,8 @@ export const textbookPageLogic = (
               currentWord: 0,
               difficultWordsCount: words.filter(
                 (word) =>
-                  !!word.userWord && word.userWord.difficulty === 'difficult'
+                  !!word.userWord &&
+                  word.userWord.difficulty === WordDifficulties.DIFFICULT
               ).length,
             },
           }))
@@ -128,6 +133,7 @@ export const textbookPageLogic = (
         addUserDifficultWordService(word, check.isNew, check.difficulty).then(
           (data) => {
             if (data) {
+              changeStats()
               if (textbook.counter.currentGroup < 6)
                 getWords(
                   textbook.counter.currentGroup,
@@ -143,6 +149,7 @@ export const textbookPageLogic = (
     deleteDifficultyWordEvent: (id: string) => {
       deleteUserDifficultWordService(id).then((data) => {
         if (data) {
+          changeStats()
           if (textbook.counter.currentGroup < 6)
             getWords(
               textbook.counter.currentGroup,

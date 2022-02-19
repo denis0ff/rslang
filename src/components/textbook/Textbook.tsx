@@ -1,5 +1,6 @@
 import React, { FC } from 'react'
 import styled from 'styled-components'
+import { Link, NavLink } from 'react-router-dom'
 import { ITextbook, ITextbookMethods, TPColors } from './textbookTypes'
 import { Paging } from './Paging'
 import { Section, SectionDifficult } from './Section'
@@ -7,6 +8,7 @@ import { WordlistItem } from './WordlistItem'
 import { Word } from './Word'
 import { AuthContext } from '../../utils/services'
 import { sections } from './textbookConfig'
+import { IWord, Paths, WordDifficulties } from '../../utils/types'
 
 const Container = styled.div`
   width: 100%;
@@ -62,43 +64,41 @@ const WordContainer = styled.div`
   display: flex;
   flex-direction: column;
   width: 400px;
+  height: 750px;
+  flex-shrink: 0;
+  background-color: #ffffff;
+  color: #030303;
+  border-radius: 5px;
+  border-top-left-radius: 160px;
 `
 
-const Games = styled.div`
+const Games = styled.div<{
+  active: boolean
+}>`
   display: flex;
   width: 100%;
-`
-
-const GameLink = styled.button`
-  border: none;
-  border-radius: 5px;
-  width: 175px;
-  height: 26px;
-  text-align: center;
-  text-transform: uppercase;
-  opacity: 0.8;
-  transition: all ease 0.3s;
-  cursor: pointer;
-  :hover {
-    opacity: 1;
-  }
-  .audioCall {
-    background-color: ${(props) =>
-      props.difficulty === 'difficult' && !props.isDifficultGroup
-        ? '#ccc;'
-        : '#d651ff;'};
-    pointer-events: ${(props) =>
-      props.difficulty === 'difficult' && !props.isDifficultGroup
-        ? 'none;'
-        : 'auto;'};
-  }
-  .sprint {
-    background-color: ${(props) =>
-      props.difficulty === 'studied' ? '#ccc' : '#65c6ff;'};
-    pointer-events: ${(props) =>
-      props.difficulty === 'studied' ? 'none;' : 'auto;'};
-  }
-}
+  padding: 5px 15px;
+  column-gap: 10px;
+  & .game {
+    border: none;
+    border-radius: 5px;
+    width: 175px;
+    height: 26px;
+    padding: 0;
+    line-height: 26px;
+    text-align: center;
+    text-transform: uppercase;
+    opacity: 0.8;
+    transition: all ease 0.3s;
+    cursor: pointer;
+    font-weight: bold;
+    letter-spacing: 1px;
+    font-family: inherit;
+    background-color: ${(props) => (props.active ? '#ccc;' : '#b3065c;')};
+    pointer-events: ${(props) => (props.active ? 'none;' : 'auto;')};
+    :hover {
+      opacity: 1;
+    }
 `
 
 export const Textbook: FC<{
@@ -107,6 +107,21 @@ export const Textbook: FC<{
 }> = ({ state, methods }) => {
   const { isAuth } = React.useContext(AuthContext)
   const currentWord = methods.getCurrentWord()
+  const markPages = methods.getMarkPages(state.counter.currentGroup)
+
+  const getChankWords = (): IWord[] => {
+    const res = state.words.filter(
+      (word) =>
+        !word.userWord ||
+        (word.userWord && word.userWord.difficulty !== WordDifficulties.STUDIED)
+    )
+    res.map((word) => {
+      delete word._id
+      delete word.userWord
+      return word
+    })
+    return res
+  }
 
   const vocabulary = () => {
     if (isAuth) {
@@ -135,7 +150,7 @@ export const Textbook: FC<{
         <Paging
           current={methods.getCurrentPage()}
           total={state.counter.countPage}
-          markPages={methods.getMarkPages(state.counter.currentGroup)}
+          markPages={markPages}
           callback={methods.pagingEvent}
         />
       )
@@ -180,7 +195,9 @@ export const Textbook: FC<{
                       ind={ind}
                       active={item.id === currentWord.id}
                       word={item}
-                      label={item.userWord ? item.userWord.difficulty : 'all'}
+                      label={
+                        item.userWord ? item.userWord.difficulty : undefined
+                      }
                       callback={methods.wordEvent}
                     />
                   )
@@ -196,9 +213,29 @@ export const Textbook: FC<{
                         deleteDifficulty={methods.deleteDifficultyWordEvent}
                         state={state}
                       />
-                      <Games>
-                        <GameLink className="sprint">Спринт</GameLink>
-                        <GameLink className="audioCall">Аудиовызов</GameLink>
+                      <Games
+                        active={
+                          markPages[
+                            state.counter.currentPage[
+                              state.counter.currentGroup
+                            ] - 1
+                          ]
+                        }
+                      >
+                        <NavLink
+                          to={`../${Paths.AUDIO_CALL}`}
+                          className="game"
+                          state={getChankWords()}
+                        >
+                          Аудиовызов
+                        </NavLink>
+                        <Link
+                          to={`../${Paths.SPRINT}`}
+                          className="game"
+                          state={getChankWords()}
+                        >
+                          Спринт
+                        </Link>
                       </Games>
                     </WordContainer>
                   )

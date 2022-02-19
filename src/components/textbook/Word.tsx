@@ -3,16 +3,12 @@ import React, { FC, useState } from 'react'
 import styled from 'styled-components'
 import { BASE } from './textbookConfig'
 import { AuthContext } from '../../utils/services'
-import {
-  IWordAddition,
-  IWordAudioFiles,
-  IWordObj,
-  WordDifficultyType,
-} from './textbookTypes'
+import { IWordAddition, IWordAudioFiles, IWordObj } from './textbookTypes'
 import { VolumeSVG } from './VolumeSVG'
+import { WordDifficulties } from '../../utils/types'
 
 const Container = styled.div<{
-  difficulty?: WordDifficultyType
+  difficulty?: WordDifficulties
   isDifficultGroup: boolean
   isPlay: boolean
 }>`
@@ -23,7 +19,7 @@ const Container = styled.div<{
   flex-shrink: 0;
   background-color: #ffffff;
   color: #030303;
-  border-radius: 5px;
+  border-top-right-radius: 5px;
   border-top-left-radius: 160px;
   @media screen and (max-width: 420px) {
     width: 300px;
@@ -81,19 +77,19 @@ const Container = styled.div<{
   }
   & .buttons .difficult {
     background-color: ${(props) =>
-      props.difficulty === 'difficult' && !props.isDifficultGroup
+      props.difficulty === WordDifficulties.DIFFICULT && !props.isDifficultGroup
         ? '#ccc;'
         : '#d651ff;'};
     pointer-events: ${(props) =>
-      props.difficulty === 'difficult' && !props.isDifficultGroup
+      props.difficulty === WordDifficulties.DIFFICULT && !props.isDifficultGroup
         ? 'none;'
         : 'auto;'};
   }
   & .buttons .studied {
     background-color: ${(props) =>
-      props.difficulty === 'studied' ? '#ccc' : '#65c6ff;'};
+      props.difficulty === WordDifficulties.STUDIED ? '#ccc' : '#65c6ff;'};
     pointer-events: ${(props) =>
-      props.difficulty === 'studied' ? 'none;' : 'auto;'};
+      props.difficulty === WordDifficulties.STUDIED ? 'none;' : 'auto;'};
   }
   & .explanation-title {
     font-size: 1.3em;
@@ -184,7 +180,7 @@ export const Word: FC<IWordObj> = ({
   }
 
   const buttonDifficulty = (
-    name: WordDifficultyType,
+    name: WordDifficulties,
     child: string,
     click: (e: React.MouseEvent<HTMLButtonElement>) => void
   ) => {
@@ -274,14 +270,14 @@ export const Word: FC<IWordObj> = ({
         </div>
         <div className="buttons">
           {buttonDifficulty(
-            'difficult',
+            WordDifficulties.DIFFICULT,
             getButtonName(state.counter.currentGroup < 6),
             state.counter.currentGroup < 6
               ? difficultyListener
               : deleteDifficultyListener
           )}
           {buttonDifficulty(
-            'studied',
+            WordDifficulties.STUDIED,
             'Добавить в изученые',
             difficultyListener
           )}
