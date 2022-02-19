@@ -1,22 +1,21 @@
 import { useState } from 'react'
+import { useLocation } from 'react-router-dom'
 import { AudioCallGame } from '../components/games/AudioCall/AudioCallGame'
 import { CustomGame } from '../components/games/CustomGame'
 import { Difficulty } from '../components/games/Difficulty'
 import { NotEnoughWords } from '../components/games/NotEnoughWords'
 import { Result } from '../components/games/Result/Result'
-import {
-  GameStatus,
-  GameType,
-  IAnswers,
-  IGameProps,
-} from '../components/games/types'
+import { GameStatus, GameType, IAnswers } from '../components/games/types'
 import { IWord } from '../utils/types'
 
-export const AudioCall = ({ textbookWords }: IGameProps) => {
+export const AudioCall = () => {
+  const { state } = useLocation()
+  console.log(state)
+
   const [status, setStatus] = useState(
-    textbookWords ? GameStatus.TEXTBOOK : GameStatus.SELECT
+    state ? GameStatus.TEXTBOOK : GameStatus.SELECT
   )
-  const [words, setWords] = useState<IWord[]>(textbookWords || [])
+  const [words, setWords] = useState<IWord[]>((state as IWord[] | null) || [])
   const [answers, setAnswers] = useState<IAnswers>({
     right: [],
     wrong: [],
