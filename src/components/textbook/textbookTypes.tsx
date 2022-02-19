@@ -1,4 +1,4 @@
-import { IUserWord, IWord } from '../../utils/types'
+import { IUserWord, IWord, WordDifficulties } from '../../utils/types'
 
 export type NameSectionType = 'Easy' | 'Normal' | 'Hard' | 'Difficult'
 
@@ -62,19 +62,17 @@ export interface ITextbookMethods {
   getMarkPages: (group: number) => Array<boolean>
 }
 
-export type WordDifficultyType = 'studied' | 'difficult' | 'all'
-
 export interface IWordlistItem {
   ind: number
   word: IAggregatedWord
   active: boolean
-  label?: WordDifficultyType
+  label?: WordDifficulties
   callback: (num: number) => void
 }
 
 export interface IWordAddition {
   id: string
-  difficulty: WordDifficultyType
+  difficulty: WordDifficulties
   isNew: boolean
 }
 
