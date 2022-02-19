@@ -13,20 +13,19 @@ export const CustomGame = ({
   setWords,
   setStatus,
 }: IDifficultyProps) => {
-  const [isStart, setIsStart] = useState(false)
+  const [isStart, setIsStart] = useState(true)
 
   const getNewWords = useCallback(async () => {
-    const arrowWords = await getWordsPromise(words[0].group, words[0].page)
+    const arrowWords = await getWordsPromise(words[0].group, words[0].page - 1)
     const { data } = arrowWords
-    setWords((prev) => [...prev, ...data].slice(0, 9))
+    setWords((prev) => [...prev, ...data].slice(0, MIN_GAME_LENGTH))
   }, [])
 
   useEffect(() => {
-    if (words.length >= MIN_GAME_LENGTH) setIsStart(true)
-    else if (words[0].page === 0) {
-      setStatus(GameStatus.ERROR)
-    } else getNewWords()
-  }, [words])
+    if (words.length >= MIN_GAME_LENGTH) setIsStart(false)
+    else if (words[0].page === 0) setStatus(GameStatus.ERROR)
+    else getNewWords()
+  }, [type])
 
   return (
     <Container>
