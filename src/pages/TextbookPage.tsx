@@ -6,6 +6,7 @@ import {
 } from '../components/textbook/textbookTypes'
 import { AuthContext } from '../utils/services'
 import { textbookPageLogic } from '../components/textbook/textbookPageLogic'
+import { Footer } from '../components/ui/Footer/Footer'
 
 const local = () => {
   const data = localStorage.getItem('textbookState')
@@ -44,5 +45,10 @@ export const TextbookPage = () => {
     else methods.getPageWords()
   }, [isAuth])
 
-  return <Textbook state={textbook} methods={methods} />
+  return (
+    <>
+      <Textbook state={textbook} methods={methods} />
+      <Footer />
+    </>
+  )
 }
