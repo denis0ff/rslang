@@ -1,6 +1,6 @@
 import React, { FC } from 'react'
 import styled from 'styled-components'
-import { Link } from 'react-router-dom'
+import { Link, NavLink } from 'react-router-dom'
 import { ITextbook, ITextbookMethods, TPColors } from './textbookTypes'
 import { Paging } from './Paging'
 import { Section, SectionDifficult } from './Section'
@@ -217,17 +217,17 @@ export const Textbook: FC<{
                           ]
                         }
                       >
-                        <Link
+                        <NavLink
                           to={`../${Paths.AUDIO_CALL}`}
                           className="game"
-                          state={getChankWords}
+                          state={getChankWords()}
                         >
                           Аудиовызов
-                        </Link>
+                        </NavLink>
                         <Link
                           to={`../${Paths.SPRINT}`}
                           className="game"
-                          state={getChankWords}
+                          state={getChankWords()}
                         >
                           Спринт
                         </Link>
