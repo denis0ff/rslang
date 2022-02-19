@@ -26,7 +26,7 @@ import { IGotUserWord, IStat, Paths, Tokens } from './types'
 import { getRandomInteger } from './utils'
 
 export const getWordsPromise = async (group: number, page?: number) =>
-  page
+  page !== undefined
     ? axios.get(getWordsResponse(group, page))
     : axios.get(getWordsResponse(group, getRandomInteger(0, 30)))
 
