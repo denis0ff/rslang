@@ -133,15 +133,14 @@ export const textbookPageLogic = (
         addUserDifficultWordService(word, check.isNew, check.difficulty).then(
           (data) => {
             if (data) {
-              changeStats().then(() => {
-                if (textbook.counter.currentGroup < 6)
-                  getWords(
-                    textbook.counter.currentGroup,
-                    textbook.counter.currentPage[textbook.counter.currentGroup],
-                    true
-                  )
-                else getDifficultWords(textbook.counter.currentGroup)
-              })
+              changeStats()
+              if (textbook.counter.currentGroup < 6)
+                getWords(
+                  textbook.counter.currentGroup,
+                  textbook.counter.currentPage[textbook.counter.currentGroup],
+                  true
+                )
+              else getDifficultWords(textbook.counter.currentGroup)
             }
           }
         )
