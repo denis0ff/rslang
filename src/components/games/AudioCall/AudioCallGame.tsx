@@ -8,7 +8,15 @@ import { Wrapper, WrapperRow } from '../Difficulty'
 import { GameStatus, GameTypeOption, IGameRunProps } from '../types'
 import { addWord, addWordStat } from '../utils'
 
-const AnswerContainer = styled.div``
+const AnswerContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 0.5rem;
+  min-height: 35rem;
+  min-width: 30rem;
+`
 
 export const Container = styled.div`
   display: flex;
@@ -17,10 +25,12 @@ export const Container = styled.div`
   gap: 0.5em;
 `
 
-const AnswerImg = styled.div<{ img: string }>`
+const AnswerImg = styled.div<{ img: string; isRight: boolean }>`
   width: 30rem;
   height: 30rem;
   background: center / cover no-repeat ${(props) => `url(${props.img})`};
+  box-shadow: 5px 5px 50px 5px
+    ${({ isRight }) => (isRight ? '#35c77e89' : '#b9393989')};
 `
 
 const AnswerButton = styled.button<{ isRight: boolean; isAnswered: boolean }>`
@@ -36,8 +46,6 @@ const ShowAnswer = styled.button``
 
 const keys = ['1', '2', '3', '4', '5']
 
-let variables: string[] = []
-
 export const AudioCallGame = ({
   words,
   answers,
@@ -45,7 +53,10 @@ export const AudioCallGame = ({
   setAnswers,
 }: IGameRunProps) => {
   const [current, setCurrent] = useState(0)
+  const [variables, setVariables] = useState<string[]>([])
   const [isAnswered, setIsAnswered] = useState(false)
+  const [isRight, setIsRight] = useState(false)
+
   const { isAuth } = useContext(AuthContext)
 
   const audio = useMemo(() => new Audio(), [])
@@ -54,14 +65,15 @@ export const AudioCallGame = ({
     const newArray = shuffle(
       Array.from(new Set([words[current], ...shuffle([...words])])).slice(0, 5)
     )
-    variables = newArray.map((i) => i.id)
+    setVariables(newArray.map((i) => i.id))
     return newArray
   }, [current, words])
 
   const checkAnswer = useCallback(
     (id: string) => {
-      const isRight = id === words[current].id
-      if (isRight)
+      const currentIsRight = id === words[current].id
+      setIsRight(currentIsRight)
+      if (currentIsRight)
         setAnswers((prev) => ({
           ...prev,
           ...{
@@ -81,7 +93,7 @@ export const AudioCallGame = ({
       }
       if (isAuth)
         addWord({
-          isRight,
+          isRight: currentIsRight,
           id: words[current].id,
           gameType: GameTypeOption.AUDIO_CALL,
         })
@@ -114,7 +126,7 @@ export const AudioCallGame = ({
         else checkAnswer('')
       }
       if (keys.includes(e.key) && !isAnswered) {
-        checkAnswer(variables[+e.key])
+        checkAnswer(variables[+e.key - 1])
       }
       if (e.key === 'Enter') {
         audio.play()
@@ -130,17 +142,22 @@ export const AudioCallGame = ({
 
   return (
     <Wrapper>
-      {isAnswered ? (
-        <AnswerContainer>
-          <AnswerImg img={getFileResponse(words[current].image)} />
-          <Container>
-            {words[current].word}
-            <AudioButton audio={audio} />
-          </Container>
-        </AnswerContainer>
-      ) : (
-        <AudioButton audio={audio} />
-      )}
+      <AnswerContainer>
+        {isAnswered ? (
+          <>
+            <AnswerImg
+              img={getFileResponse(words[current].image)}
+              isRight={isRight}
+            />
+            <Container>
+              {words[current].word}
+              <AudioButton audio={audio} />
+            </Container>
+          </>
+        ) : (
+          <AudioButton audio={audio} />
+        )}
+      </AnswerContainer>
       <WrapperRow>
         {generatedAnswers.map((w) => (
           <AnswerButton
