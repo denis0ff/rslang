@@ -74,7 +74,7 @@ export const setLearnedWordsLength = ({
 
 const updateStat = async (props: IUpdateStatProps) => {
   const learnedWords = { all: 0, today: 0 }
-  getAllUserWordsPromise()
+  await getAllUserWordsPromise()
     .then(({ data }) => setLearnedWordsLength({ learnedWords, data }))
     .catch(async ({ response }) => {
       if (response.status === Errors.ERROR_401) {
