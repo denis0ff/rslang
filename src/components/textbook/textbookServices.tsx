@@ -114,7 +114,17 @@ export const addUserDifficultWordService = async (
   diff: WordDifficulties
 ) => {
   const opt =
-    word.userWord && word.userWord.optional ? word.userWord.optional : {}
+    word.userWord && word.userWord.optional
+      ? word.userWord.optional
+      : {
+          lastTime: new Date().toJSON(),
+          allTry: 0,
+          streak: 0,
+          games: {
+            sprint: { right: 0, wrong: 0 },
+            audioCall: { right: 0, wrong: 0 },
+          },
+        }
   const response = (activeToken: string) => {
     return fetch(getUserWordURL(userId(), word.id), {
       method: isNew ? 'PUT' : 'POST',

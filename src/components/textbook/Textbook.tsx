@@ -1,13 +1,14 @@
 import React, { FC } from 'react'
 import styled from 'styled-components'
-import { useNavigate } from 'react-router-dom'
-import { Game, ITextbook, ITextbookMethods, TPColors } from './textbookTypes'
+import { Link } from 'react-router-dom'
+import { ITextbook, ITextbookMethods, TPColors } from './textbookTypes'
 import { Paging } from './Paging'
 import { Section, SectionDifficult } from './Section'
 import { WordlistItem } from './WordlistItem'
 import { Word } from './Word'
 import { AuthContext } from '../../utils/services'
 import { sections } from './textbookConfig'
+import { IWord, Paths } from '../../utils/types'
 
 const Container = styled.div`
   width: 100%;
@@ -71,34 +72,33 @@ const WordContainer = styled.div`
   border-top-left-radius: 160px;
 `
 
-const Games = styled.div`
+const Games = styled.div<{
+  active: boolean
+}>`
   display: flex;
   width: 100%;
   padding: 5px 15px;
   column-gap: 10px;
-`
-
-const GameLink = styled.button<{
-  active: boolean
-}>`
-  border: none;
-  border-radius: 5px;
-  width: 175px;
-  height: 26px;
-  text-align: center;
-  text-transform: uppercase;
-  opacity: 0.8;
-  transition: all ease 0.3s;
-  cursor: pointer;
-  font-weight: bold;
-  letter-spacing: 1px;
-  font-family: inherit;
-  background-color: ${(props) => (props.active ? '#ccc;' : '#b3065c;')};
-  pointer-events: ${(props) => (props.active ? 'none;' : 'auto;')};
-  :hover {
-    opacity: 1;
-  }
-}
+  & .game {
+    border: none;
+    border-radius: 5px;
+    width: 175px;
+    height: 26px;
+    padding: 0;
+    line-height: 26px;
+    text-align: center;
+    text-transform: uppercase;
+    opacity: 0.8;
+    transition: all ease 0.3s;
+    cursor: pointer;
+    font-weight: bold;
+    letter-spacing: 1px;
+    font-family: inherit;
+    background-color: ${(props) => (props.active ? '#ccc;' : '#b3065c;')};
+    pointer-events: ${(props) => (props.active ? 'none;' : 'auto;')};
+    :hover {
+      opacity: 1;
+    }
 `
 
 export const Textbook: FC<{
@@ -109,12 +109,13 @@ export const Textbook: FC<{
   const currentWord = methods.getCurrentWord()
   const markPages = methods.getMarkPages(state.counter.currentGroup)
 
-  const navigate = useNavigate()
-
-  const gameTypeListener = (e: React.MouseEvent<HTMLButtonElement>) => {
-    e.preventDefault()
-    const gameType: Game = e.currentTarget.dataset.prop as Game
-    navigate(`../${gameType}`)
+  const getChankWords = (): IWord[] => {
+    const res = [...state.words]
+    return res.map((word) => {
+      delete word._id
+      delete word.userWord
+      return word
+    })
   }
 
   const vocabulary = () => {
@@ -207,35 +208,29 @@ export const Textbook: FC<{
                         deleteDifficulty={methods.deleteDifficultyWordEvent}
                         state={state}
                       />
-                      <Games>
-                        <GameLink
-                          active={
-                            markPages[
-                              state.counter.currentPage[
-                                state.counter.currentGroup
-                              ] - 1
-                            ]
-                          }
+                      <Games
+                        active={
+                          markPages[
+                            state.counter.currentPage[
+                              state.counter.currentGroup
+                            ] - 1
+                          ]
+                        }
+                      >
+                        <Link
+                          to={`../${Paths.AUDIO_CALL}`}
                           className="game"
-                          onClick={gameTypeListener}
-                          data-prop={Game.SPRINT}
-                        >
-                          Спринт
-                        </GameLink>
-                        <GameLink
-                          active={
-                            markPages[
-                              state.counter.currentPage[
-                                state.counter.currentGroup
-                              ] - 1
-                            ]
-                          }
-                          className="game"
-                          onClick={gameTypeListener}
-                          data-prop={Game.AUDIOCALL}
+                          state={getChankWords}
                         >
                           Аудиовызов
-                        </GameLink>
+                        </Link>
+                        <Link
+                          to={`../${Paths.SPRINT}`}
+                          className="game"
+                          state={getChankWords}
+                        >
+                          Спринт
+                        </Link>
                       </Games>
                     </WordContainer>
                   )
