@@ -122,7 +122,6 @@ export const Textbook: FC<{
             !f
           )
         }) as IWord[]
-        console.log(res)
         return res
       })(),
     [state.words, state.aggrWords]

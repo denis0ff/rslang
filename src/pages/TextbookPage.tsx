@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React from 'react'
 import { Textbook } from '../components/textbook/Textbook'
 import { ITextbook } from '../components/textbook/textbookTypes'
 import { AuthContext } from '../utils/services'
@@ -8,9 +8,16 @@ import { initTextbookState } from '../components/textbook/textbookUtils'
 
 export const TextbookPage = () => {
   const { isAuth } = React.useContext(AuthContext)
-  const [textbook, setTextbook] = useState<ITextbook>(initTextbookState())
+  const [textbook, setTextbook] = React.useState<ITextbook>(initTextbookState())
+  const cleanup = React.useRef(true)
 
-  const methods = textbookPageLogic(isAuth, textbook, setTextbook)
+  const methods = textbookPageLogic(isAuth, textbook, setTextbook, cleanup)
+
+  React.useEffect(() => {
+    return () => {
+      cleanup.current = false
+    }
+  }, [])
 
   React.useEffect(() => {
     localStorage.setItem('textbookState', JSON.stringify(textbook))
