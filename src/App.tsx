@@ -11,6 +11,12 @@ import { TextbookPage } from './pages/TextbookPage'
 import { AuthContext } from './utils/services'
 import { Paths } from './utils/types'
 
+export const AppWrapper = styled.div`
+  width: 100%;
+  min-height: 100vh;
+  padding: 2rem;
+  background: #030303;
+`
 const NavLink = styled(Link)`
   margin: 0 0.5rem;
   padding: 0.2rem 1rem;
