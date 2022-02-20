@@ -25,7 +25,17 @@ const Header = styled.header`
   flex-wrap: wrap;
   height: 100%;
 `
-const Logout = styled.button``
+const Logout = styled.button`
+  margin: 0 0.5rem;
+  padding: 0.2rem 1rem;
+  font-size: 1.2rem;
+  border-radius: 0.5rem;
+  border-width: 0;
+  background-color: transparent;
+  color: inherit;
+  outline: 3px solid #b3065c;
+  cursor: pointer;
+`
 
 export const App = () => {
   const [isAuth, setIsAuth] = useState(() => !!localStorage.getItem('token'))

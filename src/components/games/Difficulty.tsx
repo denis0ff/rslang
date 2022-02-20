@@ -34,6 +34,8 @@ export const Button = styled.button`
   color: inherit;
   border-color: inherit;
   border-radius: 20rem;
+  cursor: pointer;
+  transition: 300ms;
   &:hover {
     border-color: wheat;
     color: wheat;
@@ -41,6 +43,7 @@ export const Button = styled.button`
   &:disabled {
     border-color: grey;
     color: grey;
+    cursor: not-allowed;
   }
 `
 
@@ -62,9 +65,10 @@ export const Difficulty = ({
   const getWords = useCallback(
     async (group, key) => {
       setActive(key)
-      await getWordsPromise(group).then(({ data }) => setWords(data))
+      if (key !== active)
+        await getWordsPromise(group).then(({ data }) => setWords(data))
     },
-    [words]
+    [active, setWords]
   )
 
   return (
