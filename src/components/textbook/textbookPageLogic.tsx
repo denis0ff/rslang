@@ -117,8 +117,6 @@ export const textbookPageLogic = (
           ...prev.counter,
           currentWord: num,
         },
-        words: [...prev.words],
-        aggrWords: [...prev.aggrWords],
       }))
     },
     difficultyWordEvent: (check: IWordAddition) => {

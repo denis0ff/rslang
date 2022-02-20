@@ -1,6 +1,6 @@
 import React, { FC } from 'react'
 import styled from 'styled-components'
-import { Link, NavLink } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 import { ITextbook, ITextbookMethods, TPColors } from './textbookTypes'
 import { Paging } from './Paging'
 import { Section, SectionDifficult } from './Section'
@@ -110,18 +110,23 @@ export const Textbook: FC<{
   const currentWord = methods.getCurrentWord()
   const markPages = methods.getMarkPages(state.counter.currentGroup)
 
-  const getChankWords = (): IWord[] => {
-    const res = state.words.filter((word) => {
-      const f = state.aggrWords.find((el) => el._id === word.id)
-      return (
-        (f &&
-          f.userWord &&
-          f.userWord.difficulty !== WordDifficulties.STUDIED) ||
-        !f
-      )
-    }) as IWord[]
-    return res
-  }
+  const chankWords = React.useMemo(
+    () =>
+      ((): IWord[] => {
+        const res = state.words.filter((word) => {
+          const f = state.aggrWords.find((el) => el._id === word.id)
+          return (
+            (f &&
+              f.userWord &&
+              f.userWord.difficulty !== WordDifficulties.STUDIED) ||
+            !f
+          )
+        }) as IWord[]
+        console.log(res)
+        return res
+      })(),
+    [state.words, state.aggrWords]
+  )
 
   const vocabulary = () => {
     if (isAuth) {
@@ -236,17 +241,17 @@ export const Textbook: FC<{
                             ]
                           }
                         >
-                          <NavLink
+                          <Link
                             to={`../${Paths.AUDIO_CALL}`}
                             className="game"
-                            state={getChankWords()}
+                            state={chankWords}
                           >
                             Аудиовызов
-                          </NavLink>
+                          </Link>
                           <Link
                             to={`../${Paths.SPRINT}`}
                             className="game"
-                            state={getChankWords()}
+                            state={chankWords}
                           >
                             Спринт
                           </Link>
