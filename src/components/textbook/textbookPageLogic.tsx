@@ -72,7 +72,8 @@ export const textbookPageLogic = (
           })
           setTextbook((prev) => ({
             ...prev,
-            words,
+            words: [...words],
+            aggrWords: [...words],
             counter: {
               ...prev.counter,
               currentGroup: group,

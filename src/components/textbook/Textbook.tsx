@@ -232,30 +232,36 @@ export const Textbook: FC<{
                           deleteDifficulty={methods.deleteDifficultyWordEvent}
                           state={state}
                         />
-                        <Games
-                          active={
-                            markPages[
-                              state.counter.currentPage[
-                                state.counter.currentGroup
-                              ] - 1
-                            ]
-                          }
-                        >
-                          <Link
-                            to={`../${Paths.AUDIO_CALL}`}
-                            className="game"
-                            state={chankWords}
-                          >
-                            Аудиовызов
-                          </Link>
-                          <Link
-                            to={`../${Paths.SPRINT}`}
-                            className="game"
-                            state={chankWords}
-                          >
-                            Спринт
-                          </Link>
-                        </Games>
+                        {(() => {
+                          if (state.counter.currentGroup < 6)
+                            return (
+                              <Games
+                                active={
+                                  markPages[
+                                    state.counter.currentPage[
+                                      state.counter.currentGroup
+                                    ] - 1
+                                  ] && state.counter.currentGroup < 6
+                                }
+                              >
+                                <Link
+                                  to={`../${Paths.AUDIO_CALL}`}
+                                  className="game"
+                                  state={chankWords}
+                                >
+                                  Аудиовызов
+                                </Link>
+                                <Link
+                                  to={`../${Paths.SPRINT}`}
+                                  className="game"
+                                  state={chankWords}
+                                >
+                                  Спринт
+                                </Link>
+                              </Games>
+                            )
+                          return null
+                        })()}
                       </WordContainer>
                     )
                   }
