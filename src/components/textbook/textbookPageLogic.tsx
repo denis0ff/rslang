@@ -1,105 +1,135 @@
+import { WordDifficulties } from '../../utils/types'
 import {
   addUserDifficultWordService,
   deleteUserDifficultWordService,
   getUserAggregatedWordsService,
   getWordsService,
 } from './textbookServices'
-import {
-  IAggregatedWord,
-  ITextbook,
-  ITextbookMethods,
-  IWordAddition,
-} from './textbookTypes'
+import { ITextbook, ITextbookMethods, IWordAddition } from './textbookTypes'
+import { changeStats } from './utils/stats'
 
 export const textbookPageLogic = (
   isAuth: boolean,
   textbook: ITextbook,
-  updateTextbook: (item: ITextbook) => void
+  setTextbook: (value: React.SetStateAction<ITextbook>) => void,
+  cleanup: React.MutableRefObject<boolean>
 ) => {
-  const updateWords = (data: IAggregatedWord[], isNotReset?: boolean) => {
-    textbook.words = data
-    if (!isNotReset) textbook.counter.currentWord = 0
-    updateTextbook(textbook)
-  }
+  const getWords = (group: number, page: number, isNotReset?: boolean) => {
+    try {
+      const wordProm = getWordsService(group, page - 1)
+      const arrPage = [...textbook.counter.currentPage]
+      arrPage[group] = page
 
-  const getWords = (isNotReset?: boolean) => {
-    const wordProm = getWordsService(
-      textbook.counter.currentGroup,
-      textbook.counter.currentPage[textbook.counter.currentGroup] - 1
-    )
+      const cW = !isNotReset ? 0 : textbook.counter.currentWord
 
-    if (isAuth) {
-      const aggrAllWordsProm = getUserAggregatedWordsService(
-        'all',
-        textbook.counter.currentGroup,
-        textbook.counter.currentPage[textbook.counter.currentGroup] - 1
-      )
-      const aggrDiffWordsProm = getUserAggregatedWordsService('difficult')
+      if (isAuth) {
+        const aggrWordsProm = getUserAggregatedWordsService()
 
-      Promise.all([wordProm, aggrAllWordsProm, aggrDiffWordsProm]).then(
-        ([words, aggAllResp, aggDiffResp]) => {
-          if (aggAllResp && aggDiffResp) {
-            aggAllResp.paginatedResults.forEach((item) => {
-              for (let i = 0; i < words.length; i += 1) {
-                if (words[i].id === item._id) {
-                  words[i].userWord = item.userWord
-                  break
-                }
-              }
-            })
-            textbook.difficultWordsCount =
-              aggDiffResp.totalCount.length > 0
-                ? aggDiffResp.totalCount[0].count
-                : 0
+        Promise.all([wordProm, aggrWordsProm]).then(([wordsResp, aggResp]) => {
+          if (cleanup.current && aggResp) {
+            setTextbook((prev) => ({
+              ...prev,
+              words: wordsResp,
+              aggrWords: aggResp.paginatedResults,
+              counter: {
+                ...prev.counter,
+                currentGroup: group,
+                currentWord: cW,
+                currentPage: arrPage,
+                difficultWordsCount: aggResp.paginatedResults.filter(
+                  (word) =>
+                    !!word.userWord &&
+                    word.userWord.difficulty === WordDifficulties.DIFFICULT
+                ).length,
+              },
+            }))
           }
-          updateWords(words, isNotReset)
-        }
-      )
-    } else {
-      wordProm.then((data) => {
-        updateWords(data)
-      })
+        })
+      } else {
+        wordProm.then((data) => {
+          if (cleanup.current)
+            setTextbook((prev) => ({
+              ...prev,
+              words: data,
+              counter: {
+                ...prev.counter,
+                currentGroup: group,
+                currentWord: cW,
+                currentPage: arrPage,
+              },
+            }))
+        })
+      }
+    } catch (e) {
+      console.error(e)
     }
   }
 
-  const getDifficultWords = () => {
+  const getDifficultWords = (group: number) => {
     if (isAuth) {
-      const aggrDiffWordsProm = getUserAggregatedWordsService('difficult')
-      aggrDiffWordsProm.then((data) => {
-        if (data) {
-          const words = data.paginatedResults.map((item) => {
-            item.id = item._id || ''
-            return item
-          })
-          textbook.difficultWordsCount = data.totalCount.length
-            ? data.totalCount[0].count
-            : 0
-          updateWords(words)
-        }
-      })
+      try {
+        const aggrDiffWordsProm = getUserAggregatedWordsService(
+          WordDifficulties.DIFFICULT
+        )
+        aggrDiffWordsProm.then((data) => {
+          if (data) {
+            const words = data.paginatedResults.map((item) => {
+              item.id = item._id || ''
+              return item
+            })
+            if (cleanup.current)
+              setTextbook((prev) => ({
+                ...prev,
+                words: [...words],
+                aggrWords: [...words],
+                counter: {
+                  ...prev.counter,
+                  currentGroup: group,
+                  currentWord: 0,
+                  difficultWordsCount: words.filter(
+                    (word) =>
+                      !!word.userWord &&
+                      word.userWord.difficulty === WordDifficulties.DIFFICULT
+                  ).length,
+                },
+              }))
+          }
+        })
+      } catch (e) {
+        console.error(e)
+      }
     }
   }
 
   const methods: ITextbookMethods = {
-    getWords,
+    getPageWords: () => {
+      let group = textbook.counter.currentGroup
+      if (textbook.counter.currentGroup > 5 && !isAuth) group = 0
+      getWords(
+        group,
+        textbook.counter.currentPage[textbook.counter.currentGroup]
+      )
+    },
     pagingEvent: (page: number) => {
-      textbook.counter.currentPage[textbook.counter.currentGroup] = page
-      getWords()
+      getWords(textbook.counter.currentGroup, page)
     },
     groupEvent: (group: number) => {
-      textbook.counter.currentGroup = group
-      getWords()
+      getWords(group, textbook.counter.currentPage[group])
     },
     groupDifficultEvent: (group: number) => {
-      textbook.counter.currentGroup = group
-      getDifficultWords()
+      getDifficultWords(group)
     },
     getCurrentPage: () =>
       textbook.counter.currentPage[textbook.counter.currentGroup],
     getCurrentWord: () => textbook.words[textbook.counter.currentWord],
     wordEvent: (num: number) => {
-      textbook.counter.currentWord = num
-      updateTextbook(textbook)
+      setTextbook((prev) => ({
+        ...prev,
+        counter: {
+          ...prev.counter,
+          currentWord: num,
+        },
+      }))
     },
     difficultyWordEvent: (check: IWordAddition) => {
       const word = textbook.words.find((item) => item.id === check.id)
@@ -107,8 +137,14 @@ export const textbookPageLogic = (
         addUserDifficultWordService(word, check.isNew, check.difficulty).then(
           (data) => {
             if (data) {
-              if (textbook.counter.currentGroup < 6) getWords(true)
-              else getDifficultWords()
+              changeStats()
+              if (textbook.counter.currentGroup < 6)
+                getWords(
+                  textbook.counter.currentGroup,
+                  textbook.counter.currentPage[textbook.counter.currentGroup],
+                  true
+                )
+              else getDifficultWords(textbook.counter.currentGroup)
             }
           }
         )
@@ -117,10 +153,32 @@ export const textbookPageLogic = (
     deleteDifficultyWordEvent: (id: string) => {
       deleteUserDifficultWordService(id).then((data) => {
         if (data) {
-          if (textbook.counter.currentGroup < 6) getWords(true)
-          else getDifficultWords()
+          changeStats()
+          if (textbook.counter.currentGroup < 6)
+            getWords(
+              textbook.counter.currentGroup,
+              textbook.counter.currentPage[textbook.counter.currentGroup],
+              true
+            )
+          else getDifficultWords(textbook.counter.currentGroup)
         }
       })
+    },
+    getMarkPages: (group: number) => {
+      const arrCount = new Array<number>(textbook.counter.countPage).fill(0)
+      if (isAuth && textbook.aggrWords.length > 0) {
+        for (let i = 0; i < arrCount.length; i += 1) {
+          arrCount[i] = textbook.aggrWords.filter(
+            (word) =>
+              word.group === group &&
+              word.page === i &&
+              word.userWord &&
+              (word.userWord?.difficulty === 'difficult' ||
+                word.userWord?.difficulty === 'studied')
+          ).length
+        }
+      }
+      return arrCount.map((item) => item === 20)
     },
   }
   return methods

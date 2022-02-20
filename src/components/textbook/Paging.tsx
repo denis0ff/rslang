@@ -3,10 +3,11 @@ import styled from 'styled-components'
 interface IPaging {
   current: number
   total: number
+  markPages: boolean[]
   callback: (num: number) => void
 }
 
-type ButtonStateType = 'disabled' | 'current' | 'page' | 'skip' | 'studied'
+type ButtonStateType = 'disabled' | 'current' | 'page' | 'skip' | 'mark'
 
 enum LABEL {
   PREV = '<',
@@ -40,8 +41,8 @@ const PagingButton = styled.button<{ buttonState: ButtonStateType }>`
       case 'disabled':
         res = '#555;'
         break
-      case 'studied':
-        res = '#00aa00;'
+      case 'mark':
+        res = '#366a89;'
         break
       case 'skip':
         res = 'transparent;'
@@ -52,14 +53,19 @@ const PagingButton = styled.button<{ buttonState: ButtonStateType }>`
     }
     return res
   }};
-  opacity: ${(props) => (props.buttonState === 'page' ? '0.7;' : '1;')};
+  opacity: ${(props) =>
+    props.buttonState === 'page' || props.buttonState === 'mark'
+      ? '0.7;'
+      : '1;'};
   font-size: 14px;
   line-height: 22px;
   font-weight: bold;
   transition: all ease 0.3s;
   cursor: pointer;
   pointer-events: ${(props) =>
-    props.buttonState === 'page' ? 'auto;' : 'none;'};
+    props.buttonState === 'page' || props.buttonState === 'mark'
+      ? 'auto;'
+      : 'none;'};
   &:hover {
     opacity: 1;
   }
@@ -126,7 +132,7 @@ const createPaging = (
   return arr
 }
 
-export const Paging = ({ current, total, callback }: IPaging) => {
+export const Paging = ({ current, total, markPages, callback }: IPaging) => {
   const pagingListener = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault()
     const page = e.currentTarget.dataset.prop || ''
@@ -147,6 +153,7 @@ export const Paging = ({ current, total, callback }: IPaging) => {
               if (current === 1 && page === LABEL.PREV) return 'disabled'
               if (current === total && page === LABEL.NEXT) return 'disabled'
               if (page === LABEL.SKIP) return 'skip'
+              if (!Number.isNaN(+page) && markPages[+page - 1]) return 'mark'
               return 'page'
             })()}
             disabled={

@@ -20,11 +20,7 @@ const StyledFlex = styled.div<{ styleRT: Style }>`
   ${(props) => props.styleRT.media || null}
   ${(props) => props.styleRT.mediaChildren || null};
 `
-const Flex: FC<IFlexProps> = ({ styleRT, children, style }) => {
-  return (
-    <StyledFlex style={style} styleRT={styleRT}>
-      {children}
-    </StyledFlex>
-  )
+const Flex: FC<IFlexProps> = ({ styleRT, children }) => {
+  return <StyledFlex styleRT={styleRT}>{children}</StyledFlex>
 }
 export default Flex

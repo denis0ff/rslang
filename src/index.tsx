@@ -51,7 +51,10 @@ const GlobalStyle = createGlobalStyle`
   }
 
   #root {
+    display: flex;
+    flex-direction: column;
     max-width: 1440px;
+    min-height: 100vh;
     margin: 0 auto;
     color: #fafafa;
   }

@@ -29,6 +29,7 @@ const personInfo: IPersonInfo[] = [
 ]
 const AboutItem = styled.div`
   width: 100%;
+  margin: 5rem 0;
   h2 {
     width: 100%;
     text-align: center;
@@ -38,6 +39,7 @@ const AboutItem = styled.div`
     width: 100%;
     text-align: center;
     text-shadow: 1px 0px 3px;
+    margin-bottom: 5rem;
   }
   img {
     width: 100%;
@@ -52,7 +54,7 @@ const Person = ({ src, name, status, work }: IPersonInfo) => {
         direction: 'column',
         mWidth: '200px',
         flex: '0 1 25%',
-        styleChildren: `.block-img {width: 100%; height: auto; border-radius: 50%; overflow: hidden;}`,
+        styleChildren: `.block-img {width: 100%; max-width: 220px; height: auto; border-radius: 50%; overflow: hidden;}`,
       }}
     >
       <div className="block-img">

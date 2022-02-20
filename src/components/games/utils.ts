@@ -57,22 +57,24 @@ const createStat = async (props: IAddWordStatProps) =>
     }
   })
 
-const setLearnedWordsLength = ({
+export const setLearnedWordsLength = ({
   learnedWords,
   data,
 }: {
-  learnedWords: { length: number }
+  learnedWords: { all: number; today: number }
   data: IGotUserWord[]
 }) => {
-  learnedWords.length = data.filter(
-    (w) =>
-      w.difficulty === WordDifficulties.STUDIED && sameDay(w.optional.lastTime)
-  ).length
+  data.forEach((w) => {
+    if (w.difficulty === WordDifficulties.STUDIED) {
+      learnedWords.all += 1
+      if (sameDay(w.optional.lastTime)) learnedWords.today += 1
+    }
+  })
 }
 
 const updateStat = async (props: IUpdateStatProps) => {
-  const learnedWords = { length: 0 }
-  getAllUserWordsPromise()
+  const learnedWords = { all: 0, today: 0 }
+  await getAllUserWordsPromise()
     .then(({ data }) => setLearnedWordsLength({ learnedWords, data }))
     .catch(async ({ response }) => {
       if (response.status === Errors.ERROR_401) {
@@ -82,7 +84,7 @@ const updateStat = async (props: IUpdateStatProps) => {
         )
       }
     })
-  const data = { ...props, learnedWords: learnedWords.length }
+  const data = { ...props, learnedWords }
   putStatPromise(data).catch(async ({ response }) => {
     if (response.status === Errors.ERROR_401) {
       await getNewToken()

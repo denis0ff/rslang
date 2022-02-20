@@ -1,15 +1,18 @@
 import React, { FC } from 'react'
 import styled from 'styled-components'
-import { IWordlistItem, WordDifficultyType } from './textbookTypes'
+import { IWordlistItem } from './textbookTypes'
+import Pic from '../../assets/progress.png'
+import { AuthContext } from '../../utils/services'
+import { WordDifficulties } from '../../utils/types'
 
 const Container = styled.div<{
-  label?: WordDifficultyType
+  label?: WordDifficulties
   active: boolean
 }>`
   display: flex;
   flex-direction: column;
   width: 180px;
-  height: 95px;
+  height: 110px;
   padding: 5px 10px;
   border-radius: 5px;
   color: #030303;
@@ -19,7 +22,6 @@ const Container = styled.div<{
   cursor: pointer;
   background-color: #fff;
   pointer-events: ${(props) => (props.active ? 'none;' : 'auto;')};
-  &.active,
   &:hover {
     opacity: 0.9;
   }
@@ -34,8 +36,10 @@ const Container = styled.div<{
     width: 30px;
     height: 30px;
     background-color: ${(props) => {
-      if (props.label === 'difficult') return '#d651ff;'
-      if (props.label === 'studied') return '#65c6ff;'
+      if (props.label && props.label === WordDifficulties.DIFFICULT)
+        return '#d651ff;'
+      if (props.label && props.label === WordDifficulties.STUDIED)
+        return '#65c6ff;'
       return 'transparent;'
     }};
   }
@@ -53,14 +57,55 @@ const P = styled.p`
   height: 48px;
 `
 
+const Progress = styled.p`
+  font-size: 14px;
+  line-height: 14px;
+  height: 14px;
+  letter-spacing: 1px;
+  z-index: 5;
+  margin-top: auto;
+  & img {
+    height: 14px;
+    width: auto;
+    margin-right: 5px;
+  }
+`
+
 export const WordlistItem: FC<IWordlistItem> = ({
   ind,
+  state,
   word,
-  trans,
   active,
   label,
   callback,
 }) => {
+  const { isAuth } = React.useContext(AuthContext)
+
+  const getStatistic = () => {
+    const f = state.aggrWords.find((el) => el._id === word.id)
+    if (
+      isAuth &&
+      f &&
+      f.userWord &&
+      f.userWord.optional &&
+      f.userWord.optional.games
+    ) {
+      const n1 = f.userWord.optional.games.audioCall
+        ? f.userWord.optional.games.audioCall.right
+        : 0
+      const n2 = f.userWord.optional.games.sprint
+        ? f.userWord.optional.games.sprint.right
+        : 0
+      return (
+        <Progress>
+          <img src={Pic} alt="прогресс" />
+          {`${n1 + n2}/${f.userWord.optional.allTry}`}
+        </Progress>
+      )
+    }
+    return null
+  }
+
   const itemListener = (e: React.MouseEvent<HTMLDivElement>) => {
     e.preventDefault()
     const checkWord = e.currentTarget.dataset.prop || ''
@@ -76,8 +121,9 @@ export const WordlistItem: FC<IWordlistItem> = ({
       onClick={itemListener}
       data-prop={ind}
     >
-      <Title>{word}</Title>
-      <P>{trans}</P>
+      <Title>{word.word}</Title>
+      <P>{word.wordTranslate}</P>
+      {getStatistic()}
     </Container>
   )
 }
