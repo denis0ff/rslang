@@ -1,15 +1,41 @@
 import { useCallback, useMemo, useState } from 'react'
 import styled from 'styled-components'
-import { Wrapper, WrapperRow } from '../Difficulty'
+import { WrapperRow } from '../Difficulty'
 import { GameStatus, IResultProps, ResultViews, WordListType } from '../types'
 import { ResultView } from './ResultView'
 import { WordList } from './WordList'
 
-const PageLink = styled.div``
+const Wrapper = styled.div`
+  margin-top: 5rem;
+  padding: 1em;
+  max-width: 500px;
+  width: 90%;
+  height: 500px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  align-self: center;
+  gap: 0.5em;
+  background-color: #0e0e0e;
+  border-radius: 20px;
+`
+
+const PageLink = styled.div<{ isActive: boolean }>`
+  margin: 0 5px;
+  font-size: 20px;
+  cursor: pointer;
+  border-bottom: 3px solid
+    ${({ isActive }) => (isActive ? '#b9393989' : 'transparent')};
+  text-transform: uppercase;
+  &:hover {
+    color: wheat;
+  }
+`
 
 const Container = styled.div`
-  width: 60vw;
-  height: 80vh;
+  width: 100%;
+  height: 100%;
   text-align: center;
   overflow-y: scroll;
   ::-webkit-scrollbar {
@@ -35,10 +61,16 @@ export const Result = ({
   return (
     <Wrapper>
       <WrapperRow>
-        <PageLink onClick={() => setActive(ResultViews.RESULT)}>
+        <PageLink
+          isActive={active === ResultViews.RESULT}
+          onClick={() => setActive(ResultViews.RESULT)}
+        >
           {ResultViews.RESULT}
         </PageLink>
-        <PageLink onClick={() => setActive(ResultViews.WORDS)}>
+        <PageLink
+          isActive={active === ResultViews.WORDS}
+          onClick={() => setActive(ResultViews.WORDS)}
+        >
           {ResultViews.WORDS}
         </PageLink>
       </WrapperRow>
@@ -48,6 +80,7 @@ export const Result = ({
             right={answers.right.length}
             wrong={answers.wrong.length}
             nextGame={nextGame}
+            setActive={setActive}
           />
         ) : (
           <>

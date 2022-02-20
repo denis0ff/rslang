@@ -12,6 +12,7 @@ const Button = styled.button`
   border: none;
   border-radius: 50%;
   transition: 300ms;
+  cursor: pointer;
   &:hover {
     background-color: #607d8b21;
     svg {
