@@ -192,7 +192,10 @@ export const Word: FC<IWordObj> = ({
           data-prop={JSON.stringify({
             id: word.id,
             difficulty: name,
-            isNew: !!word.userWord,
+            isNew: (() => {
+              const res = state.aggrWords.find((el) => el._id === word.id)
+              return res && res.userWord
+            })(),
           })}
           onClick={click}
         >
@@ -249,7 +252,10 @@ export const Word: FC<IWordObj> = ({
 
   return (
     <Container
-      difficulty={word.userWord ? word.userWord.difficulty : undefined}
+      difficulty={(() => {
+        const res = state.aggrWords.find((el) => el._id === word.id)
+        return res && res.userWord ? res.userWord.difficulty : undefined
+      })()}
       isDifficultGroup={state.counter.currentGroup === 6}
       isPlay={isPlay}
     >

@@ -1,39 +1,23 @@
-import React, { useState } from 'react'
+import React from 'react'
 import { Textbook } from '../components/textbook/Textbook'
-import {
-  IAggregatedWord,
-  ITextbook,
-} from '../components/textbook/textbookTypes'
+import { ITextbook } from '../components/textbook/textbookTypes'
 import { AuthContext } from '../utils/services'
 import { textbookPageLogic } from '../components/textbook/textbookPageLogic'
 import { Footer } from '../components/ui/Footer/Footer'
-
-const local = () => {
-  const data = localStorage.getItem('textbookState')
-  if (data) {
-    const state = JSON.parse(data) as ITextbook
-    state.words = new Array<IAggregatedWord>()
-    state.aggrWords = new Array<IAggregatedWord>()
-    return state
-  }
-  return {
-    counter: {
-      currentGroup: 0,
-      currentPage: new Array(7).fill(1),
-      currentWord: 0,
-      countPage: 30,
-      difficultWordsCount: 0,
-    },
-    words: new Array<IAggregatedWord>(),
-    aggrWords: new Array<IAggregatedWord>(),
-  }
-}
+import { initTextbookState } from '../components/textbook/textbookUtils'
 
 export const TextbookPage = () => {
   const { isAuth } = React.useContext(AuthContext)
-  const [textbook, setTextbook] = useState<ITextbook>(local())
+  const [textbook, setTextbook] = React.useState<ITextbook>(initTextbookState())
+  const cleanup = React.useRef(true)
 
-  const methods = textbookPageLogic(isAuth, textbook, setTextbook)
+  const methods = textbookPageLogic(isAuth, textbook, setTextbook, cleanup)
+
+  React.useEffect(() => {
+    return () => {
+      cleanup.current = false
+    }
+  }, [])
 
   React.useEffect(() => {
     localStorage.setItem('textbookState', JSON.stringify(textbook))

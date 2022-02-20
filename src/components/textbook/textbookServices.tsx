@@ -114,7 +114,7 @@ export const addUserDifficultWordService = async (
   diff: WordDifficulties
 ) => {
   const opt =
-    word.userWord && word.userWord.optional
+    !!word.userWord && !!word.userWord.optional
       ? word.userWord.optional
       : {
           lastTime: new Date().toJSON(),
