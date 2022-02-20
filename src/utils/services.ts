@@ -2,7 +2,6 @@ import axios from 'axios'
 import { createContext } from 'react'
 import { IRegistration, IsAuthContext, ISignIn } from '../components/auth/types'
 import {
-  Errors,
   IPostWordProps,
   IPutWordProps,
   IAddWordStatProps,
@@ -56,11 +55,9 @@ export const getNewToken = async () =>
       localStorage.setItem('token', data.token)
       localStorage.setItem('refreshToken', data.refreshToken)
     })
-    .catch(({ response }) => {
-      if (response.status === Errors.ERROR_401) {
-        localStorage.clear()
-        window.location.href = Paths.AUTH
-      }
+    .catch(() => {
+      localStorage.clear()
+      window.location.href = Paths.AUTH
     })
 
 export const getWordPromise = async (id: string) =>
