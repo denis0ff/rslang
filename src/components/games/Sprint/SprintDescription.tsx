@@ -1,9 +1,15 @@
+import {
+  DesriptionTitle,
+  DescriptionListItem,
+  DescriptionList,
+} from '../AudioCall/AudioCallDescription'
+
 export const SprintDescription = () => (
   <>
-    <h2>«Спринт»</h2>
-    <ul>
+    <DesriptionTitle>«Спринт»</DesriptionTitle>
+    <DescriptionList>
       Тренировка на скорость. Угадай как можно больше слов за 30 секунд
-      <li>Используйте мышь, чтобы выбрать</li>
-    </ul>
+      <DescriptionListItem>Используйте мышь, чтобы выбрать</DescriptionListItem>
+    </DescriptionList>
   </>
 )

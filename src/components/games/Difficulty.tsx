@@ -1,4 +1,4 @@
-import { useCallback } from 'react'
+import { useCallback, useState } from 'react'
 import styled from 'styled-components'
 import { getWordsPromise } from '../../utils/services'
 import { AudioCallDescription } from './AudioCall/AudioCallDescription'
@@ -16,6 +16,7 @@ export const Wrapper = styled.div`
   flex-direction: column;
   align-items: center;
   gap: 1em;
+  font-size: 1.5rem;
 `
 
 export const WrapperRow = styled.div`
@@ -26,7 +27,26 @@ export const WrapperRow = styled.div`
 `
 
 export const Button = styled.button`
+  padding: 0.5rem 1rem;
   width: max-content;
+  font-size: 1.1rem;
+  background-color: transparent;
+  color: inherit;
+  border-color: inherit;
+  border-radius: 20rem;
+  &:hover {
+    border-color: wheat;
+    color: wheat;
+  }
+  &:disabled {
+    border-color: grey;
+    color: grey;
+  }
+`
+
+export const DifficultyButton = styled(Button)<{ isActive: boolean }>`
+  padding: 0.5rem;
+  background-color: ${({ isActive }) => (isActive ? '#35c77e89' : 'inherit')};
 `
 
 const difficulties = ['A1', 'A2', 'B1', 'B2', 'C1', 'C2']
@@ -37,9 +57,12 @@ export const Difficulty = ({
   words,
   setWords,
 }: IDifficultyProps) => {
+  const [active, setActive] = useState('')
+
   const getWords = useCallback(
-    (group) => {
-      getWordsPromise(group).then(({ data }) => setWords(data))
+    async (group, key) => {
+      setActive(key)
+      await getWordsPromise(group).then(({ data }) => setWords(data))
     },
     [words]
   )
@@ -57,9 +80,13 @@ export const Difficulty = ({
         Выбери уровень сложности:
         <WrapperRow>
           {difficulties.map((key, index) => (
-            <Button key={key} onClick={() => getWords(index)}>
+            <DifficultyButton
+              key={key}
+              isActive={key === active}
+              onClick={() => getWords(index, key)}
+            >
               {key}
-            </Button>
+            </DifficultyButton>
           ))}
         </WrapperRow>
         <Button
