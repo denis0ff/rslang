@@ -11,6 +11,7 @@ import { useEffect, useState } from 'react'
 import { Bar } from 'react-chartjs-2'
 import styled from 'styled-components'
 import { ILongStat } from '../../utils/types'
+import { ListItem } from './GameCard'
 import { IChartData, ILongStatProps } from './types'
 import { Section, Title as HeaderTitle } from './WordStats'
 
@@ -98,6 +99,16 @@ export const LongStats = ({ longStat }: ILongStatProps) => {
   return (
     <Section>
       <HeaderTitle>Статистика за всё время</HeaderTitle>
+      <ul>
+        <ListItem>
+          «Новые слова» - график отображает статистику новых слов за каждый день
+          обучения
+        </ListItem>
+        <ListItem>
+          «Изученные слова» - график отображает прогрессирующую статистику за
+          всё время обучения (рост количества изученных слов по дням)
+        </ListItem>
+      </ul>
       <Wrapper>
         <WrapperGraph>
           <Bar

@@ -27,6 +27,7 @@ export const Form = styled.form`
   }
   label {
     height: 1.4em;
+    margin: 0.5em 0;
   }
   span {
     align-self: flex-start;
@@ -37,7 +38,7 @@ export const Form = styled.form`
 export const Input = styled.input`
   padding: 0.5em;
   height: 100%;
-  width: 250px;
+  width: fit-content;
   font-size: 0.8em;
   font-family: inherit;
   color: #fafafa;
@@ -63,6 +64,7 @@ export const LinkPage = styled(GameLink)`
   display: inline-block;
   text-transform: unset;
   font-size: 1.2em;
+  border-color: #fafafa;
 `
 
 export const Submit = styled(Button)`

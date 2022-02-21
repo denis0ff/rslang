@@ -12,7 +12,7 @@ const personInfo: IPersonInfo[] = [
     src: '../../assets/img/dev1.jpg',
     name: 'Denis Popov',
     status: 'Front-end developer Team lead',
-    work: '',
+    work: 'Создал: игру "Аудиовызов", общие интерфейсы для игр, страницы статистики и авторизации/регистрации пользователя. Организовал работу статистики и прогресса игр с бэкендом.',
   },
   {
     src: '../../assets/img/dev2.jpg',
@@ -91,7 +91,7 @@ const About = () => {
             wrap: 'wrap',
             mediaChildren: `@media (max-width: 500px) {
               justify-content: center;
-              align-item: center;  
+              align-item: center;
           }`,
           }}
         >

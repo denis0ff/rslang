@@ -8,7 +8,7 @@ const Article = styled.article`
   box-shadow: 0px 8px 40px 20px rgb(34 60 80 / 47%);
 `
 
-const ListItem = styled.li`
+export const ListItem = styled.li`
   padding: 0.5em 0;
 `
 

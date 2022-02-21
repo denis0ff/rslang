@@ -30,7 +30,7 @@ export const AudioCallDescription = () => (
         Используйте цифровые клавиши от 1 до 5 для выбора ответа
       </DescriptionListItem>
       <DescriptionListItem>
-        Используйте клавишу Enter для повтроного звучания слова
+        Используйте клавишу Enter для повторного звучания слова
       </DescriptionListItem>
       <DescriptionListItem>
         Используйте пробел для подсказки или для перехода к следующему слову

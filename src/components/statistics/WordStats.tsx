@@ -12,8 +12,9 @@ export const Section = styled.section`
 `
 
 export const Title = styled.h2`
-  font-size: 2rem;
   padding-bottom: 0.5em;
+  font-size: 2rem;
+  text-align: center;
 `
 
 export const Subtitle = styled.h3`
@@ -28,7 +29,7 @@ export const Subtitle = styled.h3`
 `
 
 const WrapperRowStat = styled(WrapperRow)`
-  gap: 2em;
+  gap: 5rem;
 `
 
 export const WordStat = ({ learnedWords, newWords, right }: IWordStatProps) => {

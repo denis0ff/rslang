@@ -17,6 +17,7 @@ export const AppWrapper = styled.div`
   min-height: 100vh;
   padding: 2rem;
   background: #030303;
+  overflow-x: hidden;
 `
 
 const Header = styled.header`
