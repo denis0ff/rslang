@@ -48,3 +48,14 @@ export const sameDay = (dateJSON: string) => {
 }
 
 export const checkIsNaN = (value: number) => (Number.isNaN(value) ? 0 : value)
+export const getRandomAnswers = (
+  currentIindex: number,
+  maxIndex: number
+): number => {
+  const randomIndex = (max: number): number => {
+    const randomItem = getRandomInteger(0, max)
+    return randomItem === currentIindex ? randomIndex(max) : randomItem
+  }
+  const rIndex = randomIndex(maxIndex)
+  return shuffle([rIndex, currentIindex])[0]
+}
