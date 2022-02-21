@@ -119,12 +119,12 @@ export const LongStats = ({ longStat }: ILongStatProps) => {
                 {
                   label: 'Новые слова',
                   data: data.dataset1,
-                  backgroundColor: 'rgb(172, 3, 130)',
+                  backgroundColor: '#35c77e89',
                 },
                 {
                   label: 'Изученные слова',
                   data: data.dataset2,
-                  backgroundColor: 'rgb(50, 4, 255)',
+                  backgroundColor: '#65c6ff',
                 },
               ],
             }}

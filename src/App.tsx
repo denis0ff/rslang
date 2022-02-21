@@ -29,26 +29,36 @@ const Header = styled.header`
     margin: 1rem 1rem;
     padding: 0.2rem 1rem;
     font-size: 1.2rem;
-    border-radius: 0.5rem;
-    outline: 3px solid #b3065c;
+    border-bottom: 3px solid transparent;
+    transition: 300ms;
+    &:hover {
+      color: wheat;
+      border-color: wheat;
+    }
   }
   .active {
     color: #b3065c;
-    border: 3px solid #fff;
+    border-color: #b3065d92;
     outline: none;
   }
 `
 const Logout = styled.button`
+  font: inherit;
   width: 50%;
   margin: 1rem 1rem;
   padding: 0.2rem 1rem;
-  border-radius: 0.5rem;
   text-align: left;
   color: #ffffff;
   background: transparent;
-  outline: 3px solid #b3065c;
-  border: none;
   font-size: 1.2rem;
+  cursor: pointer;
+  border: none;
+  border-bottom: 3px solid transparent;
+  transition: 300ms;
+  &:hover {
+    color: wheat;
+    border-color: wheat;
+  }
 `
 
 export const App = () => {

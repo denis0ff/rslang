@@ -131,12 +131,12 @@ export const Authorization = ({ setAction, setError }: IAuthProps) => {
           <Submit type="submit">Войти</Submit>
         </fieldset>
       </Form>
-      <p>
+      <div>
         Еще не с нами? Тогда{' '}
         <LinkPage onClick={() => setAction(AuthAction.REGISTRATION)}>
           зарегистрируйся
         </LinkPage>
-      </p>
+      </div>
     </Wrapper>
   )
 }
