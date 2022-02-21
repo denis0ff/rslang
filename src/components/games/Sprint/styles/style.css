@@ -105,10 +105,15 @@ button, h2, h5{
     margin: 1.5rem 0 2rem 0;
   }
   .word-compare {
-    line-height: 1.7rem;
-  }
-  .word-compare h2{
+    line-height: 1.5rem;
     font-size: 1.5rem;
-
+    flex-wrap: nowrap;
+  }
+  .word-compare h5 {
+    line-height: 1.5rem;
+    font-size: 1.3rem;
+  }
+  .wrapper {
+    width: 100%;
   }
 }
