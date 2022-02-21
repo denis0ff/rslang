@@ -137,6 +137,7 @@ export const Word: FC<IWordObj> = ({
 }) => {
   const { isAuth } = React.useContext(AuthContext)
   const [isPlay, setIsPlay] = useState(false)
+  const isNotStop = React.useRef(true)
   const [audioFiles] = useState<IWordAudioFiles>({
     audio: new Audio(),
     audioMeaning: new Audio(),
@@ -164,12 +165,21 @@ export const Word: FC<IWordObj> = ({
     ]
     for (let i = 0; i < items.length; i += 1) {
       items[i].onended = () => {
-        if (i + 1 < items.length) items[i + 1].play()
+        if (i + 1 < items.length && isNotStop.current) items[i + 1].play()
         else setIsPlay(true)
       }
     }
     items[0].play()
   }
+
+  React.useEffect(() => {
+    return () => {
+      isNotStop.current = false
+      audioFiles.audio.pause()
+      audioFiles.audioMeaning.pause()
+      audioFiles.audioExample.pause()
+    }
+  }, [])
 
   const audioKeyPressListener = () => {
     audioPlay()
