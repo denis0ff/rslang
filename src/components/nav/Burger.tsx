@@ -1,5 +1,7 @@
 import React, { FC, ReactNode, useState } from 'react'
+import { Link } from 'react-router-dom'
 import styled from 'styled-components'
+import { Paths } from '../../utils/types'
 import Flex from '../main/flex'
 
 const Wrapper = styled.div<{ open: boolean }>`
@@ -79,7 +81,9 @@ const Burger: FC<ReactNode> = ({ children }) => {
           display: block; font-size: 1.5rem; line-height: 1.6rem}}`,
         }}
       >
-        <div className="logo">RS Lang</div>
+        <div className="logo">
+          <Link to={Paths.HOME}>RS Lang</Link>
+        </div>
         <StyledBurger open={open} onClick={() => setOpen(!open)}>
           <div />
           <div />

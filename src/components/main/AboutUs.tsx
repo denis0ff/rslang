@@ -12,7 +12,7 @@ const personInfo: IPersonInfo[] = [
     src: '../../assets/img/dev1.jpg',
     name: 'Denis Popov',
     status: 'Front-end developer Team lead',
-    work: '',
+    work: 'Создал: игру "Аудиовызов", Базовую структуру проекта, Работа с API, Статистика',
   },
   {
     src: '../../assets/img/dev2.jpg',
@@ -26,7 +26,7 @@ const personInfo: IPersonInfo[] = [
     src: '../../assets/img/dev3.jpg',
     name: 'Max Klimenkov',
     status: 'Front-end developer',
-    work: '',
+    work: 'Создал: игру "Спринт", Home page',
   },
 ]
 const AboutItem = styled.div`
