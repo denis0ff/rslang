@@ -48,7 +48,7 @@ const Logout = styled.button`
   margin: 1rem 1rem;
   padding: 0.2rem 1rem;
   text-align: left;
-  color: #ffffff;
+  color: #fafafa;
   background: transparent;
   font-size: 1.2rem;
   cursor: pointer;

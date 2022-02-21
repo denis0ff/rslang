@@ -26,7 +26,7 @@ const BtnStyled = styled.button`
 const Frime = () => {
   return (
     <iframe
-      src="https://www.youtube.com/embed/lZQCG5y_UYQ?autoplay=1"
+      src="https://www.youtube.com/embed/rP7a4vZV5u8?autoplay=1"
       title="YouTube video player"
       frameBorder="0"
       allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
@@ -98,7 +98,6 @@ const Presentatins = () => {
         {frimeActive ? (
           <Btn
             onClick={() => {
-              console.log('ok')
               setFrimeActive((prev) => !prev)
             }}
           />

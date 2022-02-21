@@ -23,7 +23,7 @@ export const NotEnoughWords = ({ setStatus, setWords }: IGameErrorProps) => {
         игру
       </Title>
       <WrapperRow>
-        <GameLink onClick={newGame}>Сыграть ещё раз</GameLink>
+        <GameLink onClick={newGame}>Новая игра</GameLink>
         <TextbookLink to={`../${Paths.TEXTBOOK}`}>
           Перейти в учебник
         </TextbookLink>

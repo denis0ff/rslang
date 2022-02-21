@@ -1,5 +1,4 @@
 import { useState } from 'react'
-import { Error } from '../components/auth/Error'
 import { Authorization } from '../components/auth/Authorization'
 import { Registration } from '../components/auth/Registration'
 import { AuthAction, Errors } from '../components/auth/types'
@@ -11,11 +10,14 @@ export const Auth = () => {
   return (
     <WrapperRow>
       {action === AuthAction.AUTH ? (
-        <Authorization setAction={setAction} setError={setError} />
+        <Authorization
+          setAction={setAction}
+          setError={setError}
+          error={error}
+        />
       ) : (
-        <Registration setAction={setAction} setError={setError} />
+        <Registration setAction={setAction} setError={setError} error={error} />
       )}
-      <Error error={error} />
     </WrapperRow>
   )
 }

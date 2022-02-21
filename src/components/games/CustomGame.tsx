@@ -25,7 +25,7 @@ export const CustomGame = ({
     if (words.length >= MIN_GAME_LENGTH) setIsStart(false)
     else if (words[0].page === 0) setStatus(GameStatus.ERROR)
     else getNewWords()
-  }, [type])
+  }, [type, words])
 
   return (
     <Container>
