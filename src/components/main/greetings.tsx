@@ -27,15 +27,18 @@ const GreetingsBlock = () => {
         <BlockDiv
           styleRT={{
             styleChildren: `h2 {font-size: 3rem; text-shadow: 1px 0px 3px; line-height: 3.5rem; margin-bottom: 1.5rem;}
-              p {font-size: 1.5rem; line-height: 2.0rem }`,
+              li {font-size: 1.5rem; line-height: 2.0rem }`,
             mediaChildren: `@media (max-width: 700px) {
                 h2 {
                   font-size: 2rem;
                   line-height: 2.5rem;
                 }
-                p {
-                  font-size: 1.4rem;
-                  line-height: 1.6rem
+                li {
+                  font-size: 1.3rem;
+                  line-height: 1.5rem;
+                  margin: 1rem;
+                  list-style: circle;
+                  font-size: 1rem;
                 }
               }`,
           }}
@@ -44,13 +47,19 @@ const GreetingsBlock = () => {
             Изучай английский
             <div>с RSLang</div>
           </h2>
-          <p>Приложение для эффективного изучения</p>
-          <p>английского языка в игровой форме.</p>
-          <p> В приложении есть учебник который поможет вам </p>
-          <p> легко и быстро изучать лексику.</p>
-          <p>
-            Мини-игры позволят вам закрепить ваши знания и улучшить аудирование.
-          </p>
+          <ul>
+            <li>
+              Приложение для эффективного изучения английского языка в игровой
+              форме.
+            </li>
+            <li>
+              В приложении есть учебник, который поможет вам изучать лексику.
+            </li>
+            <li>
+              Мини-игры позволят вам закрепить ваши знания и улучшить
+              аудирование.
+            </li>
+          </ul>
         </BlockDiv>
         <Flex
           styleRT={{
