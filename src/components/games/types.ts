@@ -66,6 +66,7 @@ export interface IResultViewProps {
   right: number
   wrong: number
   nextGame: () => void
+  setActive: Dispatch<SetStateAction<ResultViews>>
 }
 
 export interface IPostWordProps {

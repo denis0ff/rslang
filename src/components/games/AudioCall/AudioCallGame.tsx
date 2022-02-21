@@ -4,18 +4,19 @@ import { getFileResponse } from '../../../utils/config'
 import { AuthContext } from '../../../utils/services'
 import { shuffle } from '../../../utils/utils'
 import { AudioButton } from '../AudioButton'
-import { Wrapper, WrapperRow } from '../Difficulty'
+import { Button, Wrapper, WrapperRow } from '../Difficulty'
 import { GameStatus, GameTypeOption, IGameRunProps } from '../types'
 import { addWord, addWordStat } from '../utils'
 
 const AnswerContainer = styled.div`
+  padding-top: 2rem;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: flex-end;
   gap: 0.5rem;
-  min-height: 35rem;
-  min-width: 30rem;
+  min-width: calc(390px + 5em);
+  min-height: calc(260px + 5em);
 `
 
 export const Container = styled.div`
@@ -26,23 +27,22 @@ export const Container = styled.div`
 `
 
 const AnswerImg = styled.div<{ img: string; isRight: boolean }>`
-  width: 30rem;
-  height: 30rem;
+  width: 390px;
+  height: 260px;
+  border-radius: 160px 0 160px 5px;
   background: center / cover no-repeat ${(props) => `url(${props.img})`};
   box-shadow: 5px 5px 50px 5px
     ${({ isRight }) => (isRight ? '#35c77e89' : '#b9393989')};
 `
 
-const AnswerButton = styled.button<{ isRight: boolean; isAnswered: boolean }>`
+const AnswerButton = styled(Button)<{ isRight: boolean; isAnswered: boolean }>`
   padding: 0.4em 0.8em;
   background-color: ${({ isRight, isAnswered }) => {
-    if (isAnswered) return isRight ? '#35c77f' : '#b93939'
+    if (isAnswered) return isRight ? '#35c77e89' : '#b9393989'
     return 'transparent'
   }};
   color: inherit;
 `
-
-const ShowAnswer = styled.button``
 
 const keys = ['1', '2', '3', '4', '5']
 
@@ -172,11 +172,9 @@ export const AudioCallGame = ({
           </AnswerButton>
         ))}
       </WrapperRow>
-      <ShowAnswer
-        onClick={() => (isAnswered ? nextQuestion() : checkAnswer(''))}
-      >
+      <Button onClick={() => (isAnswered ? nextQuestion() : checkAnswer(''))}>
         {isAnswered ? 'Следующий' : 'Не знаю'}
-      </ShowAnswer>
+      </Button>
     </Wrapper>
   )
 }

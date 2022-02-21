@@ -34,7 +34,7 @@ const Frime = () => {
     />
   )
 }
-const Btn = ({onClick}: { onClick: () => void }) => {
+const Btn = ({ onClick }: { onClick: () => void }) => {
   return (
     <BtnStyled onClick={onClick} type="button">
       <svg width="68" height="48" viewBox="0 0 68 48">
@@ -75,7 +75,7 @@ const Presentatins = () => {
         styleRT={{
           width: '70%',
           height: '60vh',
-          mediaChildren: ` 
+          mediaChildren: `
           border: 1px solid #ffffff;
           position: relative;
           iframe {
