@@ -1,15 +1,15 @@
 import { useCallback } from 'react'
 import styled from 'styled-components'
 import { getWordsPromise } from '../../utils/services'
+import { AudioCallDescription } from './AudioCall/AudioCallDescription'
+import { SprintDescription } from './Sprint/SprintDescription'
 import { GameStatus, GameType, IDifficultyProps } from './types'
 
-const Container = styled.section`
+export const Container = styled.section`
   text-align: center;
 `
 
-const Title = styled.h2``
-
-const Description = styled.p``
+export const Description = styled.article``
 
 export const Wrapper = styled.div`
   display: flex;
@@ -25,7 +25,7 @@ export const WrapperRow = styled.div`
   gap: 0.5em;
 `
 
-const Button = styled.button`
+export const Button = styled.button`
   width: max-content;
 `
 
@@ -46,13 +46,12 @@ export const Difficulty = ({
 
   return (
     <Container>
-      <Title>
-        {type === GameType.AUDIO_CALL ? GameType.AUDIO_CALL : GameType.SPRINT}
-      </Title>
       <Description>
-        {type === GameType.AUDIO_CALL
-          ? 'Аудиовызов улучшает восприятие речи. Угадай слова на слух'
-          : 'Спринт - тренировка на скорость. Угадай как можно больше слов за 30 секунд'}
+        {type === GameType.AUDIO_CALL ? (
+          <AudioCallDescription />
+        ) : (
+          <SprintDescription />
+        )}
       </Description>
       <Wrapper>
         Выбери уровень сложности:

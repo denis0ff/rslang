@@ -1,17 +1,13 @@
 import axios from 'axios'
 import { getWordsResponse } from '../../utils/config'
-import { Paths } from '../../utils/types'
+import { Paths, WordDifficulties } from '../../utils/types'
 import {
   getNewUserTokenURL,
   getUserWordURL,
-  getUserAggregatedAllWordsURL,
   getUserAggregatedDifficultWordsURL,
+  getUserAggregatedWordsURL,
 } from './textbookConfig'
-import {
-  IAggregatedResponse,
-  IAggregatedWord,
-  WordDifficultyType,
-} from './textbookTypes'
+import { IAggregatedResponse, IAggregatedWord } from './textbookTypes'
 
 interface ITokens {
   token: string
@@ -24,6 +20,7 @@ const saveNewToken = (data: ITokens) => {
 }
 
 const expireTokens = () => {
+  localStorage.clear()
   window.location.href = Paths.AUTH
 }
 
@@ -34,6 +31,7 @@ const refreshToken = () => localStorage.getItem('refreshToken') || ''
 const getNewUserToken = (id: string | null, rt: string | null) => {
   return fetch(getNewUserTokenURL(id), {
     method: 'GET',
+    // @ts-expect-error: Unreachable code error
     withCredentials: true,
     headers: {
       Authorization: `Bearer ${rt}`,
@@ -60,17 +58,17 @@ export const getWordsService = async (group: number, page: number) => {
 }
 
 export const getUserAggregatedWordsService = async (
-  filter: WordDifficultyType,
-  group?: number,
-  page?: number
+  filter?: WordDifficulties
 ) => {
   let url = ''
-  if (filter === 'difficult') url = getUserAggregatedDifficultWordsURL(userId())
-  else url = getUserAggregatedAllWordsURL(userId(), group || 0, page || 0)
+  if (filter === WordDifficulties.DIFFICULT)
+    url = getUserAggregatedDifficultWordsURL(userId())
+  else url = getUserAggregatedWordsURL(userId())
 
   const response = (activeToken: string) => {
     return fetch(url, {
       method: 'GET',
+      // @ts-expect-error: Unreachable code error
       withCredentials: true,
       headers: {
         Authorization: `Bearer ${activeToken}`,
@@ -113,13 +111,24 @@ export const getUserAggregatedWordsService = async (
 export const addUserDifficultWordService = async (
   word: IAggregatedWord,
   isNew: boolean,
-  diff: WordDifficultyType
+  diff: WordDifficulties
 ) => {
   const opt =
-    word.userWord && word.userWord.optional ? word.userWord.optional : {}
+    !!word.userWord && !!word.userWord.optional
+      ? word.userWord.optional
+      : {
+          lastTime: new Date().toJSON(),
+          allTry: 0,
+          streak: 0,
+          games: {
+            sprint: { right: 0, wrong: 0 },
+            audioCall: { right: 0, wrong: 0 },
+          },
+        }
   const response = (activeToken: string) => {
     return fetch(getUserWordURL(userId(), word.id), {
       method: isNew ? 'PUT' : 'POST',
+      // @ts-expect-error: Unreachable code error
       withCredentials: true,
       headers: {
         Authorization: `Bearer ${activeToken}`,
@@ -155,6 +164,7 @@ export const deleteUserDifficultWordService = async (id: string) => {
   const response = (activeToken: string) => {
     return fetch(getUserWordURL(userId(), id), {
       method: 'DELETE',
+      // @ts-expect-error: Unreachable code error
       withCredentials: true,
       headers: {
         Authorization: `Bearer ${activeToken}`,
