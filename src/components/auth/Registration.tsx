@@ -1,6 +1,7 @@
 import validator from 'validator'
 import { ChangeEvent, FormEvent, useContext, useState } from 'react'
-import { Form } from './Authorization'
+import { Form, Input, LinkPage, Submit } from './Authorization'
+import { Wrapper } from '../games/Result/Result'
 import { AuthAction, Errors, IAuthProps } from './types'
 import {
   AuthContext,
@@ -58,61 +59,66 @@ export const Registration = ({ setAction, setError }: IAuthProps) => {
   }
 
   return (
-    <div>
-      <Form onSubmit={(e) => submitChackin(e)}>
+    <Wrapper>
+      <Form onSubmit={(e) => submitChackin(e)} autoComplete="off">
         <fieldset>
-          <legend>Введите данные для регистрации</legend>
+          <legend>Зарегистрируйся в RS Lang</legend>
+          <span>и изучай английский используя все возможности приложения</span>
           <label htmlFor="username">
             Имя:{' '}
-            <input
+            <Input
               type="username"
               id="username"
               name="username"
               value={register.username}
+              autoComplete="off"
               onChange={(e) => changeInputRegister(e)}
             />
           </label>
 
           <label htmlFor="email">
             Email:{' '}
-            <input
+            <Input
               type="email"
               id="email"
               name="email"
               value={register.email}
+              autoComplete="off"
               onChange={(e) => changeInputRegister(e)}
               formNoValidate
             />
           </label>
           <label htmlFor="password">
             Пароль:{' '}
-            <input
+            <Input
               type="password"
               id="password"
               name="password"
               value={register.password}
+              autoComplete="new-password"
               onChange={(e) => changeInputRegister(e)}
             />
           </label>
-          <label htmlFor="password">
+          <label htmlFor="password2">
             Повторите пароль:{' '}
-            <input
+            <Input
               type="password"
               id="password2"
               name="password2"
               value={register.password2}
+              autoComplete="new-password"
               onChange={(e) => changeInputRegister(e)}
             />
           </label>
-          <input type="submit" />
+          <Submit type="submit">Отправить</Submit>
         </fieldset>
       </Form>
       <p>
         Уже с нами?{' '}
-        <button type="button" onClick={() => setAction(AuthAction.AUTH)}>
+        <LinkPage onClick={() => setAction(AuthAction.AUTH)}>
           Да, войти!
-        </button>
+        </LinkPage>
       </p>
-    </div>
+    </Wrapper>
   )
 }

@@ -2,16 +2,75 @@ import { ChangeEvent, FormEvent, useContext, useState } from 'react'
 import styled from 'styled-components'
 import { AuthContext, singInPromise } from '../../utils/services'
 import { catchError, signIn } from '../../utils/utils'
+import { Button } from '../games/Difficulty'
+import { Wrapper } from '../games/Result/Result'
+import { GameLink } from '../games/Result/ResultView'
 import { AuthAction, IAuthProps } from './types'
 
 export const Form = styled.form`
-  margin: 2em;
-  & > fieldset {
-    width: min-content;
+  width: 100%;
+  height: 100%;
+  padding: 1rem;
+  fieldset {
+    width: 100%;
+    height: 100%;
     display: flex;
+    align-items: flex-end;
     flex-direction: column;
+    border: 0;
     gap: 1em;
+    font-size: 1.2em;
   }
+  legend {
+    font-size: 1.5em;
+    color: #50ffff;
+  }
+  label {
+    height: 1.4em;
+    margin: 0.5em 0;
+  }
+  span {
+    align-self: flex-start;
+    padding-bottom: 2em;
+  }
+`
+
+export const Input = styled.input`
+  padding: 0.5em;
+  height: 100%;
+  width: fit-content;
+  font-size: 0.8em;
+  font-family: inherit;
+  color: #fafafa;
+  box-shadow: 0 0 0 30px #030303 inset;
+  border: none;
+  border-radius: 5px;
+  outline: 1px solid #fafafa;
+  transition: 300ms;
+  &:focus {
+    outline-color: wheat;
+  }
+  &:-webkit-autofill,
+  &:-webkit-autofill:hover,
+  &:-webkit-autofill:focus,
+  &:-webkit-autofill:active {
+    font-size: 0.8em;
+    font-family: inherit;
+    -webkit-text-fill-color: #fafafa;
+  }
+`
+
+export const LinkPage = styled(GameLink)`
+  display: inline-block;
+  text-transform: unset;
+  font-size: 1.2em;
+  border-color: #fafafa;
+`
+
+export const Submit = styled(Button)`
+  margin-top: 2em;
+  align-self: center;
+  padding: 0.5em 5em;
 `
 
 export const Authorization = ({ setAction, setError }: IAuthProps) => {
@@ -43,13 +102,14 @@ export const Authorization = ({ setAction, setError }: IAuthProps) => {
   }
 
   return (
-    <div>
+    <Wrapper>
       <Form onSubmit={(e) => submitChackin(e)}>
         <fieldset>
-          <legend>Введите данные для входа</legend>
+          <legend>Уже с Нами?</legend>
+          <span>Войдите в свой аккаунт RS Lang!</span>
           <label htmlFor="email">
             Email:{' '}
-            <input
+            <Input
               type="email"
               id="email"
               name="email"
@@ -60,7 +120,7 @@ export const Authorization = ({ setAction, setError }: IAuthProps) => {
           </label>
           <label htmlFor="password">
             Пароль:{' '}
-            <input
+            <Input
               type="password"
               id="password"
               name="password"
@@ -68,18 +128,15 @@ export const Authorization = ({ setAction, setError }: IAuthProps) => {
               onChange={(e) => changeInputRegister(e)}
             />
           </label>
-          <input type="submit" />
+          <Submit type="submit">Войти</Submit>
         </fieldset>
       </Form>
       <p>
         Еще не с нами? Тогда{' '}
-        <button
-          type="button"
-          onClick={() => setAction(AuthAction.REGISTRATION)}
-        >
+        <LinkPage onClick={() => setAction(AuthAction.REGISTRATION)}>
           зарегистрируйся
-        </button>
+        </LinkPage>
       </p>
-    </div>
+    </Wrapper>
   )
 }

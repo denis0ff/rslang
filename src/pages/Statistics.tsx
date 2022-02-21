@@ -3,6 +3,7 @@ import { GameStat } from '../components/statistics/GameStats'
 import { LongStats } from '../components/statistics/LongStats'
 import { getStats } from '../components/statistics/utils'
 import { WordStat } from '../components/statistics/WordStats'
+import { Footer } from '../components/ui/Footer/Footer'
 import { IStat } from '../utils/types'
 
 export const Statistics = () => {
@@ -40,6 +41,7 @@ export const Statistics = () => {
       />
       <GameStat games={stats.optional.games} />
       <LongStats longStat={stats.optional.longStat} />
+      <Footer />
     </>
   )
 }
