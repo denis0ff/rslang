@@ -11,7 +11,7 @@ export interface IWordsLearn {
 export interface ITimerProps {
   end?: boolean
   onTimer: React.Dispatch<React.SetStateAction<number>>
-  conrols: (value: number) => void
+  conrols: () => void
 }
 export type Color = {
   color: string
