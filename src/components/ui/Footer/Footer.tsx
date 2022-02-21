@@ -49,20 +49,20 @@ export const Footer = () => {
         <p className="footer-link copyright">Copyright 2022</p>
         <p className="footer-link ">
           <a
-            href="https://github.com/ameshchanka/"
-            target="_blank"
-            rel="noreferrer"
-          >
-            Aleh Meshchanka
-          </a>
-        </p>
-        <p className="footer-link ">
-          <a
             href="https://github.com/denis0ff/"
             target="_blank"
             rel="noreferrer"
           >
             Denis Popov
+          </a>
+        </p>
+        <p className="footer-link ">
+          <a
+            href="https://github.com/ameshchanka/"
+            target="_blank"
+            rel="noreferrer"
+          >
+            Aleh Meshchanka
           </a>
         </p>
         <p className="footer-link ">
