@@ -1,7 +1,6 @@
 import validator from 'validator'
 import { ChangeEvent, FormEvent, useContext, useState } from 'react'
-import { Form, Input, LinkPage, Submit } from './Authorization'
-import { Wrapper } from '../games/Result/Result'
+import { Form, Input, LinkPage, Submit, WrapperAuth } from './Authorization'
 import { AuthAction, Errors, IAuthProps } from './types'
 import {
   AuthContext,
@@ -9,8 +8,9 @@ import {
   singInPromise,
 } from '../../utils/services'
 import { catchError, signIn } from '../../utils/utils'
+import { Error } from './Error'
 
-export const Registration = ({ setAction, setError }: IAuthProps) => {
+export const Registration = ({ setAction, setError, error }: IAuthProps) => {
   const { setIsAuth } = useContext(AuthContext)
   const [register, setRegister] = useState(() => {
     return {
@@ -59,7 +59,7 @@ export const Registration = ({ setAction, setError }: IAuthProps) => {
   }
 
   return (
-    <Wrapper>
+    <WrapperAuth>
       <Form onSubmit={(e) => submitChackin(e)} autoComplete="off">
         <fieldset>
           <legend>Зарегистрируйся в RS Lang</legend>
@@ -111,14 +111,20 @@ export const Registration = ({ setAction, setError }: IAuthProps) => {
             />
           </label>
           <Submit type="submit">Отправить</Submit>
+          <Error error={error} />
         </fieldset>
       </Form>
       <p>
         Уже с нами?{' '}
-        <LinkPage onClick={() => setAction(AuthAction.AUTH)}>
+        <LinkPage
+          onClick={() => {
+            setError(Errors.ALL_RIGHT)
+            setAction(AuthAction.AUTH)
+          }}
+        >
           Да, войти!
         </LinkPage>
       </p>
-    </Wrapper>
+    </WrapperAuth>
   )
 }

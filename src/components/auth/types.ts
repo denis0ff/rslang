@@ -17,6 +17,7 @@ export enum Errors {
 }
 
 export interface IAuthProps {
+  error: Errors
   setAction: Dispatch<SetStateAction<AuthAction>>
   setError: Dispatch<SetStateAction<Errors>>
 }

@@ -8,12 +8,7 @@ interface WordsCompareProps {
 const RightAnser = <span>&#10003;</span>
 const NegativeAnser = <span>&#10006;</span>
 const WordsCompare = (props: WordsCompareProps) => {
-  const {
-    EWord = 'Car',
-    RWord = 'Машина',
-    anser = true,
-    onClickIndex,
-  } = props
+  const { EWord = 'Car', RWord = 'Машина', anser = true, onClickIndex } = props
   return (
     <div className="compare-wrapper">
       <div

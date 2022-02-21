@@ -5,7 +5,8 @@ import { catchError, signIn } from '../../utils/utils'
 import { Button } from '../games/Difficulty'
 import { Wrapper } from '../games/Result/Result'
 import { GameLink } from '../games/Result/ResultView'
-import { AuthAction, IAuthProps } from './types'
+import { AuthAction, Errors, IAuthProps } from './types'
+import { Error } from './Error'
 
 export const Form = styled.form`
   width: 100%;
@@ -73,7 +74,11 @@ export const Submit = styled(Button)`
   padding: 0.5em 5em;
 `
 
-export const Authorization = ({ setAction, setError }: IAuthProps) => {
+export const WrapperAuth = styled(Wrapper)`
+  height: fit-content;
+`
+
+export const Authorization = ({ setAction, setError, error }: IAuthProps) => {
   const { setIsAuth } = useContext(AuthContext)
   const [auth, setAuth] = useState(() => {
     return {
@@ -102,7 +107,7 @@ export const Authorization = ({ setAction, setError }: IAuthProps) => {
   }
 
   return (
-    <Wrapper>
+    <WrapperAuth>
       <Form onSubmit={(e) => submitChackin(e)}>
         <fieldset>
           <legend>Уже с Нами?</legend>
@@ -129,14 +134,20 @@ export const Authorization = ({ setAction, setError }: IAuthProps) => {
             />
           </label>
           <Submit type="submit">Войти</Submit>
+          <Error error={error} />
         </fieldset>
       </Form>
       <div>
         Еще не с нами? Тогда{' '}
-        <LinkPage onClick={() => setAction(AuthAction.REGISTRATION)}>
+        <LinkPage
+          onClick={() => {
+            setError(Errors.ALL_RIGHT)
+            setAction(AuthAction.REGISTRATION)
+          }}
+        >
           зарегистрируйся
         </LinkPage>
       </div>
-    </Wrapper>
+    </WrapperAuth>
   )
 }
