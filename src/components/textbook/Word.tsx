@@ -7,7 +7,7 @@ import { IWordAddition, IWordAudioFiles, IWordObj } from './textbookTypes'
 import { VolumeSVG } from './VolumeSVG'
 import { WordDifficulties } from '../../utils/types'
 
-const Container = styled.div<{
+const ContainerWord = styled.div<{
   difficulty?: WordDifficulties
   isDifficultGroup: boolean
   isPlay: boolean
@@ -21,8 +21,8 @@ const Container = styled.div<{
   color: #030303;
   border-top-right-radius: 5px;
   border-top-left-radius: 160px;
-  @media screen and (max-width: 420px) {
-    width: 300px;
+  @media screen and (max-width: 470px) {
+    width: 250px;
     border-top-left-radius: 120px;
   }
   & img {
@@ -32,7 +32,7 @@ const Container = styled.div<{
     border-bottom-right-radius: 160px;
     border-top-right-radius: 5px;
     object-fit: cover;
-    @media screen and (max-width: 420px) {
+    @media screen and (max-width: 470px) {
       border-top-left-radius: 120px;
       border-bottom-right-radius: 120px;
     }
@@ -261,7 +261,7 @@ export const Word: FC<IWordObj> = ({
   }
 
   return (
-    <Container
+    <ContainerWord
       difficulty={(() => {
         const res = state.aggrWords.find((el) => el._id === word.id)
         return res && res.userWord ? res.userWord.difficulty : undefined
@@ -305,6 +305,6 @@ export const Word: FC<IWordObj> = ({
         <p className="explanation-example">{parse(word.textExample)}</p>
         <p className="explanation-example">{word.textExampleTranslate}</p>
       </div>
-    </Container>
+    </ContainerWord>
   )
 }
