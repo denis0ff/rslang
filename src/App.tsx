@@ -25,7 +25,7 @@ const Header = styled.header`
   flex-wrap: wrap;
   height: 100%;
   a {
-    margin: 0 0.5rem;
+    margin: 1rem 1rem;
     padding: 0.2rem 1rem;
     font-size: 1.2rem;
     border-radius: 0.5rem;
@@ -37,7 +37,18 @@ const Header = styled.header`
     outline: none;
   }
 `
-const Logout = styled.button``
+const Logout = styled.button`
+  width: 50%;
+  margin: 1rem 1rem;
+  padding: 0.2rem 1rem;
+  border-radius: 0.5rem;
+  text-align: left;
+  color: #ffffff;
+  background: transparent;
+  outline: 3px solid #b3065c;
+  border: none;
+  font-size: 1.2rem;
+`
 
 export const App = () => {
   const [isAuth, setIsAuth] = useState(() => !!localStorage.getItem('token'))
