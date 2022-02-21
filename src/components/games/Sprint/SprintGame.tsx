@@ -32,11 +32,9 @@ export const SprintGame = ({
     setenWords(() => [...enWords, ...data])
   }
 
-  const getValue = (value: number) => {
-    if (value === 0) {
-      if (isAuth) addWordStat({ answers, gameType: GameTypeOption.SPRINT })
-    }
-  }
+  const statPost = useCallback(() => {
+    if (isAuth) addWordStat({ answers, gameType: GameTypeOption.SPRINT })
+  }, [end])
 
   const handleAnser = useCallback(
     (anserCompare: boolean) => {
@@ -99,7 +97,7 @@ export const SprintGame = ({
     <div className="container">
       <div className="wrapper">
         <Title />
-        <Timer onTimer={setStatus} end={end} conrols={getValue} />
+        <Timer onTimer={setStatus} end={end} conrols={statPost} />
         <Score coefficient={coefficient} total={total} anser={anserButton} />
         <WordsCompare
           onClickIndex={handleAnser}
