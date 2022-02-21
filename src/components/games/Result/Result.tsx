@@ -5,8 +5,8 @@ import { GameStatus, IResultProps, ResultViews, WordListType } from '../types'
 import { ResultView } from './ResultView'
 import { WordList } from './WordList'
 
-const Wrapper = styled.div`
-  margin-top: 5rem;
+export const Wrapper = styled.div`
+  margin: 5rem auto;
   padding: 1em;
   max-width: 500px;
   width: 90%;
@@ -17,7 +17,7 @@ const Wrapper = styled.div`
   flex-direction: column;
   align-self: center;
   gap: 0.5em;
-  background-color: #0e0e0e;
+  box-shadow: 0px 8px 40px 20px rgb(34 60 80 / 47%);
   border-radius: 20px;
 `
 
