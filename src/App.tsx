@@ -60,16 +60,18 @@ export const App = () => {
           <NavLink to={Paths.SPRINT}>Спринт</NavLink>
           <NavLink to={Paths.AUDIO_CALL}>Аудиовызов</NavLink>
           <NavLink to={Paths.TEXTBOOK}>Учебник</NavLink>
-          <NavLink to={Paths.STAT}>Статистика</NavLink>
           {isAuth ? (
-            <Logout
-              onClick={() => {
-                localStorage.clear()
-                setIsAuth(false)
-              }}
-            >
-              Выход
-            </Logout>
+            <>
+              <NavLink to={Paths.STAT}>Статистика</NavLink>
+              <Logout
+                onClick={() => {
+                  localStorage.clear()
+                  setIsAuth(false)
+                }}
+              >
+                Выход
+              </Logout>
+            </>
           ) : (
             <NavLink to={Paths.AUTH}>Вход</NavLink>
           )}
