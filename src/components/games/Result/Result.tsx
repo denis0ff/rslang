@@ -38,9 +38,13 @@ const Container = styled.div`
   height: 100%;
   text-align: center;
   overflow-y: scroll;
-  ::-webkit-scrollbar {
-    width: 0;
-    height: 0;
+  &::-webkit-scrollbar {
+    width: 7px;
+    background-color: #030303;
+  }
+  &::-webkit-scrollbar-thumb {
+    background-color: rgb(34 60 80);
+    border-radius: 2em;
   }
 `
 
