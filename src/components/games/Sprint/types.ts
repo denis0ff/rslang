@@ -8,7 +8,8 @@ export interface IWordsLearn {
   good: IWord[]
   bad: IWord[]
 }
-export interface ItimerProps {
+export interface ITimerProps {
+  end?: boolean
   onTimer: React.Dispatch<React.SetStateAction<number>>
   conrols: (value: number) => void
 }
