@@ -1,6 +1,7 @@
 import { useMemo, useState } from 'react'
-import { Link, Route, Routes } from 'react-router-dom'
+import { NavLink, Route, Routes } from 'react-router-dom'
 import styled from 'styled-components'
+import Burger from './components/nav/Burger'
 import { AudioCall } from './pages/AudioCall'
 import { Auth } from './pages/Auth'
 import { Main } from './pages/Main'
@@ -11,12 +12,11 @@ import { TextbookPage } from './pages/TextbookPage'
 import { AuthContext } from './utils/services'
 import { Paths } from './utils/types'
 
-const NavLink = styled(Link)`
-  margin: 0 0.5rem;
-  padding: 0.2rem 1rem;
-  font-size: 1.2rem;
-  border-radius: 0.5rem;
-  outline: 3px solid #b3065c;
+export const AppWrapper = styled.div`
+  width: 100%;
+  min-height: 100vh;
+  padding: 2rem;
+  background: #030303;
 `
 
 const Header = styled.header`
@@ -24,6 +24,18 @@ const Header = styled.header`
   display: flex;
   flex-wrap: wrap;
   height: 100%;
+  a {
+    margin: 0 0.5rem;
+    padding: 0.2rem 1rem;
+    font-size: 1.2rem;
+    border-radius: 0.5rem;
+    outline: 3px solid #b3065c;
+  }
+  .active {
+    color: #b3065c;
+    border: 3px solid #fff;
+    outline: none;
+  }
 `
 const Logout = styled.button``
 
@@ -33,23 +45,25 @@ export const App = () => {
   return (
     <AuthContext.Provider value={memoizedAuth}>
       <Header>
-        <NavLink to={Paths.HOME}>Домой</NavLink>
-        <NavLink to={Paths.SPRINT}>Спринт</NavLink>
-        <NavLink to={Paths.AUDIO_CALL}>Аудиовызов</NavLink>
-        <NavLink to={Paths.TEXTBOOK}>Учебник</NavLink>
-        <NavLink to={Paths.STAT}>Статистика</NavLink>
-        {isAuth ? (
-          <Logout
-            onClick={() => {
-              localStorage.clear()
-              setIsAuth(false)
-            }}
-          >
-            Выход
-          </Logout>
-        ) : (
-          <NavLink to={Paths.AUTH}>Вход</NavLink>
-        )}
+        <Burger>
+          <NavLink to={Paths.HOME}>Домой</NavLink>
+          <NavLink to={Paths.SPRINT}>Спринт</NavLink>
+          <NavLink to={Paths.AUDIO_CALL}>Аудиовызов</NavLink>
+          <NavLink to={Paths.TEXTBOOK}>Учебник</NavLink>
+          <NavLink to={Paths.STAT}>Статистика</NavLink>
+          {isAuth ? (
+            <Logout
+              onClick={() => {
+                localStorage.clear()
+                setIsAuth(false)
+              }}
+            >
+              Выход
+            </Logout>
+          ) : (
+            <NavLink to={Paths.AUTH}>Вход</NavLink>
+          )}
+        </Burger>
       </Header>
       <Routes>
         <Route path={Paths.HOME} element={<Main />} />
