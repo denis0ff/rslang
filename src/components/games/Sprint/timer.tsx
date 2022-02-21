@@ -43,19 +43,16 @@ function ClockSvg({ color }: Color) {
 export default function Timer({ onTimer, conrols, end }: ITimerProps) {
   const [value, setValueTimer] = useState(30)
   useEffect(() => {
-    if (value > 0) {
-      window.setTimeout(() => {
-        if (end) {
-          setValueTimer(value - 1)
-        } else {
-          onTimer(GameStatus.RESULT)
-        }
-      }, 1000)
-    } else {
-      onTimer(GameStatus.RESULT)
-      conrols(value)
-    }
-  }, [end, value])
+    const int = window.setTimeout(() => {
+      if (value > 0 && end) {
+        setValueTimer(value - 1)
+      } else {
+        clearTimeout(int)
+        onTimer(GameStatus.RESULT)
+        conrols()
+      }
+    }, 1000)
+  }, [value])
 
   return (
     <div className="timer-wrapper">

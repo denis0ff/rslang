@@ -19,8 +19,8 @@ const personInfo: IPersonInfo[] = [
     name: 'Aleh Meshchanka',
     status: 'Front-end developer',
     work: `Создал:  электронный учебник. Список изученныx слов.
-    Визуализацию прогресса изучения слов на странице учебника
-    footer в home page`,
+    Визуализацию прогресса изучения слов на странице учебника.
+    Footer`,
   },
   {
     src: '../../assets/img/dev3.jpg',
