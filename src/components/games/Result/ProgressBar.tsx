@@ -38,7 +38,7 @@ const Percent = styled.div`
   box-shadow: inset 0 0 50px #000;
   background: #222;
   color: grey;
-  z-index: 1000;
+  z-index: 100;
   &:hover {
     color: #fafafa;
     div {

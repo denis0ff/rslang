@@ -13,6 +13,8 @@ import { AuthContext } from './utils/services'
 import { Paths } from './utils/types'
 
 export const AppWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
   width: 100%;
   min-height: 100vh;
   padding: 2rem;

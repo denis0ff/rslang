@@ -25,6 +25,7 @@ export const WrapperRow = styled.div`
   align-items: center;
   justify-content: center;
   gap: 0.5em;
+  flex-grow: 1;
 `
 
 export const Button = styled.button`
