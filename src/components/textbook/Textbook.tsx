@@ -71,6 +71,11 @@ const WordContainer = styled.div`
   color: #030303;
   border-radius: 5px;
   border-top-left-radius: 160px;
+  @media screen and (max-width: 470px) {
+    width: 250px;
+    border-top-left-radius: 120px;
+    height: auto;
+  }
 `
 
 const Games = styled.div<{
@@ -80,14 +85,16 @@ const Games = styled.div<{
   width: 100%;
   padding: 5px 15px;
   column-gap: 10px;
+  row-gap: 10px;
   & .game {
+    display: inline-flex;
     border: none;
     border-radius: 5px;
     width: 175px;
     height: 26px;
     padding: 0;
     line-height: 26px;
-    text-align: center;
+    justify-content: center;
     text-transform: uppercase;
     opacity: 0.8;
     transition: all ease 0.3s;
@@ -100,6 +107,10 @@ const Games = styled.div<{
     :hover {
       opacity: 1;
     }
+  }
+  @media screen and (max-width: 470px) {
+    flex-direction: column;
+  }
 `
 
 export const Textbook: FC<{

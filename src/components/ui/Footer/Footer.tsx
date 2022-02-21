@@ -5,8 +5,13 @@ const Container = styled.div`
   display: flex;
   width: 100%;
   height: 40px;
+  & * {
+    margin: 0;
+    padding: 0;
+  }
   & .footer-wrapper {
     display: flex;
+    flex-wrap: wrap;
     height: 100%;
     width: 100%;
     align-items: center;
@@ -21,11 +26,17 @@ const Container = styled.div`
     color: #555;
     text-align: center;
     & a {
+      height: 34px;
+      line-height: 34px;
       color: #555;
     }
     & a:hover {
       color: #999;
     }
+  }
+  & .copyright {
+    height: 34px;
+    line-height: 34px;
   }
   & .copyright:before {
     content: '©';
@@ -39,6 +50,13 @@ const Container = styled.div`
     background-size: 100px 34px;
     background-repeat: no-repeat;
   }
+  @media screen and (max-width: 660px) {
+    height: auto;
+    & .footer-wrapper {
+      flex-direction: column;
+      justify-content: center;
+    }
+  }
 }
 `
 
@@ -49,20 +67,20 @@ export const Footer = () => {
         <p className="footer-link copyright">Copyright 2022</p>
         <p className="footer-link ">
           <a
-            href="https://github.com/ameshchanka/"
-            target="_blank"
-            rel="noreferrer"
-          >
-            Aleh Meshchanka
-          </a>
-        </p>
-        <p className="footer-link ">
-          <a
             href="https://github.com/denis0ff/"
             target="_blank"
             rel="noreferrer"
           >
             Denis Popov
+          </a>
+        </p>
+        <p className="footer-link ">
+          <a
+            href="https://github.com/ameshchanka/"
+            target="_blank"
+            rel="noreferrer"
+          >
+            Aleh Meshchanka
           </a>
         </p>
         <p className="footer-link ">

@@ -1,7 +1,7 @@
 import ReactDOM from 'react-dom'
 import { BrowserRouter } from 'react-router-dom'
 import { createGlobalStyle } from 'styled-components'
-import { App } from './App'
+import { App, AppWrapper } from './App'
 
 const GlobalStyle = createGlobalStyle`
 
@@ -24,6 +24,15 @@ const GlobalStyle = createGlobalStyle`
   body {
     margin: 0;
     background-color: #030303;
+    &::-webkit-scrollbar {
+      width: 7px;
+      background-color: #030303;
+    }
+    &::-webkit-scrollbar-thumb {
+      background-color: #b3065c;
+      border-radius: 2em;
+      
+    }
   }
 
   ul {
@@ -47,7 +56,6 @@ const GlobalStyle = createGlobalStyle`
     max-width: 1440px;
     min-height: 100vh;
     margin: 0 auto;
-    padding: 1rem;
     color: #fafafa;
   }
 
@@ -65,7 +73,9 @@ const GlobalStyle = createGlobalStyle`
 const app = (
   <BrowserRouter>
     <GlobalStyle />
-    <App />
+    <AppWrapper>
+      <App />
+    </AppWrapper>
   </BrowserRouter>
 )
 

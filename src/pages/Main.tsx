@@ -1,14 +1,21 @@
-import styled from 'styled-components'
+import About from '../components/main/AboutUs'
+import Benefits from '../components/main/Benefits'
+import Flex from '../components/main/flex'
+import GreetingsBlock from '../components/main/greetings'
+import Presentatins from '../components/main/presentation'
 import { Container } from '../components/ui/elements'
 import { Footer } from '../components/ui/Footer/Footer'
-
-const Title = styled.h2``
 
 export const Main = () => {
   return (
     <>
       <Container>
-        <Title>Main page</Title>
+        <Flex styleRT={{ direction: 'column' }}>
+          <GreetingsBlock />
+          <Presentatins />
+          <Benefits />
+          <About />
+        </Flex>
       </Container>
       <Footer />
     </>
