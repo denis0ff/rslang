@@ -17,6 +17,9 @@ button, h2, h5{
   align-items: center;
   justify-content: center;
   flex-direction: column;
+  background-color: #000000;
+  box-shadow: 0px 8px 40px 20px rgb(34 60 80 / 47%);
+  border-radius: 20px;
 }
 .timer-wrapper {
   color:#fff;

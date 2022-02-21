@@ -11,7 +11,7 @@ export const SprintDescription = () => (
       Тренировка на скорость. Угадай как можно больше слов за 30 секунд
       <DescriptionListItem>Используйте мышь, чтобы выбрать</DescriptionListItem>
       <DescriptionListItem>
-        Используйте цифровые клавиши от ArrowLeft и ArrowRight для выбора ответа
+        Используйте клавиши от ArrowLeft и ArrowRight для выбора ответа
       </DescriptionListItem>
     </DescriptionList>
   </>
