@@ -26,7 +26,7 @@ const personInfo: IPersonInfo[] = [
     src: '../../assets/img/dev3.jpg',
     name: 'Max Klimenkov',
     status: 'Front-end developer',
-    work: '',
+    work: 'Создал: игру "Спринт", Home page',
   },
 ]
 const AboutItem = styled.div`

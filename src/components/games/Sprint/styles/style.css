@@ -3,7 +3,7 @@ button, h2, h5{
 }
 .container {
   width: 100%;
-  height: 100%;
+  height: 90vh;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -17,7 +17,6 @@ button, h2, h5{
   align-items: center;
   justify-content: center;
   flex-direction: column;
-  border: 1px solid #fff;
 }
 .timer-wrapper {
   color:#fff;
@@ -36,6 +35,7 @@ button, h2, h5{
 .score-wrapper,
 .compare-wrapper{
   display: flex;
+  flex-wrap: wrap;
   gap: 0.5rem;
   margin: 1rem 0;
 }
@@ -63,6 +63,7 @@ button, h2, h5{
 }
 .words-block {
   display: flex;
+  flex-wrap: wrap;
   margin: 2rem 0 5rem 0;
   gap: 1.5rem;
 }
@@ -95,4 +96,16 @@ button, h2, h5{
 }
 .word-compare, h5 {
  margin: 0;
+}
+@media (max-width: 800px) {
+  .words-block { 
+    margin: 1.5rem 0 2rem 0;
+  }
+  .word-compare {
+    line-height: 1.7rem;
+  }
+  .word-compare h2{
+    font-size: 1.5rem;
+
+  }
 }

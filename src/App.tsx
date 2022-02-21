@@ -26,7 +26,7 @@ const Header = styled.header`
   flex-wrap: wrap;
   height: 100%;
   a {
-    margin: 0 0.5rem;
+    margin: 1rem 1rem;
     padding: 0.2rem 1rem;
     font-size: 1.2rem;
     border-radius: 0.5rem;
@@ -39,15 +39,16 @@ const Header = styled.header`
   }
 `
 const Logout = styled.button`
-  margin: 0 0.5rem;
+  width: 50%;
+  margin: 1rem 1rem;
   padding: 0.2rem 1rem;
-  font-size: 1.2rem;
   border-radius: 0.5rem;
-  border-width: 0;
-  background-color: transparent;
-  color: inherit;
+  text-align: left;
+  color: #ffffff;
+  background: transparent;
   outline: 3px solid #b3065c;
-  cursor: pointer;
+  border: none;
+  font-size: 1.2rem;
 `
 
 export const App = () => {
