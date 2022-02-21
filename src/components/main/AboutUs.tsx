@@ -18,7 +18,9 @@ const personInfo: IPersonInfo[] = [
     src: '../../assets/img/dev2.jpg',
     name: 'Aleh Meshchanka',
     status: 'Front-end developer',
-    work: '',
+    work: `Создал:  электронный учебник. Список изученныx слов.
+    Визуализацию прогресса изучения слов на странице учебника
+    footer в home page`,
   },
   {
     src: '../../assets/img/dev3.jpg',
@@ -54,7 +56,8 @@ const Person = ({ src, name, status, work }: IPersonInfo) => {
         direction: 'column',
         mWidth: '200px',
         flex: '0 1 25%',
-        styleChildren: `.block-img {width: 100%; max-width: 220px; height: auto; border-radius: 50%; overflow: hidden;}`,
+        styleChildren: `.block-img {width: 100%; max-width: 220px; height: auto; border-radius: 50%; overflow: hidden;}
+        .work {margin: 1rem 0 0 0}`,
       }}
     >
       <div className="block-img">
@@ -63,7 +66,7 @@ const Person = ({ src, name, status, work }: IPersonInfo) => {
       <Flex styleRT={{ direction: 'column' }}>
         <h3>{name}</h3>
         <p>{status}</p>
-        <p>{work}</p>
+        <p className="work">{work}</p>
       </Flex>
     </Flex>
   )

@@ -5,7 +5,7 @@ import BlockDiv from './Block'
 
 const Greetings = styled.section`
   width: 100%;
-  min-height: 90vh;
+  min-height: 80vh;
   color: #ffffff;
 `
 const GreetingsBlock = () => {
@@ -54,29 +54,14 @@ const GreetingsBlock = () => {
         </BlockDiv>
         <Flex
           styleRT={{
-            width: '50%',
-            height: '90vh',
             justify: 'center',
             items: 'center',
+            wrap: 'wrap',
             margin: '0 0',
-            styleChildren: `img {width: 80%; height: 70%; display: block; object-position: center; margin: 0}`,
-            mediaChildren: `@media (max-width: 840px) {
-              img {
-                width: 90%;
-                height: 50%;
-                margin: 0;
-              }
-            }
-            @media (max-width: 700px) {
-              & {width: 80%;
-              height: 70vh;}
-              img {
-                height: 80%;
-              }
-            }`,
+            styleChildren: `img {width: 70%; min-width: 280px; max-width: 380px; height: 70%; display: block; object-position: center; margin: 0; flex: 1 0 50%;}`,
           }}
         >
-          <img src="../../assets/img/main1.png" alt="img" />
+          <img src="../../assets/img/main2.png" alt="img" />
         </Flex>
       </Flex>
     </Greetings>

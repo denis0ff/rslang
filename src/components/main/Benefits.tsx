@@ -74,7 +74,7 @@ const Benefits = () => {
         height: 'auto',
         justify: 'space-between',
         direction: 'column',
-        margin: '5rem 0 0 0',
+        margin: '5rem 0 5rem 0',
         styleChildren: `h2 {font-size: 3rem; line-height: 3.5rem; margin-bottom: 1.5rem; text-shadow: 1px 0px 3px; width: 100%; text-align: center;}
         p {font-size: 1.5rem; line-height: 2.0rem; width: 100%; text-align: center;}`,
         mediaChildren: `@media (max-width: 700px) {
