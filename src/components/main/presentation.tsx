@@ -88,7 +88,7 @@ const Presentatins = () => {
           @media (max-width: 800px) {
            & {
             padding-bottom: 56.25%;
-            width: 100%,
+            width: 100%;
             padding-top: 30px;
             height: auto;
             overflow: hidden;};

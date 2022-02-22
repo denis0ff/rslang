@@ -5,7 +5,7 @@ import BlockDiv from './Block'
 
 const Greetings = styled.section`
   width: 100%;
-  min-height: 80vh;
+  min-height: 70vh;
   color: #ffffff;
 `
 const GreetingsBlock = () => {
@@ -27,7 +27,9 @@ const GreetingsBlock = () => {
         <BlockDiv
           styleRT={{
             styleChildren: `h2 {font-size: 3rem; text-shadow: 1px 0px 3px; line-height: 3.5rem; margin-bottom: 1.5rem;}
-              li {font-size: 1.5rem; line-height: 2.0rem }`,
+              li {font-size: 1.9rem; line-height: 2.0rem 
+                margin: 2rem 0 1rem 0rem; list-style: circle;}
+                ul { margin: 0 0 0 2rem;}`,
             mediaChildren: `@media (max-width: 700px) {
                 h2 {
                   font-size: 2rem;

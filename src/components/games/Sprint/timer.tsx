@@ -49,7 +49,7 @@ export default function Timer({ onTimer, conrols, end }: ITimerProps) {
       } else {
         clearTimeout(int)
         onTimer(GameStatus.RESULT)
-        conrols()
+        conrols(value, end)
       }
     }, 1000)
   }, [value])
